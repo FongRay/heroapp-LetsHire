@@ -4,7 +4,12 @@
       div.row-fluid
         .span8
           div.page-container-inner.candidate-panel.fixed-size id="candidate-applying-panel"
-            =render 'show_latest_applying_job'
+            - if @latest_applying_job.nil?
+              div align="center" id="candidate-no-assignment-msg"
+                span style="font-size: 30px"
+                  = "No Job Opening Assignment."
+            - else
+              =render 'show_latest_applying_job'
         .span4
           div.page-container-inner.candidate-panel id="candidate-profile-panel"
             =render 'candidate_profile'

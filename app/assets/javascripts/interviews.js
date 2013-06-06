@@ -158,7 +158,11 @@ $(function () {
                 interview.scheduled_at_iso = row.find('td:eq(0) input').data('iso');
                 interview.duration = row.find('td:eq(1) input').val();
                 interview.modality = row.find('td:eq(2) select').val();
-                interview.location = row.find('td:eq(3) input').val();
+                if (interview.modality == 'onsite interview') {
+                    interview.location = row.find('td:eq(3) input').val();
+                } else {
+                    interview.phone = row.find('td:eq(3) input').val();
+                }
                 var interviewer_td = row.find('td:eq(4)');
                 var user_ids = interviewer_td.data('user_ids');
                 if (user_ids == null || user_ids.length == 0) {

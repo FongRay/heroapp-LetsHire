@@ -62,6 +62,10 @@ class Interview < ActiveRecord::Base
     end
   end
 
+  def phone_interview?
+    modality == MODALITY_PHONE
+  end
+
   def editable?
     status != STATUS_CLOSED
   end
