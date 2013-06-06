@@ -23,16 +23,12 @@ class CandidatesController < AuthenticatedController
 
     @default_filter = FILTER_LITERAL[mode.to_sym] || 'Active Candidates'
 
-    @candidates = (if %w[no_openings no_interviews with_assessement with_opening available].include?(mode)
-      puts "HELLOsfadsdfadsfadsfssdfadsfadsfadsfadsfadsfadsfadsfadwfaewwfreqwrw"
+    @candidates = (if %w[no_openings no_interviews with_assessment without_assessment with_opening available].include?(mode)
       Candidate.active.send(mode.to_sym)
     elsif mode == 'inactive'
       Candidate.inactive
     elsif mode == 'all'
       Candidate
-    elsif mode == 'without_assessment'
-      #TODO Not supported right now
-      Candidate.active
     else
       opening = nil
       if (params[:opening_id])

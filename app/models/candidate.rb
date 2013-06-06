@@ -1,5 +1,5 @@
 class Candidate < ActiveRecord::Base
-  attr_accessible :name, :email, :phone, :source, :description, :status
+  attr_accessible :name, :email, :phone, :source, :description, :status, :current_opening_candidate_id
 
   # candidate status constants
   NORMAL = 0
@@ -38,7 +38,10 @@ class Candidate < ActiveRecord::Base
   scope :with_interview, joins(:opening_candidates => :interviews).uniq
   #Todo: need filter out candidates not assigned to interviews
   scope :no_interviews, where('id NOT in ( SELECT DISTINCT "candidates"."id" FROM "candidates" INNER JOIN "opening_candidates" ON "opening_candidates"."candidate_id" = "candidates"."id" INNER JOIN "interviews" ON "interviews"."opening_candidate_id" = "opening_candidates"."id" )')
-  scope :with_assessment, joins(:opening_candidates => :assessment).uniq
+  #scope :with_assessment, joins(:opening_candidates => :assessment).uniq
+
+  scope :with_assessment, where('current_opening_candidate_id IN ( SELECT "opening_candidates"."id" FROM "opening_candidates" INNER JOIN "assessments" ON "assessments"."opening_candidate_id" = "opening_candidates"."id")')
+  scope :without_assessment, where('current_opening_candidate_id NOT IN ( SELECT "opening_candidates"."id" FROM "opening_candidates" INNER JOIN "assessments" ON "assessments"."opening_candidate_id" = "opening_candidates"."id")')
 
   def opening(index)
     opening_candidates[index].opening if opening_candidates.size > index

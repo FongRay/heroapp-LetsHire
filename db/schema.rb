@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130527141051) do
+ActiveRecord::Schema.define(:version => 20130606090513) do
 
   create_table "assessments", :force => true do |t|
     t.integer  "opening_candidate_id"
@@ -23,15 +23,16 @@ ActiveRecord::Schema.define(:version => 20130527141051) do
   add_index "assessments", ["opening_candidate_id"], :name => "index_assessments_on_opening_candidate_id"
 
   create_table "candidates", :force => true do |t|
-    t.string   "name",                                    :null => false
-    t.string   "email",                                   :null => false
+    t.string   "name",                                         :null => false
+    t.string   "email",                                        :null => false
     t.string   "phone"
     t.string   "source"
     t.text     "description"
-    t.datetime "created_at",                              :null => false
-    t.datetime "updated_at",                              :null => false
-    t.integer  "opening_candidates_count", :default => 0
-    t.integer  "status",                   :default => 0
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+    t.integer  "opening_candidates_count",     :default => 0
+    t.integer  "status",                       :default => 0
+    t.integer  "current_opening_candidate_id", :default => -1
   end
 
   add_index "candidates", ["email"], :name => "index_candidates_on_email"
