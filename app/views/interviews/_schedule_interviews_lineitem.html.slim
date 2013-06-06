@@ -1,14 +1,17 @@
 tr data-interview_id=interview.id
   - if interview.editable?
-    td = text_field_tag :scheduled_at, nil, :class => 'datetimepicker', :id => nil, :data => {:iso => interview.scheduled_at_iso}
+    td.scheduled_at
+      = text_field_tag :scheduled_at, nil, :class => 'datetimepicker', :id => nil, :data => {:iso => interview.scheduled_at_iso}
     td = number_field_tag :duration, interview.duration, :in => 30..180, :step => 10
-    td = select_tag :modality, options_for_select(Interview::MODALITIES.collect { |x| [x,x] }, interview.modality)
-    td = text_field_tag :location, interview.location
-    td data-user_ids=interview.user_ids data-users=interview.users.collect{ |user| user.name } data-interviewers=interview.interviewers.collect{ |i| [i.id, i.user_id] }
-      div
-        span= simple_format(interview.interviewers_str.join(';<br/>'))
-        span.pull-right= button_tag '>', :class => 'edit_interviewers btn btn-small'
-    td
+    td.modality
+      = select_tag :modality, options_for_select(Interview::MODALITIES.collect { |x| [x,x] }, interview.modality)
+    td.location
+      = text_field_tag :location, interview.location
+    td.interviewers data-user_ids=interview.user_ids data-users=interview.users.collect{ |user| user.name } data-interviewers=interview.interviewers.collect{ |i| [i.id, i.user_id] }
+      - interviewers_str = interview.interviewers_str
+      #interviewers_literal.span1 = simple_format(interviewers_str.collect { |i| truncate(i, :length => 30) }.join(';<br/>'))
+      div.span.pull-right= button_tag '>', :class => 'edit_interviewers btn btn-small'
+    td.status
       span
         = select_tag :status, options_for_select(Interview::STATUS.collect { |x| [x, x]}, interview.status)
       span
