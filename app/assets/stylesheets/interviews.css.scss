@@ -35,9 +35,6 @@ input#duration, input#interview_duration {
 
 table.schedule_interviews,
 table.list_interviews {
-  th, td {
-    overflow: auto;
-  }
 
   .scheduled_at {
     width: 20%;
