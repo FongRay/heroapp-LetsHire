@@ -127,8 +127,7 @@ class OpeningsController < ApplicationController
 
     params[:candidates] ||= []
     params[:candidates].each do |candidate|
-      @opening.opening_candidates.create :candidate_id => candidate
-      opening_candidate = OpeningCandidate.find_by_candidate_id_and_opening_id(candidate.id, @opening.id)
+      opening_candidate = @opening.opening_candidates.where(:candidate_id => candidate).first_or_create
       opening_candidate.update_candidate if opening_candidate
     end
     render :json => { :success => true }
