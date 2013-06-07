@@ -33,19 +33,43 @@ input#duration, input#interview_duration {
   width:  140px;
 }
 
-table.schedule_interviews {
-  #modality {
-    width: 140px;
-  }
-
-  #status {
-    width: 100px;
-  }
-
+table.schedule_interviews,
+table.list_interviews {
   th, td {
-    overflow: hidden;
-    width: 100px;
+    overflow: auto;
   }
+
+  .scheduled_at {
+    width: 20%;
+  }
+
+  .modality  {
+    width: 17%;
+  }
+
+  select {
+    width: 130px;
+  }
+
+  .location {
+    width: 17%;
+  }
+
+  input#phone {
+    width: 150px;
+  }
+
+  .interviewers {
+    width: 25%;
+  }
+  .status {
+    width: 17%;
+  }
+
+  #interviewers_literal {
+    margin-left: 0px;
+  }
+
 }
 
 .add-new-interview-div {

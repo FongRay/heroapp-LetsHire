@@ -1,13 +1,13 @@
 div id="all-interviews"
-  table class='table table-hover table-bordered table-striped'
+  table class='table table-hover table-bordered table-striped list_interviews'
     thead class='colheader'
       tr
-        th Scheduled At
-        th Interview Type
+        th.scheduled_at Scheduled At
+        th.modality Interview Type
         -unless opening_candidate
           th Interview
-        th Duration(min)
-        th Interviewers
+        th Duration
+        th.interviewers Interviewers
         th Status
         th
   

@@ -6,12 +6,11 @@ class OpeningsController < ApplicationController
   include ApplicationHelper
 
   # GET /openings
-  # GET /openings.json
   def index
     unless user_signed_in?
       #published openings are returned only
-      #TODO: need exclude certain fields from anonymous access, such as 'Hiring Manager'
       @openings = Opening.published.order(sort_column('Opening') + ' ' + sort_direction).paginate(:page => params[:page])
+      render 'openings/index_anonymous'
     else
       @default_filter = 'My Openings'
       case params[:mode]
@@ -32,22 +31,9 @@ class OpeningsController < ApplicationController
           @openings = Opening.interviewed_by(current_user.id).paginate(:page => params[:page])
         end
       end
+      render 'openings/index'
     end
 
-    respond_to do |format|
-      format.html  do
-        if user_signed_in?
-          if params.has_key?(:partial)
-            render :partial => 'openings/openings_index'
-          else
-            render 'openings/index'
-          end
-        else
-          render 'openings/index_anonymous'
-        end
-      end
-      format.json { render json: @openings }
-    end
   end
 
   # GET /openings/1
