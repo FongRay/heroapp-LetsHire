@@ -23,8 +23,7 @@ class CandidatesController < AuthenticatedController
 
     @default_filter = FILTER_LITERAL[mode.to_sym] || 'Active Candidates'
 
-    @candidates = (if %w[no_openings no_interviews with_assessement with_opening available].include?(mode)
-      puts "HELLOsfadsdfadsfadsfssdfadsfadsfadsfadsfadsfadsfadsfadwfaewwfreqwrw"
+    @candidates = (if %w[no_openings no_interviews with_assessment with_opening available].include?(mode)
       Candidate.active.send(mode.to_sym)
     elsif mode == 'inactive'
       Candidate.inactive
@@ -73,7 +72,7 @@ class CandidatesController < AuthenticatedController
 
     @resume = @candidate.resume.name unless @candidate.resume.nil?
   rescue ActiveRecord::RecordNotFound
-    return render :text => "", notice: 'Invalid candidate'
+    return render :text => "", :alert => 'Invalid candidate'
   end
 
   def new
@@ -84,7 +83,7 @@ class CandidatesController < AuthenticatedController
     @candidate = Candidate.find params[:id]
     @resume = @candidate.resume.name unless @candidate.resume.nil?
   rescue ActiveRecord::RecordNotFound
-    redirect_to request.referrer, notice: 'Invalid candidate'
+    redirect_to request.referrer, :alert => 'Invalid candidate'
   end
 
   def index_for_selection
@@ -132,32 +131,32 @@ class CandidatesController < AuthenticatedController
       render :action => 'new'
     end
   rescue ActiveRecord::RecordNotFound
-    return render :text => "", notice: 'Invalid parameters'
+    return render :text => "", :alert => 'Invalid parameters'
   end
 
 
   def create_opening
-    return redirect_to request.referrer, notice: 'Invalid attributes' unless params[:candidate]
+    return redirect_to request.referrer, :alert => 'Invalid attributes' unless params[:candidate]
     @candidate = Candidate.find params[:id]
     authorize! :update, @candidate
     new_opening_id = params[:candidate][:opening_ids].to_i
-    return redirect_to request.referrer, :notice => "Opening was not given." if new_opening_id == 0
+    return redirect_to request.referrer, :alert => "Opening was not given." if new_opening_id == 0
     if @candidate.opening_ids.index(new_opening_id)
       return redirect_to request.referrer, :notice => "Opening was already assigned."
     end
     if @candidate.opening_candidates.create(:opening_id => new_opening_id)
       redirect_to request.referrer, :notice => "Opening was successfully assigned."
     else
-      redirect_to request.referrer, :notice => "Opening was already assigned or not given."
+      redirect_to request.referrer, :alert => "Opening was already assigned or not given."
     end
   rescue ActiveRecord::RecordNotFound
-    redirect_to candidates_url, notice: 'Invalid Candidate'
+    redirect_to candidates_url, :alert => 'Invalid Candidate'
   end
 
   #Don't support remove JD assignment via update API
   #To avoid removing a JD assignment accidentally, should use 'create_opening' instead.
   def update
-    return redirect_to @candidate, notice: 'Invalid parameters' unless params[:candidate]
+    return redirect_to @candidate, :alert => 'Invalid parameters' unless params[:candidate]
     @candidate = Candidate.find params[:id]
     params[:candidate].delete(:department_id)
     params[:candidate].delete(:opening_ids)
@@ -189,7 +188,7 @@ class CandidatesController < AuthenticatedController
       render :action => 'edit'
     end
   rescue ActiveRecord::RecordNotFound
-    redirect_to candidates_url, notice: 'Invalid Candidate'
+    redirect_to candidates_url, :alert => 'Invalid Candidate'
   end
 
   def move_to_blacklist
@@ -201,7 +200,7 @@ class CandidatesController < AuthenticatedController
 
     redirect_to candidates_url, :notice => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) was successfully moved to blacklist."
   rescue ActiveRecord::RecordNotFound
-    redirect_to users_url, notice: 'Invalid user'
+    redirect_to candidates_url, :alert => 'Invalid user'
   rescue
     redirect_to candidates_url, :error => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) cannot be moved to blacklist."
   end
@@ -214,7 +213,7 @@ class CandidatesController < AuthenticatedController
 
     redirect_to candidates_url, :notice => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) was successfully reactived."
   rescue ActiveRecord::RecordNotFound
-    redirect_to users_url, notice: 'Invalid user'
+    redirect_to candidates_url, :alert => 'Invalid user'
   rescue
     redirect_to candidates_url, :error => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) cannot be reactived."
   end
@@ -228,7 +227,7 @@ class CandidatesController < AuthenticatedController
 
     redirect_to candidates_url, :notice => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) was successfully deleted."
   rescue ActiveRecord::RecordNotFound
-    redirect_to users_url, notice: 'Invalid user'
+    redirect_to candidates_url, :alert => 'Invalid user'
   rescue
     redirect_to candidates_url, :error => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) cannot be deleted."
   end
@@ -255,7 +254,7 @@ private
       opening_id = opening_candidates[0].opening_id
       assigned_departments = Department.joins(:openings).where( "openings.id = ?", opening_id )
     end
-    return assigned_departments
+    assigned_departments
   end
 
   def download_folder

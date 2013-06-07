@@ -52,14 +52,14 @@ class InterviewsController < AuthenticatedController
     @opening_candidate = OpeningCandidate.find(params[:opening_candidate_id]) unless params[:opening_candidate_id].nil?
     if @opening_candidate.nil?
       @opening = Opening.find(params[:opening_id]) unless params[:opening_id].nil?
-      return redirect_to :back, :notice  => 'No Candidate to schedule interviews' if @opening.nil?
+      return redirect_to :back, :alert => 'No Candidate to schedule interviews' if @opening.nil?
       @interviews = []
     else
       @opening = @opening_candidate.opening
       @interviews = @opening_candidate.interviews
     end
   rescue ActiveRecord::RecordNotFound
-    return redirect_to :back, :notice => 'Object deleted.'
+    return redirect_to :back, :alert => 'Invalid Object.'
   end
 
   def update_multiple
@@ -130,7 +130,7 @@ class InterviewsController < AuthenticatedController
     authorize! :update, @interview
     prepare_edit
     unless is_interviewer? @interview.interviewers
-      redirect_to :back, :notice => 'Not an interviewer'
+      redirect_to :back, :alert => 'Not an interviewer'
     end
   end
 
@@ -142,7 +142,7 @@ class InterviewsController < AuthenticatedController
       if is_interviewer? @interview.interviewers
         @interview.assessment = params[:interview][:assessment]
       else
-        return redirect_to request.referer, :notice => 'Not an interviewer'
+        return redirect_to request.referer, :alert => 'Not an interviewer'
       end
     end
     @interview.status = params[:interview][:status] unless params[:interview][:status].nil?
@@ -155,24 +155,15 @@ class InterviewsController < AuthenticatedController
   end
 
   # DELETE /interviews/1
-  # DELETE /interviews/1.json
   def destroy
     authorize! :manage, @interview
     @interview = Interview.find params[:id]
     @candidate = @interview.opening_candidate.candidate
     @interview.destroy
 
-    respond_to do |format|
-      format.html do
-        if request.referrer == interview_path(@interview)
-          redirect_to interviews_url, :notice => 'Interview deleted'
-        else
-          redirect_to :back, :notice => 'Interview deleted'
-        end
-      end
-    end
+    redirect_to (request.referrer == interview_path(@interview) ? interviews_url : :back), :notice => 'Interview was successfully deleted'
   rescue
-    redirect_to interviews_url, notice: 'Invalid interview'
+    redirect_to interviews_url, :alert => 'Invalid interview'
   end
 
   private

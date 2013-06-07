@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   NO_PERMISSION = 'You do not have permission to access this section'
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, :notice => NO_PERMISSION
+    redirect_to root_path, :alert => NO_PERMISSION
   end
 
   def init
@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     if @user.save
       redirect_to new_user_session_path, :notice => 'Admin user created successfully, enjoy LetsHire '
     else
-      redirect_to request.referer, :notice => 'Creating admin user failed, retry'
+      redirect_to request.referer, :alert => 'Creating admin user failed, retry'
     end
   end
 
@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
 
   def require_admin
     unless current_user and current_user.admin?
-      redirect_to root_path, :notice => REQUIRE_ADMIN
+      redirect_to root_path, :alert => REQUIRE_ADMIN
     end
   end
 

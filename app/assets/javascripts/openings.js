@@ -73,6 +73,7 @@ $(function() {
                         $('#error_messages').html('<p class="errors">' + response.messages + '</p>').parent().show();
                     } else {
                         $("#candidates_selection_container").hide().dialog( "close" );
+                        location.reload();
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {

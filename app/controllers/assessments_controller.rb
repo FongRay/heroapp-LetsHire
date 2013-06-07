@@ -6,7 +6,7 @@ class AssessmentsController < ApplicationController
       @assessment = Assessment.new(:opening_candidate_id => @opening_candidate.id)
       render 'assessments/edit'
     else
-      redirect_to candidates_url, :notice => "The parent doesn't exist anymore"
+      redirect_to candidates_url, :alert => "The parent doesn't exist anymore"
     end
   end
 
@@ -20,71 +20,63 @@ class AssessmentsController < ApplicationController
     render 'assessments/edit'
 
   rescue ActiveRecord::RecordNotFound
-    redirect_to candidates_url, :notice => "The object doesn't exist anymore"
+    redirect_to candidates_url, :alert => "The object doesn't exist anymore"
   end
 
   # POST /opening_candidates/:opening_candidate_id/assessments
-  # POST /opening_candidates.json
   def create
     @opening_candidate = OpeningCandidate.find(params[:opening_candidate_id])
     @candidate = @opening_candidate.candidate
     @opening_candidate.status = params[:opening_candidate][:status]
     @assessment = @opening_candidate.build_assessment(params[:assessment])
-    respond_to do |format|
-      if @assessment.save && @opening_candidate.save
-        format.html { redirect_to @candidate, notice: 'Assessment was successfully made.' }
-        format.json { render json: @candidate, status: :created, location: @candidate }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @candidate.errors, status: :unprocessable_entity }
-      end
+    if @assessment.save && @opening_candidate.save
+      redirect_to @candidate, notice: 'Assessment was successfully made.'
+    else
+      render action: "edit"
     end
 
-  #rescue ActiveRecord::RecordNotFound
-  #  render "static_pages/home", :notice => "The object doesn't exist anymore"
+  rescue ActiveRecord::RecordNotFound
+    redirect_to candidates_url, :alert => "The object doesn't exist anymore"
   end
 
   # PUT /opening_candidates/:opening_candidate_id/assessments/:id
-  # PUT /opening_candidates/:opening_candidate_id/assessments/:id.json
   def update
+    unless (params.has_key?(:opening_candidate) && params.has_key?(:assessment))
+      return redirect_to candidates_url, :alert => 'Invalid param'
+    end
+
+    @assessment = Assessment.find(params[:id].to_i)
+
+    new_status = params[:opening_candidate][:status].to_i
+    if params[:opening_candidate_id].to_i != @assessment.opening_candidate_id
+      redirect_to candidates_url, :alert => "Invalid object!"
+    end
+
+    @opening_candidate = @assessment.opening_candidate
+    @candidate = @opening_candidate.candidate
+
     Assessment.transaction do
-      @assessment = Assessment.find(params[:id].to_i)
-
-      if params[:opening_candidate_id].to_i != @assessment.opening_candidate_id.to_i
-        raise ActiveRecord::RecordNotFound
-      end
-
-      @opening_candidate = OpeningCandidate.find(params[:opening_candidate_id])
-      @candidate = @opening_candidate.candidate
-
-      if @opening_candidate.status_changed_to_accepted? params[:opening_candidate][:status].to_i
-        opening = Opening.find(@opening_candidate.opening_id)
-        if opening.available_no > 0
-          opening.increment! :filled_no
-        else
-          return redirect_to candidates_url, :notice => "The opening seats are all filled."
+      if @opening_candidate.status_changed_to_accepted? new_status
+        if @opening_candidate.opening.available_no == 0
+          return redirect_to request.referer, :alert => "Fail to mark candidate as 'Offer Accepted' because the opening's seats are all filled."
         end
-      elsif @opening_candidate.status_changed_from_accepted? params[:opening_candidate][:status].to_i
-        opening = Opening.find(@opening_candidate.opening_id)
-        opening.decrement! :filled_no
+        @opening_candidate.opening.increment! :filled_no
+      elsif @opening_candidate.status_changed_from_accepted? new_status
+        @opening_candidate.decrement! :filled_no
       end
 
-      @opening_candidate.status = params[:opening_candidate][:status].to_i
+      @opening_candidate.status = new_status
       params[:assessment][:comment] = "\r\n\r\n" + "#{current_user.email} write feedback at #{Time.now.to_date}:\r\n"  + params[:assessment][:comment]
 
-      respond_to do |format|
-        if @assessment.update_attributes(params[:assessment]) && @opening_candidate.save
-          format.html { redirect_to @candidate, notice: 'Assessment was successfully updated.' }
-          format.json { render json: @candidate, status: :created, location: @candidate }
-        else
-          format.html { render action: "edit" }
-          format.json { render json: @assessment.errors, status: :unprocessable_entity }
-        end
+      if @assessment.update_attributes(params[:assessment]) && @opening_candidate.save
+        redirect_to @candidate, :notice => 'Assessment was successfully updated.'
+      else
+        render action: "edit"
       end
     end
 
   rescue ActiveRecord::RecordNotFound
-    redirect_to candidates_url, :notice => "The object doesn't exist anymore"
+    redirect_to candidates_url, :alert => "The object doesn't exist anymore"
   end
 
 end
