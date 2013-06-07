@@ -1,11 +1,11 @@
 thead
   tr
-    th Scheduled At
+    th.scheduled_at Scheduled At
     th Duration(min)
-    th Interview Type
-    th Phone/Location
-    th Interviewers
-    th Status
+    th.modality Interview Type
+    th.location Phone/Location
+    th.interviewers Interviewers
+    th.status Status
 tbody data-status=@opening_candidate.try(:status_str)
   -if @opening_candidate
     = render :partial => "interviews/schedule_interviews_lineitem", :collection => @interviews, :as => :interview
