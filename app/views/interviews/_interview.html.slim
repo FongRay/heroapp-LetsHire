@@ -7,7 +7,7 @@ tr
   td= simple_format(interview.interviewers_str.join(';<br/>'))
   td= interview.status
   - can_manage = can? :manage, interview
-  td
+  td.actions
     div.row-fluid.actions
       .span6.action-icon
         -if can_manage

@@ -3,7 +3,7 @@ tr data-id=candidate.id
   td= h(candidate.email)
   td= candidate.openings.last.try(:title)
   td= candidate.overall_status_str
-  td
+  td.actions
     div.row-fluid.actions
       .span6.action-icon
         -if can? :manage, @candidate
