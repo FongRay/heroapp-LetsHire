@@ -109,7 +109,8 @@ class CandidatesController < AuthenticatedController
     @candidate = Candidate.new params[:candidate]
     if @candidate.save
       if opening_id
-        @candidate.opening_candidates.create(:opening_id => opening_id)
+        opening_candidate = @candidate.opening_candidates.create(:opening_id => opening_id)
+        opening_candidate.update_candidate
       end
 
       #TODO: async large file upload

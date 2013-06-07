@@ -26,6 +26,8 @@ class Opening < ActiveRecord::Base
   validate :select_valid_owners_if_active,
            :total_no_should_ge_than_filled_no
 
+  before_destroy :change_candidate_current_opening_candidate
+
   self.per_page = 20
 
   STATUS_LIST = { :draft => 0, :published => 1, :closed => -1 }
@@ -110,6 +112,13 @@ class Opening < ActiveRecord::Base
 
   def total_no_should_ge_than_filled_no
     errors.add(:total_no, 'is smaller than filled seat number.') if filled_no > total_no
+  end
+
+  def change_candidate_current_opening_candidate
+    opening_candidates = OpeningCandidate.where(:opening_id => opening.id)
+    opening_candidates.each do |opening_candidate|
+      opening_candidate.clear_current_opening_info
+    end
   end
 
   STATUS_STRINGS = STATUS_LIST.invert

@@ -13,7 +13,6 @@ class OpeningCandidate < ActiveRecord::Base
   validates :candidate_id, :uniqueness => { :scope => :opening_id }
 
   after_create :update_candidate
-  after_update :update_candidate
 
   accepts_nested_attributes_for :interviews, :allow_destroy => true, :reject_if => proc { |interview| interview.empty? }
 
@@ -68,10 +67,12 @@ class OpeningCandidate < ActiveRecord::Base
 
   def close_job_application
     update_attributes(:status => OpeningCandidate::STATUS_LIST[OpeningCandidate::CLOSED])
+    clear_current_opening_info
   end
 
   def reopen_job_application
     update_attributes(:status => OpeningCandidate::STATUS_LIST[OpeningCandidate::LOOP])
+    update_candidate
   end
 
   def status_changed_to_accepted? (new_status)
@@ -100,12 +101,20 @@ class OpeningCandidate < ActiveRecord::Base
                   OFFER_ACCEPTED => 10}
   STATUS_STRINGS = STATUS_LIST.invert
 
-  private
-
   def update_candidate
     candidate =  Candidate.find(self.candidate_id)
     if candidate
       candidate.current_opening_candidate_id = self.id
+      candidate.current_opening_id = self.opening_id
+      candidate.save!
+    end
+  end
+
+  def clear_current_opening_info
+    candidate = Candidate.find(self.candidate_id)
+    if candidate and candidate.current_opening_id == self.opening_id
+      candidate.current_opening_id = -1
+      candidate.current_opening_candidate_id = -1
       candidate.save!
     end
   end

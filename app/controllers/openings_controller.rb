@@ -116,13 +116,11 @@ class OpeningsController < ApplicationController
     if @opening.close_operation?(params[:opening][:status])
       # transaction update the related opening_candidates status
       OpeningCandidate.transaction do
-        Interview.transaction do
-          @opening.opening_candidates.each do |opening_candidate|
-            opening_candidate.interviews.each do |interview|
-              interview.cancel_interview('Job Opening Closed')
-            end
-            opening_candidate.close_job_application if opening_candidate.in_interview_loop?
+        @opening.opening_candidates.each do |opening_candidate|
+          opening_candidate.interviews.each do |interview|
+            interview.cancel_interview('Job Opening Closed')
           end
+          opening_candidate.close_job_application if opening_candidate.in_interview_loop?
         end
       end
     end
@@ -143,7 +141,8 @@ class OpeningsController < ApplicationController
 
     params[:candidates] ||= []
     params[:candidates].each do |candidate|
-      @opening.opening_candidates.create :candidate_id => candidate
+      opening_candidate = @opening.opening_candidates.create :candidate_id => candidate
+      opening_candidate.update_candidate
     end
     render :json => { :success => true }
   rescue ActiveRecord::RecordNotFound
