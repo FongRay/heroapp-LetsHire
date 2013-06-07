@@ -1,10 +1,10 @@
 tr
-  td.iso-time= interview.scheduled_at_iso
-  td.capitalized-text= interview.modality
+  td.scheduled_at.iso-time= interview.scheduled_at_iso
+  td.modality.capitalized-text= interview.modality
   -unless opening_candidate
     td= link_to interview.opening_candidate.candidate.name + " for " + interview.opening_candidate.opening.title, interview
-  td= interview.duration
-  td= simple_format(interview.interviewers_str.join(';<br/>'))
+  td= "#{interview.duration} minutes"
+  td.interviewers= simple_format(interview.interviewers_str.collect { |i| truncate(i, :length => 30) }.join(';<br/>'))
   td= interview.status
   - can_manage = can? :manage, interview
   td
