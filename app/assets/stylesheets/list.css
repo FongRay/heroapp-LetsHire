@@ -18,6 +18,10 @@ div.actions {
   height: 20px;
 }
 
+td.actions {
+  width: 60px;
+}
+
 .action-icon {
   margin: 0;
 }

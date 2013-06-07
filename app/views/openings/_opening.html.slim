@@ -11,7 +11,7 @@ tr data-id=opening.id
   td= "#{opening.filled_no}/#{opening.total_no}"
   td= link_to "#{opening.candidates.active.count}", candidates_path(:opening_id => opening.id)
 
-  td
+  td.actions
     - if can? :update, opening
       div.row-fluid.actions
         .span6.action-icon
