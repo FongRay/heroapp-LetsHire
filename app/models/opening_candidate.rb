@@ -12,8 +12,6 @@ class OpeningCandidate < ActiveRecord::Base
 
   validates :candidate_id, :uniqueness => { :scope => :opening_id }
 
-  after_create :update_candidate
-
   accepts_nested_attributes_for :interviews, :allow_destroy => true, :reject_if => proc { |interview| interview.empty? }
 
   # find all 'rejected' records belong to recruiter user
@@ -102,21 +100,15 @@ class OpeningCandidate < ActiveRecord::Base
   STATUS_STRINGS = STATUS_LIST.invert
 
   def update_candidate
-    candidate =  Candidate.find(self.candidate_id)
-    if candidate
-      candidate.current_opening_candidate_id = self.id
-      candidate.current_opening_id = self.opening_id
-      candidate.save!
-    end
+    candidate.current_opening_candidate_id = self.id
+    candidate.current_opening_id = self.opening_id
+    candidate.save!
   end
 
   def clear_current_opening_info
-    candidate = Candidate.find(self.candidate_id)
-    if candidate and candidate.current_opening_id == self.opening_id
-      candidate.current_opening_id = -1
-      candidate.current_opening_candidate_id = -1
-      candidate.save!
-    end
+    candidate.current_opening_id = -1
+    candidate.current_opening_candidate_id = -1
+    candidate.save!
   end
 
 end

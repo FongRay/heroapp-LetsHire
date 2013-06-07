@@ -115,7 +115,6 @@ class Opening < ActiveRecord::Base
   end
 
   def change_candidate_current_opening_candidate
-    opening_candidates = OpeningCandidate.where(:opening_id => opening.id)
     opening_candidates.each do |opening_candidate|
       opening_candidate.clear_current_opening_info
     end
