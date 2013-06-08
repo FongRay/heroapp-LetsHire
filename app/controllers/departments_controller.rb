@@ -58,7 +58,7 @@ class DepartmentsController < AuthenticatedController
   # DELETE /departments/1
   def destroy
     @department = Department.find(params[:id])
-    return redirect_to departments_url, notice: 'Department with users cannot be deleted.' if @department.users.count > 0
+    return redirect_to departments_url, :alert => 'Department with users cannot be deleted.' if @department.users.count > 0
     @department.destroy
 
     redirect_to departments_url
