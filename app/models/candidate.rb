@@ -32,11 +32,11 @@ class Candidate < ActiveRecord::Base
   scope :active, where(:status => NORMAL)
   scope :inactive, where(:status => INACTIVE)
 
-  scope :no_openings_sql, where('id NOT IN (
+  scope :no_openings, where('id NOT IN (
                             SELECT DISTINCT "opening_candidates"."candidate_id" FROM "opening_candidates"
                             INNER JOIN "openings" ON "opening_candidates"."opening_id" = "openings"."id"
                             WHERE "openings"."status" = 1 )')
-  scope :no_openings, lambda { where('id NOT IN (?)', OpeningCandidate.joins(:opening).where(:openings => {:status => 1}).map(&:candidate_id).join(',')) }
+  #scope :no_openings, lambda { where('id NOT IN (?)', OpeningCandidate.joins(:opening).where(:openings => {:status => 1}).map(&:candidate_id).join(',')) }
 
   scope :not_in_opening, ->(opening_id) { where("id NOT IN (SELECT DISTINCT candidate_id FROM opening_candidates WHERE opening_id=#{opening_id})") }
   scope :available, where(:status => INACTIVE).no_openings
@@ -48,12 +48,12 @@ class Candidate < ActiveRecord::Base
   scope :with_interview, where(:current_opening_candidate_id => OpeningCandidate.joins(:interviews).pluck(:opening_candidate_id).uniq)
 
   #Todo: need filter out candidates not assigned to interviews
-  scope :no_interviews_sql, where('id NOT in (
+  scope :no_interviews, where('id NOT in (
                               SELECT DISTINCT "candidates"."id" FROM "candidates"
                               INNER JOIN "opening_candidates" ON "opening_candidates"."candidate_id" = "candidates"."id"
                               INNER JOIN "interviews" ON "interviews"."opening_candidate_id" = "opening_candidates"."id" )
                               AND current_opening_candidate_id > 0')
-  scope :no_interviews, lambda { where('id NOT IN (?)', Candidate.joins(:opening_candidates => :interviews).map(&:id).join(',')).where('current_opening_candidate_id > 0') }
+  #scope :no_interviews, lambda { where('id NOT IN (?)', Candidate.joins(:opening_candidates => :interviews).map(&:id).join(',')).where('current_opening_candidate_id > 0') }
 
   scope :with_assessment_sql, where('current_opening_candidate_id IN (
                                 SELECT "opening_candidates"."id" FROM "opening_candidates"
