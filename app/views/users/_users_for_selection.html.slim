@@ -3,7 +3,7 @@
     td
       = check_box_tag nil, user.id, false,  { :id => nil, :data => { :str => user.name  } }
     td.span5
-      = user.name
+      = truncate(user.name, :length => 30)
     td
       i.icon-arrow-down
   tr.hide
