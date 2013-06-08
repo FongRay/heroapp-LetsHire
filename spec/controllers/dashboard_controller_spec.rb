@@ -56,11 +56,19 @@ describe DashboardController do
   end
 
   def create_opening_candidate(opening, candidate)
-    OpeningCandidate.create! valid_opening_candidate(opening, candidate)
+    opening_candidate = OpeningCandidate.create! valid_opening_candidate(opening, candidate)
+    candidate.current_opening_id = opening.id
+    candidate.current_opening_candidate_id = opening_candidate.id
+    candidate.save!
+    opening_candidate
   end
 
   def assign_opening_to_candidate(opening, candidate)
     opening_candidate = OpeningCandidate.create! valid_opening_candidate(opening, candidate)
+    candidate.current_opening_id = opening.id
+    candidate.current_opening_candidate_id = opening_candidate.id
+    candidate.save!
+    opening_candidate
   end
 
   def schedule_opening_interview_to_candidate(candidate, opening)
@@ -126,7 +134,7 @@ describe DashboardController do
     end
 
 
-    xit 'assign candidate with final assessment to @candidates_with_assessment' do
+    it 'assign candidate with final assessment to @candidates_with_assessment' do
       sign_in @recruiter
       get 'overview'
       assigns(:candidates_with_assessment).should_not include(@candidate)
@@ -136,17 +144,11 @@ describe DashboardController do
       assigns(:candidates_with_assessment).should include(@candidate)
     end
 
-    xit 'assign interviewed candidate without final assessment to @candidates_without_assessment' do
+    it 'assign interviewed candidate without final assessment to @candidates_without_assessment' do
       sign_in @recruiter
       get 'overview'
       assigns(:candidates_without_assessment).should_not include(@candidate)
       interview = schedule_opening_interview_to_candidate(@candidate, @opening)
-      interview.status = 'started'
-      interview.save!
-      get 'overview'
-      assigns(:candidates_without_assessment).should_not include(@candidate)
-      interview.status = 'finished'
-      interview.save!
       get 'overview'
       assigns(:candidates_without_assessment).should include(@candidate)
     end
@@ -171,5 +173,4 @@ describe DashboardController do
       assigns(:interviews_interviewed_by_me).should include(interview)
     end
   end
-
 end

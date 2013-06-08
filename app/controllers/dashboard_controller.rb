@@ -13,7 +13,7 @@ class DashboardController < ApplicationController
       @candidates_without_opening = Candidate.active.no_openings
       @candidates_without_interview = Candidate.active.no_interviews
       #Fixme: no_assessment isn't a scope, cannot apply scope 'active' for without_assessment
-      @candidates_without_assessment = Candidate.no_assessment
+      @candidates_without_assessment = Candidate.active.without_assessment
       @candidates_with_assessment = Candidate.active.with_assessment
     end
 
