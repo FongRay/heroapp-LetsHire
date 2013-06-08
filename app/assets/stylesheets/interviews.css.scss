@@ -45,6 +45,7 @@ table.list_interviews {
 
   .modality  {
     width: 17%;
+
   }
 
   select {
@@ -64,6 +65,10 @@ table.list_interviews {
   }
   .status {
     width: 17%;
+
+    select {
+      width: 110px;
+    }
   }
 
   #interviewers_literal {

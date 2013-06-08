@@ -23,7 +23,7 @@ tr data-id=opening.id
             ul.dropdown-menu
               li = link_to 'View Details', opening
               li = link_to 'Edit', edit_opening_path(opening)
-              - if opening.published?
+              - if opening.published? && opening.available_no > 0
                 li = link_to 'Assign Candidates', '', :class => 'assign_candidates'
               -if current_user.admin? || opening.status == Opening::STATUS_LIST[:draft]
                 li = link_to 'Delete', opening, :confirm => 'Are you sure?', :method => :delete

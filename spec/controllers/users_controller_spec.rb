@@ -133,7 +133,7 @@ describe UsersController do
       user = User.create! valid_attributes
       put :deactivate, {:id => user.to_param}
       expect(response).to redirect_to(users_url)
-      expect(flash[:notice]).to eq(nil)
+      expect(flash[:alert]).to eq(nil)
 
       expect(assigns(:user).deleted_at).to_not eq(nil)
 
@@ -143,7 +143,7 @@ describe UsersController do
       user = User.create! valid_attributes.merge(:deleted_at => Time.current)
       put :reactivate, {:id => user.to_param}
       response.should redirect_to(users_url)
-      flash[:notice].should eq(nil)
+      flash[:alert].should eq(nil)
 
       assigns(:user).deleted_at.should eq(nil)
 
@@ -151,7 +151,7 @@ describe UsersController do
 
     it "cannot deactivate yourself" do
       put :deactivate, { :id => subject.current_user.to_param}
-      flash[:notice].should eq('Cannot disable yourself')
+      flash[:alert].should eq('Cannot disable yourself')
     end
 
     describe "Busy User Deactivate" do
@@ -169,7 +169,7 @@ describe UsersController do
 
       it "cannot deactivate an active hiring_manager" do
         put :deactivate, { :id => @users[0].to_param}
-        flash[:notice].should include('active openings')
+        flash[:alert].should include('active openings')
         user = @users[0]
         user.reload
         user.deleted_at.should eq(nil)
@@ -178,7 +178,7 @@ describe UsersController do
 
       it "cannot deactivate an active recruiter" do
         put :deactivate, { :id => @users[1].to_param}
-        flash[:notice].should include('active openings')
+        flash[:alert].should include('active openings')
         user = @users[1]
         user.reload
         user.deleted_at.should eq(nil)
@@ -196,7 +196,7 @@ describe UsersController do
                                                      :opening_candidate_id => opening_candidate.id,
                                                      :user_ids => [interviewers[0].id]})
         put :deactivate, { :id => interviewers[0].to_param}
-        flash[:notice].should eq(nil)
+        flash[:alert].should eq(nil)
         user = interviewers[0]
         user.reload
         expect(user.deleted_at).not_to eq(nil)
@@ -205,7 +205,7 @@ describe UsersController do
                                                      :opening_candidate_id => opening_candidate.id,
                                                      :user_ids => [interviewers[1].id]})
         put :deactivate, { :id => interviewers[1].to_param}
-        flash[:notice].should include('active interviews')
+        flash[:alert].should include('active interviews')
         user = interviewers[1]
         user.reload
         user.deleted_at.should eq(nil)

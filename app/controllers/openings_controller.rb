@@ -46,7 +46,7 @@ class OpeningsController < ApplicationController
       format.json { render json: @opening }
     end
   rescue ActiveRecord::RecordNotFound
-    redirect_to openings_url, notice: 'Invalid opening'
+    redirect_to openings_url, :alert => 'Invalid opening'
   end
 
   # GET /openings/new
@@ -69,7 +69,7 @@ class OpeningsController < ApplicationController
   def edit
     @opening = Opening.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to openings_url, notice: 'Invalid opening'
+    redirect_to openings_url, :alert => 'Invalid opening'
   end
 
   # POST /openings
@@ -77,7 +77,7 @@ class OpeningsController < ApplicationController
     @opening = Opening.new(params[:opening])
 
     unless current_user.has_role?(:recruiter)
-      return redirect_to openings_url, notice: 'Cannot create Job opening for other hiring managers.' if @opening.hiring_manager_id != current_user.id
+      return redirect_to openings_url, :alert => 'Cannot create Job opening for other hiring managers.' if @opening.hiring_manager_id != current_user.id
     end
     @opening.creator = current_user
     if @opening.save
@@ -119,7 +119,7 @@ class OpeningsController < ApplicationController
       render action: 'edit'
     end
   rescue ActiveRecord::RecordNotFound
-    redirect_to openings_url, notice: 'Invalid opening'
+    redirect_to openings_url, :alert => 'Invalid opening'
   end
 
   # POST /openings/1/assign_candidates
@@ -133,7 +133,7 @@ class OpeningsController < ApplicationController
     end
     render :json => { :success => true }
   rescue ActiveRecord::RecordNotFound
-    redirect_to openings_url, notice: 'Invalid opening'
+    redirect_to request.referrer, :alert => 'Invalid opening'
   end
 
 
@@ -156,7 +156,7 @@ class OpeningsController < ApplicationController
 
     redirect_to openings_url
   rescue ActiveRecord::RecordNotFound
-    redirect_to openings_url, notice: 'Invalid opening'
+    redirect_to openings_url, :alert => 'Invalid opening'
   end
 
   def subregion_options
