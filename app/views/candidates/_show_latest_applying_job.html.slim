@@ -55,5 +55,7 @@
               div.accordion-body.collapse id="collapse2-#{i}"
                 div.accordion-inner This Interview has not finished yet
 
+      p style="text-indent: 2em" = "Final Assessment:"
+      =render :partial => 'job_assessment', :locals => { :opening_candidate => @latest_applying_job }
   div.assessment-candidate-dialog id='candidate-assessment-dialog'
     = render 'assessments/form', {:opening_candidate => @latest_applying_job, :assessment => @assessment }

@@ -81,6 +81,18 @@ class OpeningCandidate < ActiveRecord::Base
     ( status == STATUS_LIST[OFFER_ACCEPTED] ) and ( new_status != STATUS_LIST[OFFER_ACCEPTED] )
   end
 
+  def self.close_opening_preprocess(opening)
+    # transaction update the related opening_candidates status
+    transaction do
+      opening.opening_candidates.each do |opening_candidate|
+        opening_candidate.interviews.each do |interview|
+          interview.cancel_interview('Job Opening Closed')
+        end
+        opening_candidate.close_job_application if opening_candidate.in_interview_loop?
+      end
+    end
+  end
+
   # find all 'rejected' records belong to recruiter user
 
   INTERVIEW_LOOP = 'Interview Loop'
@@ -88,13 +100,15 @@ class OpeningCandidate < ActiveRecord::Base
   QUIT = 'Quit'
   CLOSED = 'Closed'
   OFFER_ACCEPTED = 'Offer Accepted'
+  OFFER_PENDING = 'Offer Pending'
+  OFFER_SENT = 'Offer Sent'
   #Don't change order randomly. order matters.
   STATUS_LIST = { INTERVIEW_LOOP => 1,
                   FAIL => 2,
                   QUIT => 3,   # candidate quit
                   CLOSED => 4, # opening closed
-                  'Offer Pending' => 7,
-                  'Offer Sent' => 8,
+                  OFFER_PENDING => 7,
+                  OFFER_SENT => 8,
                   'Offer Declined' => 9,
                   OFFER_ACCEPTED => 10}
   STATUS_STRINGS = STATUS_LIST.invert

@@ -22,10 +22,10 @@ $(function() {
     {
         $('#department_id').attr('name', null);
         $('#openingid_select_wrapper').attr('id', 'candidate_openingid_select_wrapper');
-        $('select#opening_id').attr('name', 'candidate[opening_ids]');
+        $('select#opening_id').attr('name', 'candidate[opening_id]');
 
         $('body').delegate('select#department_id', 'change', function() {
-            Common.reloadOpening($(this), $('#candidate_openingid_select_wrapper'), 'candidate[opening_ids]');
+            Common.reloadOpening($(this), $('#candidate_openingid_select_wrapper'), 'candidate[opening_id]');
         });
 
         var opening_selection_container = $("#opening_selection_container");

@@ -1,26 +1,26 @@
 .page-container-wrapper
   h3 Candidate Details
   .page-container
-      div.row-fluid
-        .span8
-          div.page-container-inner.candidate-panel.fixed-size id="candidate-applying-panel"
-            - if @latest_applying_job.nil?
-              div align="center" id="candidate-no-assignment-msg"
-                span style="font-size: 30px"
-                  = "No Job Opening Assignment."
-            - else
-              =render 'show_latest_applying_job'
-        .span4
-          div.page-container-inner.candidate-panel id="candidate-profile-panel"
-            =render 'candidate_profile'
-      - j = 0
-      - unless @applying_jobs.nil?
-        - @applying_jobs.each do |job|
-          - j += 1
-          br
-          div.page-container-inner.candidate-panel
-            div.row-fluid
-              .span12
-                = render :partial => 'recruiting_history', :locals => { :applying_job => job, :index => j }
-      
-      = render 'new_opening'
+    div.row-fluid
+      .span8
+        div.page-container-inner.candidate-panel.fixed-size id="candidate-applying-panel"
+          - if @latest_applying_job.nil?
+            div align="center" id="candidate-no-assignment-msg"
+              span style="font-size: 30px"
+                = "No Job Opening Assignment."
+          - else
+            =render 'show_latest_applying_job'
+      .span4
+        div.page-container-inner.candidate-panel id="candidate-profile-panel"
+          =render 'candidate_profile'
+    - j = 0
+    - unless @applying_jobs.nil?
+      - @applying_jobs.each do |job|
+        - j += 1
+        br
+        div.page-container-inner.candidate-panel
+          div.row-fluid
+            .span12
+              = render :partial => 'recruiting_history', :locals => { :applying_job => job, :index => j }
+
+    = render 'new_opening'
