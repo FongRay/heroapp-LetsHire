@@ -51,7 +51,7 @@ class Candidate < ActiveRecord::Base
   #                            INNER JOIN "opening_candidates" ON "opening_candidates"."candidate_id" = "candidates"."id"
   #                            INNER JOIN "interviews" ON "interviews"."opening_candidate_id" = "opening_candidates"."id" )
   #                            AND current_opening_candidate_id > 0').in_interview_loop }
-  scope :no_interviews, lambda { in_interview_loop.where('current_opening_candidate_id NOT IN (?)', Interview.group(:opening_candidate_id).pluck(:opening_candidate_id).uniq.push(0)) }
+  scope :no_interviews, lambda { in_interview_loop.where('current_opening_candidate_id NOT IN (?)', OpeningCandidate.joins(:interviews).uniq.pluck(:opening_candidate_id).push(0)) }
 
   scope :with_assessment_sql, where('current_opening_candidate_id IN (
                                 SELECT "opening_candidates"."id" FROM "opening_candidates"
