@@ -113,6 +113,8 @@ class OpeningCandidate < ActiveRecord::Base
                   OFFER_ACCEPTED => 10}
   STATUS_STRINGS = STATUS_LIST.invert
 
+  scope :in_interview_loop, where(:status=> STATUS_LIST[INTERVIEW_LOOP])
+
   def update_candidate
     candidate.current_opening_candidate_id = self.id
     candidate.current_opening_id = self.opening_id
