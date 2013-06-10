@@ -43,15 +43,15 @@ class Candidate < ActiveRecord::Base
   scope :with_interview_sql, where('current_opening_candidate_id IN (
                                SELECT "opening_candidates"."id" FROM "opening_candidates"
                                INNER JOIN "interviews" ON "interviews"."opening_candidate_id" = "opening_candidates"."id")')
-  scope :with_interview, lambda { where(:current_opening_candidate_id => OpeningCandidate.in_interview_loop.joins(:interviews).select("opening_candidates.id")) }
-  scope :with_feedback, lambda { where(:current_opening_candidate_id => OpeningCandidate.in_interview_loop.joins(:interviews).where("interviews.assessment IS NOT NULL").pluck("opening_candidates.id").uniq())}
+  scope :with_interview, lambda { where(:current_opening_candidate_id => OpeningCandidate.in_interview_loop.joins(:interviews).pluck("opening_candidates.id").uniq) }
+  scope :with_feedback, lambda { where(:current_opening_candidate_id => OpeningCandidate.in_interview_loop.joins(:interviews).where("interviews.assessment IS NOT NULL").pluck("opening_candidates.id").uniq) }
 
   #scope :no_interviews, lambda { where('candidates.id NOT in (
   #                            SELECT DISTINCT "candidates"."id" FROM "candidates"
   #                            INNER JOIN "opening_candidates" ON "opening_candidates"."candidate_id" = "candidates"."id"
   #                            INNER JOIN "interviews" ON "interviews"."opening_candidate_id" = "opening_candidates"."id" )
   #                            AND current_opening_candidate_id > 0').in_interview_loop }
-  scope :no_interviews, lambda { where('candidates.id NOT IN (?)', OpeningCandidate.in_interview_loop.joins(:interviews).pluck(:candidate_id).join(',')).in_interview_loop.where('current_opening_candidate_id > 0') }
+  scope :no_interviews, lambda { in_interview_loop.where('current_opening_candidate_id NOT IN (?)', Interview.group(:opening_candidate_id).pluck(:opening_candidate_id).uniq.push(0)) }
 
   scope :with_assessment_sql, where('current_opening_candidate_id IN (
                                 SELECT "opening_candidates"."id" FROM "opening_candidates"
@@ -64,9 +64,9 @@ class Candidate < ActiveRecord::Base
   #                                 INNER JOIN "assessments" ON "assessments"."opening_candidate_id" = "opening_candidates"."id"
   #                                 WHERE "assessments"."comment" IS NOT NULL)
   #                                 AND current_opening_candidate_id > 0')
-  scope :without_assessment, lambda { with_feedback.where('current_opening_candidate_id NOT IN (?)',
+  scope :without_assessment, lambda { with_feedback.where("current_opening_candidate_id NOT IN (?)",
                                    OpeningCandidate.joins(:assessment).where('"assessments"."comment" IS NOT NULL')
-                                   .select("opening_candidates.id").uniq.join(',')).with_feedback }
+                                   .pluck(:opening_candidate_id).uniq.push(0)) }
 
   def opening(index)
     opening_candidates[index].opening if opening_candidates.size > index

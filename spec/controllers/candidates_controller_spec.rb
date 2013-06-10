@@ -23,10 +23,6 @@ describe CandidatesController do
                                                                           :department_id => @hiring_manager1.department_id)
     @candidate = Candidate.create! FactoryGirl.attributes_for(:candidate)
     @candidate.should be_valid
-    @opening_candidate = OpeningCandidate.create!(:opening_id => @opening.id, :candidate_id => @candidate.id)
-    @opening_candidate.should be_valid
-    @interview = Interview.create! FactoryGirl.attributes_for(:interview).merge(:opening_candidate_id => @opening_candidate.id)
-    @interview.should be_valid
   end
 
   before :each  do
@@ -53,8 +49,17 @@ describe CandidatesController do
     end
   end
 
-  describe "GET show" do
+  describe "Create job_opening & GET show" do
     it "should see correct user details" do
+      request.env['HTTP_REFERER'] = candidates_url
+      put :create_opening, { :id => @candidate.id, :candidate => {:opening_id => @opening.id }}
+      @opening_candidate = OpeningCandidate.find_by_candidate_id_and_opening_id(@candidate.id, @opening.id)
+      @opening_candidate.should be_valid
+      @candidate.reload
+      @opening_candidate.id.should eq(@candidate.current_opening_candidate_id)
+      @interview = Interview.create! FactoryGirl.attributes_for(:interview).merge(:opening_candidate_id => @opening_candidate.id)
+      @interview.should be_valid
+
       get :show, { :id => @candidate.to_param}
       assigns(:candidate).should eq(@candidate)
       assigns(:latest_applying_job).should eq(@opening_candidate)
