@@ -18,7 +18,7 @@
               b Status:
             .controls.capitalized-text
               = "#{@opening.status_str} ("
-              span = link_to "#{pluralize(@opening.candidates.count, 'candidate')}", candidates_path(:opening_id => @opening.id )
+              span = link_to "#{pluralize(@opening.active_candidates.count, 'candidate')}", candidates_path(:opening_id => @opening.id )
               span =  ")"
         - elsif @opening.recruiter
           .control-group

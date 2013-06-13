@@ -28,9 +28,13 @@
           td
             - if not @resume.nil?
               = link_to "#{@resume}", resume_candidate_path({:id => @candidate.id})
- 
+
     div align="center"
       = hidden_field_tag :candidate_id, @candidate.id
-      = link_to 'Assign Job Opening', '#', :class => 'btn candidate-assign-job-button candidate_new_opening'
-      = link_to 'Mark Inactive', '#', :class => 'btn candidate-mark-inactive-button candidate-blacklist-link', :"data-candidate-id" => @candidate.id
-      = render 'candidates/candidate_blacklist', {:candidate => @candidate}
+      -if @candidate.inactive?
+        = link_to 'Reactivate', reactivate_candidate_path(@candidate), :method => :post, :confirm => 'Please confirm?', :class => 'btn candidate-mark-inactive-button candidate-blacklist-link', :"data-candidate-id" => @candidate.id
+      -else
+        = link_to 'Assign Job Opening', '#', :class => 'btn candidate-assign-job-button candidate_new_opening'
+        = link_to 'Mark Inactive', '#', :class => 'btn candidate-mark-inactive-button candidate-blacklist-link', :"data-candidate-id" => @candidate.id
+        = render 'candidates/candidate_blacklist', {:candidate => @candidate}
+

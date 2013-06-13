@@ -56,11 +56,19 @@ describe DashboardController do
   end
 
   def create_opening_candidate(opening, candidate)
-    OpeningCandidate.create! valid_opening_candidate(opening, candidate)
+    opening_candidate = OpeningCandidate.create! valid_opening_candidate(opening, candidate)
+    candidate.current_opening_id = opening.id
+    candidate.current_opening_candidate_id = opening_candidate.id
+    candidate.save!
+    opening_candidate
   end
 
   def assign_opening_to_candidate(opening, candidate)
     opening_candidate = OpeningCandidate.create! valid_opening_candidate(opening, candidate)
+    candidate.current_opening_id = opening.id
+    candidate.current_opening_candidate_id = opening_candidate.id
+    candidate.save!
+    opening_candidate
   end
 
   def schedule_opening_interview_to_candidate(candidate, opening)
@@ -117,6 +125,8 @@ describe DashboardController do
 
     it 'assign candidate without interview to @candidates_without_interview' do
       opening_candidate = assign_opening_to_candidate @opening, @candidate
+      Candidate.in_interview_loop.should include @candidate
+      Candidate.no_interviews.should include @candidate
       sign_in @recruiter
       get 'overview'
       assigns(:candidates_without_interview).should include(@candidate)
@@ -125,30 +135,32 @@ describe DashboardController do
       assigns(:candidates_without_interview).should_not include(@candidate)
     end
 
-    it 'assign candidate with final assessment to @candidates_with_assessment' do
+
+    it '@candidates_w/o_assessment should has interview as prerequisite and take assessment as input' do
       sign_in @recruiter
+      opening_candidate = create_opening_candidate(@opening, @candidate)
+
+      interview = Interview.create! valid_interview(opening_candidate)
+      Candidate.with_interview.should include(@candidate)
+      Candidate.with_feedback.should_not include(@candidate)
       get 'overview'
       assigns(:candidates_with_assessment).should_not include(@candidate)
-      opening_candidate = create_opening_candidate(@opening, @candidate)
+      assigns(:candidates_without_assessment).should_not include(@candidate)
+
+      interview.assessment = 'pass'
+      interview.save!
+      Candidate.with_feedback.should include(@candidate)
+      get 'overview'
+      assigns(:candidates_with_assessment).should_not include(@candidate)
+      assigns(:candidates_without_assessment).should include(@candidate)
+
       Assessment.create! valid_assessment(opening_candidate, @hiring_manager)
       get 'overview'
       assigns(:candidates_with_assessment).should include(@candidate)
+      assigns(:candidates_without_assessment).should_not include(@candidate)
     end
 
-    xit 'assign interviewed candidate without final assessment to @candidates_without_assessment' do
-      sign_in @recruiter
-      get 'overview'
-      assigns(:candidates_without_assessment).should_not include(@candidate)
-      interview = schedule_opening_interview_to_candidate(@candidate, @opening)
-      interview.status = 'started'
-      interview.save!
-      get 'overview'
-      assigns(:candidates_without_assessment).should_not include(@candidate)
-      interview.status = 'finished'
-      interview.save!
-      get 'overview'
-      assigns(:candidates_without_assessment).should include(@candidate)
-    end
+
 
     it 'assign upcoming interviews owned by me to @interviews_owned_by_me' do
       sign_in @recruiter
@@ -170,5 +182,4 @@ describe DashboardController do
       assigns(:interviews_interviewed_by_me).should include(interview)
     end
   end
-
 end

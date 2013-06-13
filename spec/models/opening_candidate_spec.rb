@@ -8,8 +8,8 @@ describe OpeningCandidate do
 
     begin
       FactoryGirl.create(:opening_candidate)
+      FactoryGirl.build(:opening_candidate).should_not be_valid
     rescue
     end
-    FactoryGirl.build(:opening_candidate).should_not be_valid
   end
 end

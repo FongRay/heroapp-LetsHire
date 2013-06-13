@@ -16,10 +16,10 @@ class InterviewsController < AuthenticatedController
     @interviews = (case mode
                   when 'owned_by_me'
                      @default_filter = 'Any Interviews Related to Me'
-                     Interview.owned_by(current_user.id)
+                     Interview.owned_by(current_user.id).upcoming
                   when 'interviewed_by_me'
                      @default_filter = 'All of My Interviews'
-                     Interview.interviewed_by(current_user.id)
+                     Interview.interviewed_by(current_user.id).upcoming
                   when 'interviewed_by_me_today'
                      @default_filter = 'My Interviews Today'
                      Interview.interviewed_by(current_user.id).during(Time.zone.now)

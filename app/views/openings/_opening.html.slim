@@ -9,7 +9,7 @@ tr data-id=opening.id
         = opening.hiring_manager.name
   td.capitalized-text = opening.status_str
   td= "#{opening.filled_no}/#{opening.total_no}"
-  td= link_to "#{opening.candidates.active.count}", candidates_path(:opening_id => opening.id)
+  td= link_to "#{opening.active_candidates.count}", candidates_path(:opening_id => opening.id)
 
   td.actions
     - if can? :update, opening

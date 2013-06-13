@@ -13,7 +13,7 @@ class DashboardController < ApplicationController
       @candidates_without_opening = Candidate.active.no_openings
       @candidates_without_interview = Candidate.active.no_interviews
       #Fixme: no_assessment isn't a scope, cannot apply scope 'active' for without_assessment
-      @candidates_without_assessment = Candidate.no_assessment
+      @candidates_without_assessment = Candidate.active.without_assessment
       @candidates_with_assessment = Candidate.active.with_assessment
     end
 
@@ -42,9 +42,9 @@ class DashboardController < ApplicationController
 
 
     # data displayed in charts
-    @openings_created_by_me = Opening.created_by(current_user.id).length
-    @openings_assigned_to_me = Opening.owned_by(current_user.id).length
-    @openings_without_interviewers = Opening.published.without_interviewers.length
+    @openings_created_by_me = Opening.created_by(current_user.id).count
+    @openings_assigned_to_me = Opening.owned_by(current_user.id).count
+    @openings_without_interviewers = Opening.published.without_interviewers.count
 
     # FIXME: Do we arrange interview on Sunday and Saturday ?
     @dates = []
@@ -53,8 +53,8 @@ class DashboardController < ApplicationController
     (0..6).reverse_each do |i|
       date = (Time.now - i.days).to_date
       @dates << "#{date.month}-#{date.day}"
-      @interviews_assigned_to_me << Interview.owned_by(current_user.id).during(date).length
-      @interviews_upcoming_today << Interview.interviewed_by(current_user.id).during(date).length
+      @interviews_assigned_to_me << Interview.owned_by(current_user.id).during(date).count
+      @interviews_upcoming_today << Interview.interviewed_by(current_user.id).during(date).count
     end
 
     @offers_rejected = OpeningCandidate.rejected(current_user.id).count

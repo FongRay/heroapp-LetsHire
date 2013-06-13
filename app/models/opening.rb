@@ -16,7 +16,8 @@ class Opening < ActiveRecord::Base
   has_many :participants, :class_name => 'User', :through => :opening_participants
 
   has_many :opening_candidates,  :dependent => :destroy
-  has_many :candidates, :through => :opening_candidates
+
+  has_many :active_candidates, :class_name => 'Candidate', :foreign_key => 'current_opening_id'
 
   has_many :interviews, :through => :opening_candidates, :dependent => :destroy
 
@@ -26,6 +27,8 @@ class Opening < ActiveRecord::Base
   validate :select_valid_owners_if_active,
            :total_no_should_ge_than_filled_no
 
+  before_destroy :change_candidate_current_opening_candidate
+
   self.per_page = 20
 
   STATUS_LIST = { :draft => 0, :published => 1, :closed => -1 }
@@ -33,8 +36,14 @@ class Opening < ActiveRecord::Base
   scope :owned_by,  ->(user_id) { where('hiring_manager_id = ? OR recruiter_id = ? OR creator_id = ?', user_id, user_id, user_id) }
   scope :created_by, ->(user_id) { where('creator_id = ?', user_id)}
   scope :interviewed_by, ->(user_id) { joins(:opening_participants => [:participant]).where('users.id = ?', user_id) }
-  scope :without_candidates, where(:opening_candidates_count => 0)
-  scope :without_interviewers, where('id NOT IN (SELECT opening_id FROM opening_candidates)')
+  scope :without_candidates, lambda { where("id NOT IN (#{Candidate.joins(:opening_candidates)
+                                                          .where('current_opening_id > 0')
+                                                          .where('(opening_candidates.status=? OR opening_candidates.status=? OR opening_candidates.status=?)',
+                                                                  OpeningCandidate::STATUS_LIST[OpeningCandidate::INTERVIEW_LOOP],
+                                                                  OpeningCandidate::STATUS_LIST[OpeningCandidate::OFFER_PENDING],
+                                                                  OpeningCandidate::STATUS_LIST[OpeningCandidate::OFFER_SENT])
+                                                          .select('current_opening_id').uniq.to_sql})") }
+  scope :without_interviewers, lambda { where("id NOT IN (#{OpeningParticipant.select('opening_id').uniq.to_sql})") }
 
   def status_str
     STATUS_STRINGS[status]
@@ -110,6 +119,12 @@ class Opening < ActiveRecord::Base
 
   def total_no_should_ge_than_filled_no
     errors.add(:total_no, 'is smaller than filled seat number.') if filled_no > total_no
+  end
+
+  def change_candidate_current_opening_candidate
+    opening_candidates.each do |opening_candidate|
+      opening_candidate.clear_current_opening_info
+    end
   end
 
   STATUS_STRINGS = STATUS_LIST.invert

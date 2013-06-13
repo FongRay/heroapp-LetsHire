@@ -23,22 +23,19 @@ class CandidatesController < AuthenticatedController
 
     @default_filter = FILTER_LITERAL[mode.to_sym] || 'Active Candidates'
 
-    @candidates = (if %w[no_openings no_interviews with_assessment with_opening available].include?(mode)
+    @candidates = (if %w[no_openings no_interviews with_assessment without_assessment with_opening].include?(mode)
       Candidate.active.send(mode.to_sym)
     elsif mode == 'inactive'
       Candidate.inactive
     elsif mode == 'all'
       Candidate
-    elsif mode == 'without_assessment'
-      #TODO Not supported right now
-      Candidate.active
     else
       opening = nil
       if (params[:opening_id])
        opening = Opening.find(params[:opening_id])
       end
       if opening
-       opening.candidates.active
+       opening.active_candidates
       else
        # NOTE: show active candidates by default
        Candidate.active
@@ -49,13 +46,12 @@ class CandidatesController < AuthenticatedController
 
   def show
     @candidate = Candidate.find params[:id]
-    @latest_applying_job = @candidate.opening_candidates.last
-    @opening_candidate = nil
     @opening = nil
     @interviews = []
     @assessment = nil
-    unless @latest_applying_job.nil?
-      @opening_candidate = @latest_applying_job # to fit the assessment form
+    if @candidate.current_opening_candidate_id > 0
+      @latest_applying_job = OpeningCandidate.find(@candidate.current_opening_candidate_id)
+      @opening_candidate = @latest_applying_job
       @opening = @latest_applying_job.opening
       @interviews = @latest_applying_job.interviews
       unless @latest_applying_job.assessment.nil?
@@ -106,13 +102,16 @@ class CandidatesController < AuthenticatedController
     end
 
     params[:candidate].delete(:department_id)
-    opening_id = params[:candidate][:opening_ids]
-    params[:candidate].delete(:opening_ids)
+    opening_id = params[:candidate][:opening_id]
+    params[:candidate].delete(:opening_id)
     authorize! :create, Candidate
     @candidate = Candidate.new params[:candidate]
     if @candidate.save
       if opening_id
-        @candidate.opening_candidates.create(:opening_id => opening_id)
+        opening_candidate = @candidate.opening_candidates
+                                    .where(:opening_id => opening_id, :candidate_id => @candidate.id)
+                                    .first_or_create
+        opening_candidate.update_candidate if opening_candidate
       end
 
       #TODO: async large file upload
@@ -139,16 +138,11 @@ class CandidatesController < AuthenticatedController
     return redirect_to request.referrer, :alert => 'Invalid attributes' unless params[:candidate]
     @candidate = Candidate.find params[:id]
     authorize! :update, @candidate
-    new_opening_id = params[:candidate][:opening_ids].to_i
+    new_opening_id = params[:candidate][:opening_id].to_i
     return redirect_to request.referrer, :alert => "Opening was not given." if new_opening_id == 0
-    if @candidate.opening_ids.index(new_opening_id)
-      return redirect_to request.referrer, :notice => "Opening was already assigned."
-    end
-    if @candidate.opening_candidates.create(:opening_id => new_opening_id)
-      redirect_to request.referrer, :notice => "Opening was successfully assigned."
-    else
-      redirect_to request.referrer, :alert => "Opening was already assigned or not given."
-    end
+    opening_candidate = @candidate.opening_candidates.where(:opening_id => new_opening_id).first_or_create
+    opening_candidate.update_candidate if opening_candidate
+    redirect_to request.referrer, :notice => "Opening was successfully assigned."
   rescue ActiveRecord::RecordNotFound
     redirect_to candidates_url, :alert => 'Invalid Candidate'
   end
@@ -159,7 +153,7 @@ class CandidatesController < AuthenticatedController
     return redirect_to @candidate, :alert => 'Invalid parameters' unless params[:candidate]
     @candidate = Candidate.find params[:id]
     params[:candidate].delete(:department_id)
-    params[:candidate].delete(:opening_ids)
+    params[:candidate].delete(:opening_id)
 
     tempio = nil
     unless params[:candidate][:resume].nil?
@@ -198,7 +192,7 @@ class CandidatesController < AuthenticatedController
     reason = params[:comments]
     @candidate.mark_inactive(reason)
 
-    redirect_to candidates_url, :notice => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) was successfully moved to blacklist."
+    redirect_to request.referer, :notice => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) was successfully moved to blacklist."
   rescue ActiveRecord::RecordNotFound
     redirect_to candidates_url, :alert => 'Invalid user'
   rescue
@@ -211,7 +205,7 @@ class CandidatesController < AuthenticatedController
 
     @candidate.mark_active
 
-    redirect_to candidates_url, :notice => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) was successfully reactived."
+    redirect_to request.referer, :notice => "Candidate \"#{@candidate.name}\" (#{@candidate.email}) was successfully reactived."
   rescue ActiveRecord::RecordNotFound
     redirect_to candidates_url, :alert => 'Invalid user'
   rescue

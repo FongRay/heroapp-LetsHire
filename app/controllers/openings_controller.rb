@@ -99,24 +99,16 @@ class OpeningsController < ApplicationController
     end
     params[:opening].delete :creator_id
 
-    if @opening.close_operation?(params[:opening][:status])
-      # transaction update the related opening_candidates status
-      OpeningCandidate.transaction do
-        Interview.transaction do
-          @opening.opening_candidates.each do |opening_candidate|
-            opening_candidate.interviews.each do |interview|
-              interview.cancel_interview('Job Opening Closed')
-            end
-            opening_candidate.close_job_application if opening_candidate.in_interview_loop?
-          end
-        end
+    OpeningCandidate.transaction do
+      if @opening.close_operation?(params[:opening][:status])
+        OpeningCandidate.close_opening_preprocess @opening
       end
-    end
 
-    if @opening.update_attributes(params[:opening])
-      redirect_to @opening, notice: 'Opening was successfully updated.'
-    else
-      render action: 'edit'
+      if @opening.update_attributes(params[:opening])
+        redirect_to @opening, notice: 'Opening was successfully updated.'
+      else
+        render action: 'edit'
+      end
     end
   rescue ActiveRecord::RecordNotFound
     redirect_to openings_url, :alert => 'Invalid opening'
@@ -129,7 +121,8 @@ class OpeningsController < ApplicationController
 
     params[:candidates] ||= []
     params[:candidates].each do |candidate|
-      @opening.opening_candidates.create :candidate_id => candidate
+      opening_candidate = @opening.opening_candidates.where(:candidate_id => candidate).first_or_create
+      opening_candidate.update_candidate if opening_candidate
     end
     render :json => { :success => true }
   rescue ActiveRecord::RecordNotFound
@@ -143,15 +136,19 @@ class OpeningsController < ApplicationController
   def destroy
     @opening = Opening.find(params[:id])
     authorize! :manage, @opening
-    if @opening.published? or @opening.closed?
-      if current_user.admin?
-        @opening.destroy
+    OpeningCandidate.transaction do
+      OpeningCandidate.close_opening_preprocess @opening
+
+      if @opening.published? or @opening.closed?
+        if current_user.admin?
+          @opening.destroy
+        else
+          #NOTE: only admin user is able to delete published or closed job openings
+          raise CanCan::AccessDenied
+        end
       else
-        #NOTE: only admin user is able to delete published or closed job openings
-        raise CanCan::AccessDenied
+        @opening.destroy
       end
-    else
-      @opening.destroy
     end
 
     redirect_to openings_url

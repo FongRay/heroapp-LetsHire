@@ -5,7 +5,7 @@ div.action-item-title
 div.carousel-wrapper
   div.carousel data-jcarousel='true'
     ul
-      - if can? :manage, Opening
+      - if can? :manage, Opening and @active_openings.length == 0
         li
           div.action-item-wrapper
             div.action-item
