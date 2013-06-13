@@ -49,26 +49,26 @@ __jquery-rails__ is a gem to automate using jQuery with Rails 3.
 ## Run on Tempest or CloudFoundry
 --------------
 1. Install vmc and its extension
-    gem install vmc
-    gem install console-vmc-plugin
+    + gem install vmc
+    + gem install console-vmc-plugin
 
 2. Login cloudfoundry environment
-    vmc target api.cloudfoundry.com
-    vmc login <email account> <password>
+    + vmc target api.cloudfoundry.com
+    + vmc login <email account> <password>
 
 3. Create service instance
-    vmc create-service postgresql <service instance name>
+    + vmc create-service postgresql <service instance name>
 
 4. Update RAILS_ROOT/manifest.yml
-    change the service instance name under 'services' section
+    + change the service instance name under 'services' section
 
 5. Run bundler:
-    bundle package
-    bundle install
-    bundle exec rake assets:precompile
+    + bundle package
+    + bundle install
+    + bundle exec rake assets:precompile
 
 6. Push app to cloudfoundry
-    vmc push
+    + vmc push
 
 ## User initialization
 --------------
