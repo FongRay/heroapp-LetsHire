@@ -98,16 +98,16 @@ E. update interview feedback
 
 ### Roles
 1. admin
-    operation types: A, B, C, D
+    + operation types: A, B, C, D
 
 2. hiring manager
-    operation types: B, C, D
+    + operation types: B, C, D
 
 3. recruiter
-    operation types: C, D
+    + operation types: C, D
 
 4. interviewer
-    operation types: E
+    + operation types: E
 
 ## Departments management
 --------------
