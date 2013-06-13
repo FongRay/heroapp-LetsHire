@@ -25,7 +25,7 @@ __jquery-rails__ is a gem to automate using jQuery with Rails 3.
 # Installation
 --------------
 1. Download source code from github
-    git clone git@github.com:vmw-tmpst/heroapp-LetsHire.git
+    + git clone git@github.com:vmw-tmpst/heroapp-LetsHire.git
 
 ## Prerequisites
 --------------
