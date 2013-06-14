@@ -2,9 +2,9 @@
 
 # What's LetsHire?
 --------------
-LetsHire is a hero application for Tempest project. It provides a fancy web management console for recuriting, more specific, user can track job openings' lifecycle and candidates' interview progress easily through this web application.
+LetsHire is a hero application for Tempest project. It provides a fancy web management console for recruiting, more specific, user can track job openings' lifecycle and candidates' interview progress easily through this web application.
 
-Based on a fine-grained role-based access control, LetsHire demonstrates a easy-to-use web UI to users. Each user, with a different role, after successful login, can see his/her action items on the dashboard web page at first glance, furthermore, he/she can navigate to the action page directly, without the need to click lots of buttons or links.
+Based on a fine-grained role-based access control, LetsHire demonstrates a easy-to-use web UI to users. Each user, with one or multiple roles, after successful login, can see his/her own action items on the dashboard web page at first glance, furthermore, he/she can navigate to the action page directly, without the need to click lots of buttons or links.
 
 # Introduction
 --------------
@@ -48,16 +48,15 @@ __jquery-rails__ is a gem to automate using jQuery with Rails 3.
 
 ## Run on Tempest or CloudFoundry
 --------------
-1. Install vmc and its extension
-    + gem install vmc
-    + gem install console-vmc-plugin
+1. Install cf which is a CloudFoundry management client provided by VMware
+    + gem install cf
 
 2. Login cloudfoundry environment
-    + vmc target api.cloudfoundry.com
-    + vmc login <email account> <password>
+    + cf target api.run.pivotal.io
+    + cf login <email account> <password>
 
 3. Create service instance
-    + vmc create-service postgresql <service instance name>
+    + cf create-service postgresql <service instance name>
 
 4. Update RAILS_ROOT/manifest.yml
     + change the service instance name under 'services' section
@@ -68,7 +67,7 @@ __jquery-rails__ is a gem to automate using jQuery with Rails 3.
     + bundle exec rake assets:precompile
 
 6. Push app to cloudfoundry
-    + vmc push
+    + cf push
 
 ## User initialization
 --------------
