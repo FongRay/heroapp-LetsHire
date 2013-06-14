@@ -25,24 +25,7 @@ __jquery-rails__ is a gem to automate using jQuery with Rails 3.
 ## Architecture overview
 --------------
 
---------------                          --------------------------------------------------------
-|            |                          |                                                      |
-|   Client   |   <--------------------> |                Cloud Foundry Platform                |
-|            |                          |                                                      |
---------------                          |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
-                                        |
+![Image](architecture.png?raw=true)
 
 # Installation
 --------------
