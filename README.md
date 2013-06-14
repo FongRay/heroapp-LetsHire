@@ -22,6 +22,28 @@ __jqplot-rails__ is a plotting and charting plugin for the jQuery Javascript fra
 
 __jquery-rails__ is a gem to automate using jQuery with Rails 3.
 
+## Architecture overview
+--------------
+
+--------------                          --------------------------------------------------------
+|            |                          |                                                      |
+|   Client   |   <--------------------> |                Cloud Foundry Platform                |
+|            |                          |                                                      |
+--------------                          |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+                                        |
+
 # Installation
 --------------
 1. Download source code from github
