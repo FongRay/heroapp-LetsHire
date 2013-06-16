@@ -11,8 +11,6 @@ html {
 }
 
 body {
-  padding-top: 40px;
-  padding-bottom: 40px;
 }
 
 section {
@@ -81,32 +79,21 @@ p {
   }
 }
 
-/* footer */
-footer {
-  border-top:  1px solid $grayMediumLight;
-  a {
-    color: $gray;
-    &:hover {
-      color: $grayDarker;
-    }
-  }
-  small {
-    float: left;
-  }
-  ul {
-    float: left;
-    list-style: none;
-    li {
-      float: left;
-      margin-left: 10px;
-      color: white;
-      vertical-align: middle;
-    }
-  }
+/* main */
+#main {
+    min-height: 500px;
 }
 
-footer .container {
-  padding-top: 10px;
+
+/* footer */
+footer {
+    text-align: center;
+    clear: both;
+    color: #999999;
+    height: 20px;
+    line-height: 20px;
+    margin: 5px auto 0;
+    padding-bottom: 25px;
 }
 
 /* for devise prompts */
@@ -116,10 +103,6 @@ footer .container {
 
 .flash-notice {
   @extend .alert-success;
-}
-
-.container {
-  width: 1080px;
 }
 
 .navbar-fixed-top .container {
@@ -153,4 +136,8 @@ dt, dd {
 
 .alert {
   margin: 5px 0 5px 0;
+}
+
+.mb20 {
+  margin-bottom: 20px;
 }

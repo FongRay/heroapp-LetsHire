@@ -1,6 +1,8 @@
-header class="navbar navbar-fixed-top navbar-inverse"
+.navbar
   .navbar-inner
     .container
+      a.brand href="/" title="LetsHire: Recruitment Software, Applicant Tracking"
+        img src="/assets/logo_letshire.png"
       nav
         ul class="nav pull-right"
           - if user_signed_in?
@@ -9,3 +11,4 @@ header class="navbar navbar-fixed-top navbar-inverse"
               ul.dropdown-menu
                 li = link_to "Profile", profile_path
                 li = link_to "Sign Out", destroy_user_session_path, :method => :delete
+
