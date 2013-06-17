@@ -6,7 +6,7 @@
   .row
     .login-wrapper.span6.offset3
       h1.login-header Login to your LetsHire
-      .login-box.auth-form
+      .login-box
         = form_for('user', :url => user_session_path, :html => {:class=>'login-form'}) do |form|
           .mb20
             = form.label :email
@@ -18,4 +18,9 @@
             = form.check_box :remember_me, :id => 'login_checkbox', :checked => 'checked'
             = form.label :remember_me, :class => 'inline-label'
           .mb20
-            = form.submit 'Log in', :class => 'btn btn-primary btn-large '
+            = form.submit 'Log in', :class => 'btn btn-primary btn-large'
+      .login-box-tip
+        | Do not have a recruiterbox account?
+        br /
+        a href="/init"
+          ' Please initializ it.

@@ -9,7 +9,8 @@
     position: static;
 }
 
-.navbar .navbar-inner, .navbar .fill {
+.navbar .navbar-inner, 
+.navbar .fill {
     background-color: #00405E;
     background-image: linear-gradient(to bottom, #004363, #003B56);
     background-repeat: repeat-x;
@@ -46,16 +47,22 @@
     text-shadow: none;
 }
 
-.navbar ul.nav li a:link, .navbar ul.nav li a:visited {
+.navbar ul.nav li a:link, 
+.navbar ul.nav li a:visited {
     color: #DDDDDD;
 }
 
-.navbar ul.nav li a:hover, .navbar ul.nav li a:active {
+.navbar ul.nav li a:hover, 
+.navbar ul.nav li a:active {
     color: #FFFFFF;
     text-decoration: underline;
 }
 
-.navbar ul.nav li.active > a, .navbar ul.nav li.active > a:hover, .navbar ul.nav li:active > a:active, .navbar ul.nav li:active > a:link, .navbar ul.nav li:active > a:visited {
+.navbar ul.nav li.active > a, 
+.navbar ul.nav li.active > a:hover, 
+.navbar ul.nav li:active > a:active, 
+.navbar ul.nav li:active > a:link, 
+.navbar ul.nav li:active > a:visited {
     background-color: #222222;
     border-left: 1px solid #000000;
     border-right: 1px solid #000000;
@@ -77,16 +84,23 @@
     color: #666666;
     font-size: 16px;
 }
-.login-box .login-form input[type="text"], .login-box .login-form input[type="password"] {
+.login-box .login-form input[type="text"], 
+.login-box .login-form input[type="password"] {
     margin-bottom: 4px;
     width: 300px;
 }
 
-h1.login-header {
-    text-align: left;
+.login-box-tip {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.login-wrapper .login-header {
     color: #003E55;
     font-size: 30px;
     letter-spacing: -1px;
     line-height: 1.5;
     margin: 80px 0 10px;
+    text-align: left;
 }
