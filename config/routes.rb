@@ -54,8 +54,8 @@ LetsHire::Application.routes.draw do
   get '/users/index_for_selection', to: 'users#index_for_selection'
   resources :users
 
-  get '/departments/:id/user_select' => 'departments#user_select'
-  resources :departments
+  #get '/departments/:id/user_select' => 'departments#user_select'
+  #resources :departments
 
   resources :openings do
     collection do
