@@ -20,19 +20,18 @@ html
     = csrf_meta_tags
     = render 'layouts/shim'
   body
-    = render 'layouts/header'
+    - unless user_signed_in?
+      = render 'layouts/header'
     - if user_signed_in?
-      .nav-header
-        .clearfix.container
-          = link_to '/' do
-            img.logo src='/assets/logo.png'
-          .nav-bar.pull-right
-            span = link_to 'Dashboard', root_path, class: current_page(root_path)
-            span = link_to 'Job Openings', openings_path, class: current_page(openings_path)
-            span = link_to 'Candidates', candidates_path, class: current_page(candidates_path)
-            span = link_to 'Interviews', interviews_path, class: current_page(interviews_path)
+      header
+        .container
+          ul.appnav.pull-left
+            li = link_to 'Dashboard', root_path, class: current_page(root_path)
+            li = link_to 'Openings', openings_path, class: current_page(openings_path)
+            li = link_to 'Candidates', candidates_path, class: current_page(candidates_path)
+            li = link_to 'Interviews', interviews_path, class: current_page(interviews_path)
             - if current_user.admin?
-              span = link_to 'Users', users_path, class: current_page(users_path)
+              li = link_to 'Users', users_path, class: current_page(users_path)
     #main.container
       = render 'layouts/flash_message'
       == yield

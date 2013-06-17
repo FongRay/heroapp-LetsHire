@@ -18,10 +18,6 @@
     border-radius: 0 0 0 0;
 }
 
-.navbar .container {
-    width: 940px;
-}
-
 .navbar h3 {
     margin: 0;
 }
@@ -49,12 +45,12 @@
 
 .navbar ul.nav li a:link, 
 .navbar ul.nav li a:visited {
-    color: #DDDDDD;
+    color: #DDD;
 }
 
 .navbar ul.nav li a:hover, 
 .navbar ul.nav li a:active {
-    color: #FFFFFF;
+    color: #FFF;
     text-decoration: underline;
 }
 
@@ -63,7 +59,7 @@
 .navbar ul.nav li:active > a:active, 
 .navbar ul.nav li:active > a:link, 
 .navbar ul.nav li:active > a:visited {
-    background-color: #222222;
+    background-color: #222;
     border-left: 1px solid #000000;
     border-right: 1px solid #000000;
     color: #FFFFFF;
@@ -74,26 +70,36 @@
     border-radius: 5px 5px 5px 5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     padding: 30px;
-    width: 460px;
+    width: 400px;
 }
 
 .login-box .login-form {
     font-size: 16px;
 }
+
 .login-box .login-form label {
     color: #666666;
     font-size: 16px;
 }
+
 .login-box .login-form input[type="text"], 
 .login-box .login-form input[type="password"] {
     margin-bottom: 4px;
     width: 300px;
 }
 
+.login-box .btn-cancel-login {
+    margin-left: 10px;
+}
+
 .login-box-tip {
     margin-top: 20px;
     font-size: 14px;
     line-height: 1.5;
+}
+
+.login-wrapper {
+    padding: 0 30px;    
 }
 
 .login-wrapper .login-header {

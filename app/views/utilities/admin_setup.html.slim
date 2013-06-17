@@ -1,30 +1,23 @@
-.span6.offset2
-  .auth-form
-    .auth-form-header
-      h3 Setting up the Administrator Account for LetsHire
-    .auth-form-body
-      = form_for @user, :url => {:controller => :application, :action => 'admin_setup'}, :html => {:class => 'form-horizontal'} do |form|
-        .control-group
-          = form.label :name, :class => 'control-label'
-          .controls
-            = form.text_field :name, :autofocus => true
-        .control-group
-          = form.label :email, :class => 'control-label'
-          .controls
-            = form.text_field :email, :autocomplete => 'off'
-        .control-group
-          = form.label :password, :class => 'control-label'
-          .controls
-            = form.password_field :password, :autocomplete => 'off'
-        .control-group
-          = form.label :password_confirmation, :class => 'control-label'
-          .controls
-            = form.password_field :password_confirmation, :autocomplete => 'off'
-            br
-        .control-group
-          .actions
-            .controls
-              = form.submit 'Setup LetsHire', :class => 'btn btn-primary'
-              = link_to 'Not Now, Later', :back, :class => 'btn'
+.login-wrapper.span6.offset3
+  h1.login-header Set up Admin Account for LetsHire
+  .login-box
+    = form_for @user, :url => {:controller => :application, :action => 'admin_setup'}, :html => {:class => 'form-horizontal login-form'} do |form|
+      .mb20
+        = form.label :name
+        = form.text_field :name, :autofocus => true
+      .mb20
+        = form.label :email
+        = form.text_field :email, :autocomplete => 'off'
+      .mb20
+        = form.label :password
+        = form.password_field :password, :autocomplete => 'off'
+      .mb20
+        = form.label :password_confirmation
+        = form.password_field :password_confirmation, :autocomplete => 'off'
+        br
+      .mb20
+        .actions
+          = form.submit 'Signup for LetsHire', :class => 'btn btn-primary btn-large'
+          = link_to 'Not Now, Later', :back, :class => 'btn btn-cancel-login'
 
 
