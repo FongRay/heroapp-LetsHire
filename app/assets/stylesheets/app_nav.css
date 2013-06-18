@@ -19,7 +19,7 @@
     padding: 4px;
     text-align: center;
     text-shadow: 0 1px 1px #FFFFFF;
-    width: 68px;
+    width: 85px;
 }
 
 .appnav > li > a:hover, 
@@ -44,7 +44,7 @@
     border-left-width: 0;
 }
 
-.appnav > li > .current {
+.appnav > .current > a {
     background-color: #555555;
     background-image: none;
     border-color: #333333 transparent #333333 #333333;
@@ -54,8 +54,8 @@
     text-shadow: 0 1px 1px #000000;
 }
 
-.appnav > li > .current:hover,
-.appnav > li > .current:focus {
+.appnav > .current:hover a,
+.appnav > .current:focus a{
     background-color: #555555;
     color: #FFFFFF;
     text-shadow: 0 1px 1px #000000;

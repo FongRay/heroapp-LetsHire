@@ -1,0 +1,26 @@
+.table thead {
+    background-color: #6A6A6A;
+    color: white;
+}
+
+.table thead a {
+    color: white;
+}
+
+.table .actions {
+    width: 60px;
+}
+
+.table .icon-gear {
+  background-image: url(gear.png);
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}
+
+.table .icon-editor {
+  background-image: url(edit.png);
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}

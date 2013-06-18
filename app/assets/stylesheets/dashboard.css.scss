@@ -235,25 +235,11 @@ a.carousel-control-next {
   padding-top: 28px;
 }
 
-
 .stats-chart {
   border: 1px solid;
   border-color: gainsboro;
   border-radius: 5px;
-  float: left;
-  margin: 44px;
-  margin-top: 0px;
-  padding: 1px;
   background-color: white;
-}
-
-.stats-chart:first-of-type {
-  margin-left: 0px;
-}
-
-.stats-chart:last-of-type {
-  float: right;
-  margin-right: 0px;
 }
 
 .stats-chart h4 {
@@ -265,15 +251,7 @@ a.carousel-control-next {
 }
 
 .chart-title {
-
   border-radius: 5px 5px 0px 0px;
   padding: 2px;
   margin: 1px;
-
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DCDCDC), to(#FFFFFF));
-  background-image: -webkit-linear-gradient(top, #DCDCDC, #FFFFFF);
-  background-image:    -moz-linear-gradient(top, #DCDCDC, #FFFFFF);
-  background-image:     -ms-linear-gradient(top, #DCDCDC, #FFFFFF);
-  background-image:      -o-linear-gradient(top, #DCDCDC, #FFFFFF);
 }
-

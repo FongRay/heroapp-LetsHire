@@ -1,16 +1,22 @@
 .container
-  div
+  .clearfix
     .action_items
       = render partial: 'dashboard/action_items'
     .bird_sight
       = render partial: 'dashboard/recent_status'
 
-.container.stats-chart-container
-  div
-    .stats-chart
-      = render partial: 'dashboard/openings_chart'
-    .stats-chart
-      = render partial: 'dashboard/interviews_chart'
-    .stats-chart
-      = render partial: 'dashboard/offers_chart'
-
+  .clearfix.stats-chart-container
+    table
+      tbody
+        tr
+          td width="30%"
+            .stats-chart
+              = render partial: 'dashboard/openings_chart'
+          td width="5%"
+          td width="30%"
+            .stats-chart
+              = render partial: 'dashboard/interviews_chart'
+          td width="5%"
+          td width="30%"
+            .stats-chart
+              = render partial: 'dashboard/offers_chart'

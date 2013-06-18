@@ -95,7 +95,7 @@ img.logo {
   margin-top: 30px;
 }
 
-body,
+/*body,*/
 .ui-dialog,
 .ui-dialog .ui-dialog-buttonpane {
   background: url(body_content.png);

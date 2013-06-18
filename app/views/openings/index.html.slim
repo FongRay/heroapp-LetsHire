@@ -1,35 +1,30 @@
-div.page-container-wrapper
+.page-container-wrapper
   h3 Job Openings
   .page-container
-    .page-container-inner.page-container-inner-list
-      div.div-profile id="outer"
-        div.div-border id="inner"
-          div.row-fluid
-            .pull-left.index-view-filter
-              .div.btn-group
-                label.inline-label.filter-button-label View
-                button.btn id="openings_filtername" = @default_filter
-                button.btn.dropdown-toggle data-toggle="dropdown"
-                  span.caret
-                ul.dropdown-menu id="openings_viewfilter"
-                  li
-                    a href="?mode=owned_by_me" My Openings
-                  li
-                    a href="?mode=no_candidates" Openings with Zero Candidates
-                  -if can? :manage, Opening
-                    li
-                      a href="?mode=all" All
+    .operations.clearfix
+      .pull-left.index-view-filter
+        .btn-group
+          label.inline-label.filter-button-label View
+          button.btn id="openings_filtername" = @default_filter
+          button.btn.dropdown-toggle data-toggle="dropdown"
+            span.caret
+          ul.dropdown-menu id="openings_viewfilter"
+            li
+              a href="?mode=owned_by_me" My Openings
+            li
+              a href="?mode=no_candidates" Openings with Zero Candidates
+            -if can? :manage, Opening
+              li
+                a href="?mode=all" All
 
-            .pull-right.index-edit-button
-              -if can? :create, Opening
-                = '  '
-                = link_to 'Add a Job Opening', new_opening_path, :class => 'btn btn-primary'
+      .pull-right.index-edit-button
+        -if can? :create, Opening
+          = '  '
+          = link_to 'Add a Job Opening', new_opening_path, :class => 'btn btn-primary'
 
-
-          #candidates_selection_container.hide
-            #candidates_selection
-          .hide
-            #error_messages
-
-          br
-          =render 'openings_index'
+      #candidates_selection_container.hide
+        #candidates_selection
+      .hide
+        #error_messages
+    
+    =render 'openings_index'
