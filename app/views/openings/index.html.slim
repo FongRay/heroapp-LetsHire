@@ -2,9 +2,8 @@
   h3 Job Openings
   .page-container
     .operations.clearfix
-      .pull-left.index-view-filter
+      .pull-right.index-view-filter
         .btn-group
-          label.inline-label.filter-button-label View
           button.btn id="openings_filtername" = @default_filter
           button.btn.dropdown-toggle data-toggle="dropdown"
             span.caret
@@ -17,7 +16,7 @@
               li
                 a href="?mode=all" All
 
-      .pull-right.index-edit-button
+      .pull-left.index-edit-button
         -if can? :create, Opening
           = '  '
           = link_to 'Add a Job Opening', new_opening_path, :class => 'btn btn-primary'

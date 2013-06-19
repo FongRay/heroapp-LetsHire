@@ -1,17 +1,16 @@
-div id="all-interviews"
-  table class='table table-hover table-bordered table-striped list_interviews'
-    thead class='colheader'
-      tr
-        th.scheduled_at Scheduled At
-        th.modality Interview Type
-        -unless opening_candidate
-          th Interview
-        th Duration
-        th.interviewers Interviewers
-        th Status
-        th
-  
-    tbody
-      =render @interviews, :opening_candidate => false
+table class='table table-hover table-striped list_interviews mt20'
+  thead class='colheader'
+    tr
+      th.scheduled_at Scheduled At
+      th.modality Interview Type
+      -unless opening_candidate
+        th Interview
+      th Duration
+      th.interviewers Interviewers
+      th Status
+      th
 
-  = will_paginate @interviews, :class => "digg-paginate"
+  tbody
+    =render @interviews, :opening_candidate => false
+
+= will_paginate @interviews, :class => "digg-paginate"

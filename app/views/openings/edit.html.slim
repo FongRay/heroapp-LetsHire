@@ -1,6 +1,8 @@
-.page-container-wrapper
-  h3 Job Opening -> #{@opening.title} >> Edit
+ul.breadcrumb
+  li 
+    | Job Opening(#{@opening.title}) 
+    span.divider 
+      | /
+  li.active Edit
 
-  == render 'form'
-
-
+== render 'form'

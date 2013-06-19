@@ -2,6 +2,8 @@ doctype html
 html
   head
     title = full_title(yield(:title))
+    = stylesheet_link_tag "custom-theme/jquery-ui.custom", meida: "all"
+    = stylesheet_link_tag "bootstrap", meida: "all"
     = stylesheet_link_tag "application", meida: "all"
     = javascript_include_tag "application"
     = javascript_include_tag "jqplot"
@@ -19,15 +21,15 @@ html
     = javascript_include_tag "jqplot/plugins/barRenderer"
     = csrf_meta_tags
     = render 'layouts/shim'
-  body
-    - unless user_signed_in?
-      = render 'layouts/header'
+  body data-controll="#{params[:controller]}"
+    /- unless user_signed_in?
+    = render 'layouts/header'
     - if user_signed_in?
       header
         .container
           ul.appnav.pull-left
             li class="#{current_page(root_path)}" = link_to 'Dashboard', root_path
-            li class="#{current_page(openings_path)}" = link_to 'Openings', openings_path
+            li class="#{current_page(openings_path)}" = link_to 'Job Openings', openings_path
             li class="#{current_page(candidates_path)}" = link_to 'Candidates', candidates_path
             li class="#{current_page(interviews_path)}" = link_to 'Interviews', interviews_path
             - if current_user.admin?

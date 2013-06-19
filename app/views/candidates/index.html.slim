@@ -1,51 +1,45 @@
 .page-container-wrapper
   h3 Candidates
   .page-container
-    .page-container-inner.page-container-inner-list
+    .operations.clearfix
+      .pull-right.index-view-filter
+        .div.btn-group
+          button.btn =@default_filter
+          button.btn.dropdown-toggle data-toggle="dropdown"
+            span.caret
+          ul.dropdown-menu id="candidates_viewfilter"
+            li
+              a href="?mode=no_openings" Active Candidates without job openings
+            li
+              a href="?mode=no_interviews" Active Candidates without interviews
+            li
+              a href="?mode=without_assessment" Interviewed Candidates with no final assessment
+            li
+              a href="?mode=with_assessment" Interviewed Candidates with final assessment
+            li
+              a href="?mode=active" Active Candidates
+            -if can? :manage, Candidate
+              li
+                a href="?mode=inactive" Blacklisted Candidates
+              li
+                a href="?mode=all" All
 
-      div.div-profile id="outer"
-        div.div-border id="inner"
-          div.row-fluid
-            .pull-left.index-view-filter
-              .div.btn-group
-                label.inline-label.filter-button-label View
-                button.btn =@default_filter
-                button.btn.dropdown-toggle data-toggle="dropdown"
-                  span.caret
-                ul.dropdown-menu id="candidates_viewfilter"
-                  li
-                    a href="?mode=no_openings" Active Candidates without job openings
-                  li
-                    a href="?mode=no_interviews" Active Candidates without interviews
-                  li
-                    a href="?mode=without_assessment" Interviewed Candidates with no final assessment
-                  li
-                    a href="?mode=with_assessment" Interviewed Candidates with final assessment
-                  li
-                    a href="?mode=active" Active Candidates
-                  -if can? :manage, Candidate
-                    li
-                      a href="?mode=inactive" Blacklisted Candidates
-                    li
-                      a href="?mode=all" All
+      .pull-left.index-edit-button
+        -if can? :create, Candidate
+          = link_to 'Add a Candidate', new_candidate_path, :class => 'btn btn-primary'
 
-            .pull-right.index-edit-button
-              -if can? :create, Candidate
-                = link_to 'Add a Candidate', new_candidate_path, :class => 'btn btn-primary'
-          br
-          div id="all-candidates"
-            table class='table table-hover table-bordered table-striped'
-              thead class='sortable colheader'
-                tr
-                  th = sortable 'Candidate', 'name', 'Name'
-                  th = sortable 'Candidate', 'email', 'Email'
-                  th Current Job Opening
-                  th Status
-                  th
+    table class='table table-hover table-striped table-condensed mt20'
+      thead class='sortable colheader'
+        tr
+          th = sortable 'Candidate', 'name', 'Name'
+          th = sortable 'Candidate', 'email', 'Email'
+          th Current Job Opening
+          th Status
+          th
 
-              tbody
-                = render @candidates
+      tbody
+        = render @candidates
 
-          = will_paginate @candidates, :class => "digg-paginate"
+    = will_paginate @candidates, :class => "digg-paginate"
 
-          = render 'candidates/new_opening'
+    = render 'candidates/new_opening'

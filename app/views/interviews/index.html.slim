@@ -1,45 +1,39 @@
 .page-container-wrapper
   h3 Interviews
   .page-container
-    .page-container-inner.page-container-inner-list
-      = form_tag 'interviews/edit_multiple',  :method => :get, :class => 'form-horizontal hide' do
-        #opening_selection_container
-          = render 'openings/opening_selection'
-        .control-group
-          .controls
-            .actions
-              =submit_tag 'OK', :name => nil
+    = form_tag 'interviews/edit_multiple',  :method => :get, :class => 'form-horizontal hide' do
+      #opening_selection_container
+        = render 'openings/opening_selection'
+      .control-group
+        .controls
+          .actions
+            =submit_tag 'OK', :name => nil
 
-      - opening_candidate ||= nil
-      =hidden_field_tag :opening_candidate_id, opening_candidate.try(:id)
+    - opening_candidate ||= nil
+    =hidden_field_tag :opening_candidate_id, opening_candidate.try(:id)
 
-      div.div-profile id="outer"
-        div.div-border id="inner"
-          div.row-fluid
-            .pull-left.index-view-filter
-              .div.btn-group
-                label.inline-label.filter-button-label View
-                button.btn id="interviews_filtername" = @default_filter
+    .operations.clearfix
+      .pull-right.index-view-filter
+        .btn-group
+          button.btn id="interviews_filtername" = @default_filter
+          button.btn.dropdown-toggle data-toggle="dropdown"
+            span.caret
+          ul.dropdown-menu id="interviews_viewfilter"
+            li
+              a href="?mode=interviewed_by_me_today" My Interviews Today
+            li
+              a href="?mode=interviewed_by_me" All of My Interviews
+            -if can? :manage, Interview
+              li
+                a href="?mode=owned_by_me" Any Interviews Related to Me
+            li
+              a href="?mode=no_feedback" Interviews without Feedback
+            - if can? :manage, Interview
+              li
+                a href="?mode=all" All
 
-                button.btn.dropdown-toggle data-toggle="dropdown"
-                  span.caret
-                ul.dropdown-menu id="interviews_viewfilter"
-                  li
-                    a href="?mode=interviewed_by_me_today" My Interviews Today
-                  li
-                    a href="?mode=interviewed_by_me" All of My Interviews
-                  -if can? :manage, Interview
-                    li
-                      a href="?mode=owned_by_me" Any Interviews Related to Me
-                  li
-                    a href="?mode=no_feedback" Interviews without Feedback
-                  - if can? :manage, Interview
-                    li
-                      a href="?mode=all" All
+      -if can? :update, Interview
+        .pull-left.index-edit-button
+            = button_tag 'Schedule Interviews', :class => 'flexible_schedule_interviews btn btn-primary'
 
-            -if can? :update, Interview
-              .pull-right.index-edit-button
-
-                = button_tag 'Schedule Interviews', :class => 'flexible_schedule_interviews btn btn-primary'
-          br
-          =render :partial => 'interviews_index', :locals => {:opening_candidate => opening_candidate}
+    =render :partial => 'interviews_index', :locals => {:opening_candidate => opening_candidate}
