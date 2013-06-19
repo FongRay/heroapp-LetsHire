@@ -7,6 +7,16 @@
     color: white;
 }
 
+.table th, .table td {
+    border-top: none;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+  background-color: #E9F3FF;
+}
+
 .table .actions {
     width: 60px;
 }
