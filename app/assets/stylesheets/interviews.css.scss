@@ -36,8 +36,9 @@ input#duration, input#interview_duration {
 table.schedule_interviews,
 table.list_interviews {
   select, 
-  input {
-    margin: 0;
+  input,
+  p {
+    margin-bottom: 0;
   }
 
   .status {
@@ -47,7 +48,9 @@ table.list_interviews {
   }
 
   #interviewers_literal {
-    margin-left: 0px;
+    margin-left: 0px;    
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
 
