@@ -1,6 +1,9 @@
-page-container-wrapper
-h3 Candidates -> #{@candidate.name} >> Edit
-
+ul.breadcrumb
+  li 
+    | Candidates(#{@candidate.name}) 
+    span.divider 
+      | /
+  li.active Edit
 div.page-container
   div.page-container-inner.page-container-inner-form
 

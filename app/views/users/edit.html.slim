@@ -1,3 +1,8 @@
-.page-container-wrapper
-  h3 Users -> #{@user.name} >> Edit
-  == render 'form'
+ul.breadcrumb
+  li 
+    | Users(#{@user.name}) 
+    span.divider 
+      | /
+  li.active Edit
+
+== render 'form'

@@ -1,4 +1,7 @@
-.page-container-wrapper
-  h3 Job Openings >> Create
-  == render 'form'
-
+ul.breadcrumb
+  li 
+    | Job Openings
+    span.divider 
+      | /
+  li.active Create
+== render 'form'

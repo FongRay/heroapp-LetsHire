@@ -10,52 +10,53 @@
         .span6
           a.btn.btn-primary id='candidate-assessment-btn' Assess Candidate
   hr.candidate-splitter-line
-  div
-    div.accordion id="accordion2"
-      - i = 0
-      - @interviews.each do |interview|
-        - i += 1
-        div.accordion-group
-          div.accordion-heading
-            a.accordion-toggle.collapsed data-toggle="collapse" data-parent="#accordion2" href="#collapse2-#{i}"
-              table.interviewline
-                tr
-                  td
-                    img.indicator
-                  td
-                    = interview.scheduled_at
-                  td
-                    = interview.modality
-                  td 
-                    = interview.duration
-                  td
-                    = interview.status
-            - if interview.status == 'finished'
-              div.accordion-body.collapse id="collapse2-#{i}"
-                div.accordion-inner
-                  div.feedbackborder
-                    h5 Feedback from interviews
-                    div.accordion id="accordion2-#{i}-internal"
-                      div.accordion-group
-                        div.accordion-heading
-                          a.accordion-toggle.collapsed data-toggle="collapse" data-parent="#accordion2-#{i}-internal" href="#collapse2-#{i}-internal"
-                            - uids = interview.interviewers.map{|u| u.user_id}
-                            - interviews = User.active.find(:all, :conditions => ['id in (?)', uids]).map{|u| u.name}
-                            span
-                              = "From #{interviews.join(' ')}"
-                          div.accordion-body.collapse id="collapse2-#{i}-internal"
-                            div.accordion-inner
-                              span
-                                = interview.assessment
-            - if interview.status == 'canceled'
-              div.accordion-body.collapse id="collapse2-#{i}"
-                div.accordion-inner
-                  = "Cancel reason: #{interview.assessment}"
-            - elsif interview.status != 'finished'
-              div.accordion-body.collapse id="collapse2-#{i}"
-                div.accordion-inner This Interview has not finished yet
 
-      p style="text-indent: 2em" = "Final Assessment:"
-      =render :partial => 'job_assessment', :locals => { :opening_candidate => @latest_applying_job }
-  div.assessment-candidate-dialog id='candidate-assessment-dialog'
+  .accordion id="accordion2"
+    - i = 0
+    - @interviews.each do |interview|
+      - i += 1
+      .accordion-group
+        .accordion-heading
+          a.accordion-toggle.collapsed data-toggle="collapse" data-parent="#accordion2" href="#collapse2-#{i}"
+            table.interviewline
+              tr
+                td
+                  img.indicator
+                td
+                  = interview.scheduled_at
+                td
+                  = interview.modality
+                td 
+                  = interview.duration
+                td
+                  = interview.status
+          - if interview.status == 'finished'
+            .accordion-body.collapse id="collapse2-#{i}"
+              .accordion-inner
+                .feedbackborder
+                  h5 Feedback from interviews
+                  .accordion id="accordion2-#{i}-internal"
+                    .accordion-group
+                      .accordion-heading
+                        a.accordion-toggle.collapsed data-toggle="collapse" data-parent="#accordion2-#{i}-internal" href="#collapse2-#{i}-internal"
+                          - uids = interview.interviewers.map{|u| u.user_id}
+                          - interviews = User.active.find(:all, :conditions => ['id in (?)', uids]).map{|u| u.name}
+                          span
+                            = "From #{interviews.join(' ')}"
+                        .accordion-body.collapse id="collapse2-#{i}-internal"
+                          .accordion-inner
+                            span
+                              = interview.assessment
+          - if interview.status == 'canceled'
+            .accordion-body.collapse id="collapse2-#{i}"
+              .accordion-inner
+                = "Cancel reason: #{interview.assessment}"
+          - elsif interview.status != 'finished'
+            .accordion-body.collapse id="collapse2-#{i}"
+              .accordion-inner This Interview has not finished yet
+
+    p style="text-indent: 2em" 
+      strong Final Assessment:
+    =render :partial => 'job_assessment', :locals => { :opening_candidate => @latest_applying_job }
+  .assessment-candidate-dialog id='candidate-assessment-dialog'
     = render 'assessments/form', {:opening_candidate => @latest_applying_job, :assessment => @assessment }

@@ -7,7 +7,7 @@
       .control-group
         .controls
           .actions
-            =submit_tag 'OK', :name => nil
+            =submit_tag 'OK', :name => nil, :class => 'btn btn-primary btn-large'
 
     - opening_candidate ||= nil
     =hidden_field_tag :opening_candidate_id, opening_candidate.try(:id)

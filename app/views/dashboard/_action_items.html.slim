@@ -10,7 +10,7 @@ h3.tl Things to follow up
             = link_to new_opening_path do
               i.icon-caret-right  Create
 
-      - if can? :manage, Opening and @openings_without_candidate.size ==0
+      - if can? :manage, Opening and @openings_without_candidate.size != 0
         li.span3
           .action-item
             .salient-metric-number = @openings_without_candidate.length
@@ -18,7 +18,7 @@ h3.tl Things to follow up
             = link_to openings_path(:mode => :no_candidates), :class => 'action-link' do
               i.i.icon-caret-right  Assign
 
-      - if can? :manage, Candidate and @candidates_without_opening.size == 0
+      - if can? :manage, Candidate and @candidates_without_opening.size != 0
         li.span3
           .action-item
             .salient-metric-number = @candidates_without_opening.length
@@ -26,7 +26,7 @@ h3.tl Things to follow up
             = link_to candidates_path(:mode => :no_openings), :class => 'action-link' do
               i.i.icon-caret-right  Assign
 
-      - if can? :manage, Candidate and @candidates_without_interview.size == 0
+      - if can? :manage, Candidate and @candidates_without_interview.size != 0
         li.span3
           .action-item
             .salient-metric-number = @candidates_without_interview.length
@@ -34,7 +34,7 @@ h3.tl Things to follow up
             = link_to candidates_path(:mode => :no_interviews), :class => 'action-link' do
               i.i.icon-caret-right  Schedule
 
-      - if can? :manage, Interview and @interviews_owned_by_me.size == 0
+      - if can? :manage, Interview and @interviews_owned_by_me.size != 0
         li.span3
           .action-item
             .salient-metric-number = @interviews_owned_by_me.length
@@ -42,7 +42,7 @@ h3.tl Things to follow up
             = link_to interviews_path(:mode => :owned_by_me), :class => 'action-link' do
               i.i.icon-caret-right  View
 
-      - if can? :manage, Interview and @interviews_interviewed_by_me.size == 0
+      - if can? :manage, Interview and @interviews_interviewed_by_me.size != 0
         li.span3
           .action-item
             .salient-metric-number = @interviews_interviewed_by_me.length
@@ -50,7 +50,7 @@ h3.tl Things to follow up
             = link_to interviews_path(:mode => :interviewed_by_me), :class => 'action-link' do
               i.i.icon-caret-right  View
 
-      - if can? :manage, Interview and @interviews_without_feedback.size == 0
+      - if can? :manage, Interview and @interviews_without_feedback.size != 0
         li.span3
           .action-item
             .salient-metric-number = @interviews_without_feedback.length
@@ -58,7 +58,7 @@ h3.tl Things to follow up
             = link_to interviews_path(:mode => :no_feedback), :class => 'action-link' do
               i.i.icon-caret-right  Give Feedback
 
-      - if can? :manage, Candidate and @candidates_without_assessment.size == 0
+      - if can? :manage, Candidate and @candidates_without_assessment.size != 0
         li.span3
           .action-item
             .salient-metric-number = @candidates_without_assessment.length
@@ -66,7 +66,7 @@ h3.tl Things to follow up
             = link_to candidates_path(:mode => :without_assessment), :class => 'action-link' do
               i.i.icon-caret-right  Assess
 
-      - if can? :manage, Candidate and @candidates_with_assessment.size == 0
+      - if can? :manage, Candidate and @candidates_with_assessment.size != 0
         li.span3
           .action-item
             .salient-metric-number = @candidates_with_assessment.length

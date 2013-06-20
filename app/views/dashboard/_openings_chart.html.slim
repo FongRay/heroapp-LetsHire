@@ -1,6 +1,6 @@
 div.chart-title
   h4 Job Openings
-hr width="300"
+hr
 - data = [@openings_created_by_me, @openings_assigned_to_me, @openings_without_interviewers]
 - magicnum = data.max * 1.5
 - display = data << magicnum

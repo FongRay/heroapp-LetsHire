@@ -2,7 +2,7 @@
 // All this logic will automatically be available in application.js.
 // You can also rename this file to openings.js.coffee, and only keep the coffee script
 
-$(function() {
+$(function() {/*
     if ($('#candidate-profile-panel').length > 0 && $('#candidate-applying-panel').length > 0) {
         $('#candidate-applying-panel').height($('#candidate-profile-panel').height());
         if ($('#candidate-no-assignment-msg').length > 0) {
@@ -10,7 +10,7 @@ $(function() {
             fontsize = parseInt($('#candidate-no-assignment-msg').children()[0].style.fontSize);
             $('#candidate-no-assignment-msg').css("line-height", height / fontsize);
         }
-    }
+    }*/
 
     $('.fileupload').fileupload({
         name: "candidate[resume]"

@@ -93,11 +93,6 @@ img.logo {
 }
 
 /*body,*/
-.ui-dialog,
-.ui-dialog .ui-dialog-buttonpane {
-  background: url(body_content.png);
-}
-
 .clearfix:before {
   content: "";
   display: table;

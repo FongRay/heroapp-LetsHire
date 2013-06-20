@@ -18,7 +18,7 @@ tr data-id=opening.id
       .action-icon.r
         .dropdown
           a.dropdown-toggle.icon-gear data-toggle="dropdown" data-target="dropdown-menu#{opening.id}"
-          ul.dropdown-menu id="dropdown-menu#{opening.id}"
+          ul.dropdown-menu.pull-right id="dropdown-menu#{opening.id}"
             li = link_to 'View Details', opening
             li = link_to 'Edit', edit_opening_path(opening)
             - if opening.published? && opening.available_no > 0

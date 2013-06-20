@@ -1,28 +1,32 @@
-.page-container-wrapper
-  h3 Interview Feedback >> Edit
-  .page-container
-    .page-container-inner.page-container-inner-form
-      = form_for @interview, :html => { :class => 'form-horizontal'} do |f|
-        = f.error_messages
+ul.breadcrumb
+  li 
+    | Interview Feedback
+    span.divider 
+      | /
+  li.active Edit
+.page-container
+  .page-container-inner.page-container-inner-form
+    = form_for @interview, :html => { :class => 'form-horizontal'} do |f|
+      = f.error_messages
 
-        dl.dl-horizontal.clear-both
-          dt Interview Type
-          dd =@interview.modality
-          dt Scheduled At
-          dd.iso-time= @interview.scheduled_at_iso
+      dl.dl-horizontal.clear-both
+        dt Interview Type
+        dd =@interview.modality
+        dt Scheduled At
+        dd.iso-time= @interview.scheduled_at_iso
 
-          dt Updated by Interviewer
-          dd= current_user.name
+        dt Updated by Interviewer
+        dd= current_user.name
 
 
-        =hidden_field_tag :opening_candidate_id, @opening_candidate.id
+      =hidden_field_tag :opening_candidate_id, @opening_candidate.id
 
-        .control-group
-          = label_tag :assessment, 'Feedback', :class => 'control-label'
-          .controls
-            = f.text_area :assessment, :class => 'span9'
-        .control-group
-          .controls
-            .actions
-              = f.submit 'Save', :class => 'btn btn-primary'
-              = link_to 'Cancel', :back, :class => 'btn'
+      .control-group
+        = label_tag :assessment, 'Feedback', :class => 'control-label'
+        .controls
+          = f.text_area :assessment, :class => 'span9'
+      .control-group
+        .controls
+          .actions
+            = f.submit 'Save', :class => 'btn btn-primary'
+            = link_to 'Cancel', :back, :class => 'btn'

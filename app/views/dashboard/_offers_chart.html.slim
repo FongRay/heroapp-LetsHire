@@ -1,6 +1,6 @@
 div.chart-title
   h4 Offers
-hr width="300"
+hr
 - value = [@offers_rejected, @offers_notconfirmed, @offers_accepted]
 - label = ["Rejected", "Not confirmed", "Accepted"]
 - data = label.map {|key| [key, value[label.index(key)]]}

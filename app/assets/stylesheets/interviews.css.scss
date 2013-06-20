@@ -35,34 +35,12 @@ input#duration, input#interview_duration {
 
 table.schedule_interviews,
 table.list_interviews {
-
-  .scheduled_at {
-    width: 20%;
+  select, 
+  input {
+    margin: 0;
   }
 
-  .modality  {
-    width: 17%;
-
-  }
-
-  select {
-    width: 130px;
-  }
-
-  .location {
-    width: 17%;
-  }
-
-  input#phone {
-    width: 150px;
-  }
-
-  .interviewers {
-    width: 25%;
-  }
   .status {
-    width: 17%;
-
     select {
       width: 110px;
     }
@@ -72,11 +50,11 @@ table.list_interviews {
     margin-left: 0px;
   }
 
+
 }
 
 .add-new-interview-div {
-  margin: 5px;
-  padding: 5px;
+  padding: 10px 0;
 }
 
 a.add_new_interview:link {text-decoration:none;}

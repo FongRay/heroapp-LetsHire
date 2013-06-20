@@ -34,12 +34,24 @@ div.dialog-candidate-blacklist-div {
 }
 
 div.page-container-inner.candidate-panel {
-  background-color: #ffffff;
-  padding: 20px;
+    padding: 10px;
 }
 
 div.page-container-inner.candidate-panel.fixed-size {
-  overflow: auto;
+    overflow: auto;
+}
+
+.candidate-container {
+    height: 320px;
+}
+
+.candidate-profile-panel {
+    line-height: 2;
+    margin: 0 auto;
+}
+
+#candidate-no-assignment-msg {
+    line-height: 320px;
 }
 
 hr.candidate-splitter-line {
@@ -50,7 +62,7 @@ hr.candidate-splitter-line {
   margin-bottom: 20px;
 }
 
-p.candidate-name-font {
+.candidate-name-font {
   color: #2c639b;
   font-size: 40px;
   white-space: pre-wrap; /* css-3 */
@@ -60,36 +72,16 @@ p.candidate-name-font {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
-p.candidate-status-font {
+.candidate-status-font {
   font-weight: bold;
   font-size: 20px;
 }
 
-.candidate-mark-inactive-button {
-  font-size: 20px;
-  font-color: #2c639b;
-  width: 90%;
-  height: 30px;
-  padding: 5px;
-  background: url(mark_inactive.png) no-repeat left;
-}
-
-.candidate-assign-job-button {
-  font-size: 20px;
-  font-color: #2c639b;
-  width: 90%;
-  height: 30px;
-  padding: 5px;
-  background: url(assign_job_opening.png) no-repeat left;
-}
-
-table.candidate-profile {
-  table-layout: fixed;
-  width: 80%;
+table.candidate-profile td {
+  border: none;
 }
 
 .candidate-profile td { 
-    padding: 5px;
     font-size: 15px;
     white-space: pre-wrap; /* css-3 */
     white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
