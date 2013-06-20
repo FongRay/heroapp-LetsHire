@@ -53,6 +53,8 @@ class User < ActiveRecord::Base
     all.select { |user|  user.admin? || (user.roles_mask & role_mask) != 0}
   end
 
+  # The following 2 methods are defined by 'cancan', for detailed information, please
+  # refer to https://github.com/ryanb/cancan/wiki/Role-Based-Authorization.
   def roles=(roles)
     self.roles_mask = ((roles & ROLES).map { |r| 2**ROLES.index(r) }.inject(0, :+)) | 1 # '| 1 ' means user always has interviewer role
   end
