@@ -1,3 +1,5 @@
+#NOTE: Currently we do not show departments management on web ui, but
+#someday we might need this on be visible, so we keep code here.
 class DepartmentsController < AuthenticatedController
   before_filter :require_admin, :except => [:user_select, :show]
   # GET /departments

@@ -1,5 +1,6 @@
 class AssessmentsController < ApplicationController
   before_filter { authorize! :manage, Candidate }
+
   def new
     @opening_candidate = OpeningCandidate.find params[:opening_candidate_id]
     if @opening_candidate
@@ -9,7 +10,6 @@ class AssessmentsController < ApplicationController
       redirect_to candidates_url, :alert => "The parent doesn't exist anymore"
     end
   end
-
 
   # GET /opening_candidates/:opening_candidate_id/assessments/:id/edit
   def edit
@@ -66,8 +66,15 @@ class AssessmentsController < ApplicationController
       end
 
       @opening_candidate.status = new_status
-      params[:assessment][:comment] = "\r\n\r\n" + "#{current_user.email} write feedback at #{Time.now.to_date}:\r\n"  + params[:assessment][:comment]
 
+      # All assessments are written to one place, the format is similar as email, for example
+      #
+      #       r1 write feedback at 2012/12/21 10:00:
+      #           good communication skill.
+      #
+      #       r2 write feedback at 2012/12/22 11:00:
+      #           good techinical skill.
+      params[:assessment][:comment] = "\r\n\r\n" + "#{current_user.email} write feedback at #{Time.now.to_date}:\r\n"  + params[:assessment][:comment]
       if @assessment.update_attributes(params[:assessment]) && @opening_candidate.save
         redirect_to @candidate, :notice => 'Assessment was successfully updated.'
       else

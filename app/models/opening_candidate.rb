@@ -102,7 +102,7 @@ class OpeningCandidate < ActiveRecord::Base
   OFFER_ACCEPTED = 'Offer Accepted'
   OFFER_PENDING = 'Offer Pending'
   OFFER_SENT = 'Offer Sent'
-  #Don't change order randomly. order matters.
+  # Don't change order randomly. order matters.
   STATUS_LIST = { INTERVIEW_LOOP => 1,
                   FAIL => 2,
                   QUIT => 3,   # candidate quit

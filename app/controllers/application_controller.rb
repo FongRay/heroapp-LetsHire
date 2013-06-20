@@ -5,16 +5,19 @@ class ApplicationController < ActionController::Base
   REQUIRE_ADMIN = 'You must be admin to access this section'
   NO_PERMISSION = 'You do not have permission to access this section'
 
+  # We leverage 'cancan' to achieve authentication and authorization.
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_path, :alert => NO_PERMISSION
   end
 
+  # The UI hack method to initialize the admin account.
   def init
     return redirect_to root_path if User.count > 0
     @user = User.new
     render :file => 'utilities/admin_setup'
   end
 
+  # The CLI hack method to initialize the admin account.
   def admin_setup
     return redirect_to root_path  if User.count > 0
     Department.create(Department::DEFAULT_SET) if Department.count == 0

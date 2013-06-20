@@ -13,6 +13,8 @@ class InterviewsController < AuthenticatedController
        mode = 'interviewed_by_me'
      end
     end
+
+    # Implement the interviews ui page filter query.
     @interviews = (case mode
                   when 'owned_by_me'
                      @default_filter = 'Any Interviews Related to Me'
@@ -46,7 +48,8 @@ class InterviewsController < AuthenticatedController
     @candidate = @interview.opening_candidate.candidate
   end
 
-
+  # We allow user to update interviews in batch, user can fill up multiple interview
+  # records then save them at one click.
   def edit_multiple
     authorize! :update, Interview
     @opening_candidate = OpeningCandidate.find(params[:opening_candidate_id]) unless params[:opening_candidate_id].nil?
@@ -63,7 +66,6 @@ class InterviewsController < AuthenticatedController
   end
 
   def update_multiple
-    # Use update authorization since we'll do detailed check below
     authorize! :update, Interview
 
     render :json => { :success => false, :messages => ['Invalid object'] } if params[:interviews].nil?
@@ -84,11 +86,13 @@ class InterviewsController < AuthenticatedController
     new_interviews.delete :opening_id
     new_interviews.delete :candidate_id
     OpeningCandidate.transaction do
+      # save multiple interviews at one shot
       if @opening_candidate.update_attributes new_interviews
         user_ids = []
         new_interviews[:interviews_attributes].each do |key, val|
           user_ids.concat val[:user_ids] if val[:user_ids].is_a?(Array)
         end
+        # update database, which user should be the interviewer
         update_favorite_interviewers user_ids
         render :json => { :success => true }
       else
@@ -99,6 +103,7 @@ class InterviewsController < AuthenticatedController
     render :json => { :success => false, :messages => ['Invalid object'] }
   end
 
+  # Add a schedule record not save into database, partial of a page
   def schedule_add
     authorize! :create, Interview
 
@@ -113,7 +118,7 @@ class InterviewsController < AuthenticatedController
     render :partial => 'interviews/schedule_interviews_lineitem', :locals => { :interview => interview }
   end
 
-
+  # Reload all interview records, partial of a page
   def schedule_reload
     authorize! :read, Interview
 
@@ -167,6 +172,7 @@ class InterviewsController < AuthenticatedController
   end
 
   private
+
   def update_favorite_interviewers(user_ids)
     user_ids ||= []
     if user_ids.any?
@@ -189,8 +195,6 @@ class InterviewsController < AuthenticatedController
       end
     end
   end
-
-
 
   def prepare_edit
     @opening_candidate = @interview.opening_candidate
