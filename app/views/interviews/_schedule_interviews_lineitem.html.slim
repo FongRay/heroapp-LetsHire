@@ -13,13 +13,12 @@ tr data-interview_id=interview.id
       - interviewers_str = interview.interviewers_str
       #interviewers_literal.span = simple_format(interviewers_str.collect { |i| truncate(i, :length => 30) }.join('<br/>'))
       div.span= button_tag '>', :class => 'edit_interviewers btn btn-small'
-    td.status
+    td
       span
         = select_tag :status, options_for_select(Interview::STATUS.collect { |x| [x, x]}, interview.status)
       span
         = link_to '#', :class => 'button-remove' do
           = image_tag('error.png')
-        end
 
   - else
     td.iso-time data-iso=interview.scheduled_at_iso = interview.scheduled_at_iso

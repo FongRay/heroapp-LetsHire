@@ -1,70 +1,68 @@
-.page-container-wrapper
-  h3 Interview Details
-  .page-container
-    .pull-right.align-to-title
-      - if (can? :manage, @interview) && @opening_candidate.in_interview_loop?
-        = link_to 'Schedule Interviews', edit_multiple_interviews_path(:opening_candidate_id => @opening_candidate.id), :class => 'btn btn-primary'
-      span
-        - if is_interviewer? @interview.interviewers
-          a.interview-feedback-btn.btn.btn-primary href='#' data-interview-id=@interview.id Update Feedback
-    .page-container-inner.page-container-inner-view
-     
-      .form-horizontal.clear-both
-        .control-group
-          label.control-label
-            b Title:
-          .controls
-            = link_to @candidate.name, candidate_path(@candidate)
-            span = " for "
-            span = link_to @opening_candidate.opening.title, opening_path(@opening_candidate.opening)
-        .control-group
-          label.control-label
-            b Interview Type:
-          .controls
-            span = @interview.modality
-        .control-group
-          label.control-label
-            b Scheduled At:
-          .controls
-            span.iso-time = @interview.scheduled_at_iso
-        .control-group
-          label.control-label
-            b Duration(min):
-          .controls
-            span = @interview.duration.to_s
-        .control-group
-          label.control-label
-            - if @interview.modality.include?("phone")
-              b Phone:
-            - else
-              b Location:
-          .controls
-            - if @interview.modality.include?("phone")
-              span = @interview.phone
-            - else
-              span = @interview.location
-        .control-group
-          label.control-label
-            b Status:
-          .controls
-            span = @interview.status
-        .control-group
-          label.control-label
-            b Interviewers:
-          .controls
-            span = @interview.interviewers_str
-        .control-group
-          label.control-label
-            b Description
-          .controls
-            span = simple_format h(@interview.description)
-        .control-group
-          label.control-label
-            b Feedback
-          .controls
-            span = simple_format h(@interview.assessment)
+ul.breadcrumb
+  li 
+    | Interview Details
+.page-container
+  .pull-right.align-to-title
+    - if (can? :manage, @interview) && @opening_candidate.in_interview_loop?
+      = link_to 'Schedule Interviews', edit_multiple_interviews_path(:opening_candidate_id => @opening_candidate.id), :class => 'btn btn-primary'
+    span
+      - if is_interviewer? @interview.interviewers
+        a.interview-feedback-btn.btn.btn-primary href='#' data-interview-id=@interview.id Update Feedback
+  .page-container-inner.page-container-inner-view
+   
+    .form-horizontal.clear-both
+      .control-group
+        label.control-label
+          b Title:
+        .controls
+          = link_to @candidate.name, candidate_path(@candidate)
+          span = " for "
+          span = link_to @opening_candidate.opening.title, opening_path(@opening_candidate.opening)
+      .control-group
+        label.control-label
+          b Interview Type:
+        .controls
+          span = @interview.modality
+      .control-group
+        label.control-label
+          b Scheduled At:
+        .controls
+          span.iso-time = @interview.scheduled_at_iso
+      .control-group
+        label.control-label
+          b Duration(min):
+        .controls
+          span = @interview.duration.to_s
+      .control-group
+        label.control-label
+          - if @interview.modality.include?("phone")
+            b Phone:
+          - else
+            b Location:
+        .controls
+          - if @interview.modality.include?("phone")
+            span = @interview.phone
+          - else
+            span = @interview.location
+      .control-group
+        label.control-label
+          b Status:
+        .controls
+          span = @interview.status
+      .control-group
+        label.control-label
+          b Interviewers:
+        .controls
+          span = @interview.interviewers_str
+      .control-group
+        label.control-label
+          b Description
+        .controls
+          span = simple_format h(@interview.description)
+      .control-group
+        label.control-label
+          b Feedback
+        .controls
+          span = simple_format h(@interview.assessment)
 
-      =render 'interviews/interview_feedback', {:interview => @interview}
-
-
-
+    =render 'interviews/interview_feedback', {:interview => @interview}

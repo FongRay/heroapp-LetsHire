@@ -1,8 +1,10 @@
-h3 Candidate Details
+ul.breadcrumb
+  li 
+    | Candidate Details
 .page-container
   .row-fluid
     .span8
-      .page-container-inner.candidate-panel.fixed-size.candidate-container id="candidate-applying-panel"
+      .page-container-inner.candidate-panel.fixed-size.candidate-container#candidate-applying-panel
         - if @latest_applying_job.nil?
           #candidate-no-assignment-msg.tc
             span style="font-size: 30px"

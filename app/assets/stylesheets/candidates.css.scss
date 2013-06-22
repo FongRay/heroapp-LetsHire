@@ -16,15 +16,6 @@ img.indicator {
   background: url(arrow.png) no-repeat center;
 }
 
-div.feedbackborder {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  padding: 3px;
-  border-color: #D3D3D3; //LightGrey
-  background-color: #A9A9A9; //DarkGray
-}
-
 div.assessment-candidate-dialog {
   display: none;
 }
@@ -64,7 +55,8 @@ hr.candidate-splitter-line {
 
 .candidate-name-font {
   color: #2c639b;
-  font-size: 40px;
+  font-size: 30px;
+  line-height: 1;
   white-space: pre-wrap; /* css-3 */
   white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
   white-space: -pre-wrap; /* Opera 4-6 */
@@ -75,6 +67,10 @@ hr.candidate-splitter-line {
 .candidate-status-font {
   font-weight: bold;
   font-size: 20px;
+}
+
+table.candidate-profile {
+  margin: 30px 0;
 }
 
 table.candidate-profile td {
@@ -113,4 +109,8 @@ div.candidate_failed {
 
 h4.interview_result {
     padding: 10px 5px 15px 5px;
+}
+
+.mr10 {
+  margin-left: 10px;
 }

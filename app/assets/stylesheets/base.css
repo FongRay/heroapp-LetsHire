@@ -27,6 +27,10 @@ p {
     line-height: 1.7em;
 }
 
+form {
+    margin: 0;
+}
+
 body {
     /*background-color: #ECF1F3;*/
 }
@@ -62,4 +66,8 @@ footer {
 
 .tc {
     text-align: center;
+}
+
+.tr {
+    text-align: right;
 }

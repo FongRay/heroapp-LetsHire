@@ -1,39 +1,39 @@
-.page-container-wrapper
-  h3 Users
-  .page-container
-    .operations.clearfix
-      .pull-left
-        = link_to 'Add a User', new_user_path, :class => 'btn btn-primary'
-    table class='table table-hover table-striped mt20 users'
-      thead
+ul.breadcrumb
+  li 
+    | Users
+.page-container
+  .operations.clearfix
+    .pull-left
+      = link_to 'Add a User', new_user_path, :class => 'btn btn-primary'
+  table class='table table-hover table-striped mt20 users'
+    thead
+      tr
+        th Name
+        th Email
+        th Department
+        th Roles
+        th
+    tbody
+      - for user in @users do
         tr
-          th Name
-          th Email
-          th Department
-          th Roles
-          th
-      tbody
-        - for user in @users do
-          tr
-            td = link_to user.name, user
-            td = user.email
-            td = user.department.try(:name)
-            td = user.roles_string
-            td.actions
-              .action-icon.l
-                = link_to '', edit_user_path(user.id), :class => 'icon-editor'
-              .action-icon.r
-                .dropdown
-                  a.dropdown-toggle.icon-gear data-toggle="dropdown" data-target="dropdown-menu#{user.id}"
-                  ul.dropdown-menu.pull-right id="dropdown-menu#{user.id}"
-                    li = link_to 'View Details', user
-                    li = link_to 'Edit', edit_user_path(user)
-                    -if user != current_user
-                      -if user.deleted_at.nil?
-                        li =link_to 'Deactivate',  disable_user_path(user), :confirm => 'Are you sure?'
-                      -else
-                        li =link_to 'Reactivate',  enable_user_path(user)
+          td = link_to user.name, user
+          td = user.email
+          td = user.department.try(:name)
+          td = user.roles_string
+          td.actions
+            .action-icon.l
+              = link_to '', edit_user_path(user.id), :class => 'icon-editor'
+            .action-icon.r
+              .dropdown
+                a.dropdown-toggle.icon-gear data-toggle="dropdown" data-target="dropdown-menu#{user.id}"
+                ul.dropdown-menu.pull-right id="dropdown-menu#{user.id}"
+                  li = link_to 'View Details', user
+                  li = link_to 'Edit', edit_user_path(user)
+                  -if user != current_user
+                    -if user.deleted_at.nil?
+                      li =link_to 'Deactivate',  disable_user_path(user), :confirm => 'Are you sure?'
+                    -else
+                      li =link_to 'Reactivate',  enable_user_path(user)
 
-      .digg_pagination
-        = will_paginate @users, :class => "digg-paginate"
-
+    .digg_pagination
+      = will_paginate @users, :class => "digg-paginate"

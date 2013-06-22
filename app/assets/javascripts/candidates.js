@@ -11,7 +11,10 @@ $(function() {/*
             $('#candidate-no-assignment-msg').css("line-height", height / fontsize);
         }
     }*/
-
+    $( ".accordion" ).accordion({
+        collapsible: true,
+        heightStyle: 'content'
+    });
     $('.fileupload').fileupload({
         name: "candidate[resume]"
     });

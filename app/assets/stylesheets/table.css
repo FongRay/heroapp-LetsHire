@@ -14,7 +14,7 @@
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
-  background-color: #E9F3FF;
+    background-color: #E9F3FF;
 }
 
 .table .actions {
@@ -34,3 +34,5 @@
   height: 20px;
   width: 20px;
 }
+
+.

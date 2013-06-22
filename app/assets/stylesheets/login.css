@@ -11,8 +11,8 @@
 
 .navbar .navbar-inner, 
 .navbar .fill {
-    background-color: #00405E;
-    background-image: linear-gradient(to bottom, #004363, #003B56);
+    background-color: #003B56;
+    background-image: none;
     background-repeat: repeat-x;
     border: medium none;
     border-radius: 0 0 0 0;

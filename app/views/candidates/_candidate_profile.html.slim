@@ -1,13 +1,16 @@
 - unless @candidate.nil?
-  p.candidate-name-font #{@candidate.name}
   .row-fluid
     .span8.tc
-      span.candidate-status-font #{@candidate.overall_status_str}
+      span.candidate-name-font #{@candidate.name}
     .span4
       - if can? :manage, @candidate
         = link_to 'Edit', edit_candidate_path(@candidate), :class => "btn btn-info"
     
   table.table.candidate-profile
+    tr
+      td.align-right status
+      td
+        span.candidate-status-font #{@candidate.overall_status_str}
     tr
       td.align-right E-mail
       td
@@ -30,7 +33,7 @@
     -if @candidate.inactive?
       = link_to 'Reactivate', reactivate_candidate_path(@candidate), :method => :post, :confirm => 'Please confirm?', :class => 'btn btn-primary candidate-blacklist-link', :"data-candidate-id" => @candidate.id
     -else
-      = link_to 'Assign Job Opening', '#', :class => 'btn btn-primary tccandidate_new_opening'
+      = link_to 'Assign Job Opening', '#', :class => 'btn btn-primary candidate-assign-job-button candidate_new_opening'
       = link_to 'Mark Inactive', '#', :class => 'btn btn-primary candidate-blacklist-link', :"data-candidate-id" => @candidate.id
       = render 'candidates/candidate_blacklist', {:candidate => @candidate}
 
