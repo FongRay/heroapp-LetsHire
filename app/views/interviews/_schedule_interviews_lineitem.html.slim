@@ -2,11 +2,11 @@ tr data-interview_id=interview.id
   - if interview.editable?
     td.scheduled_at
       = text_field_tag :scheduled_at, nil, :class => 'datetimepicker', :id => nil, :data => {:iso => interview.scheduled_at_iso}
-    td = number_field_tag :duration, interview.duration, :in => 30..180, :step => 10
+    td = number_field_tag :duration, interview.duration, :class => 'text', :in => 30..180, :step => 10
     td.modality
       = select_tag :modality, options_for_select(Interview::MODALITIES.collect { |x| [x,x] }, interview.modality)
     - if interview.phone_interview?
-      td.location = text_field_tag :phone, interview.phone
+      td.location = text_field_tag :phone, interview.phone, :class => 'text'
     - else
       td.location = text_field_tag :location, interview.location
     td.interviewers data-user_ids=interview.user_ids data-users=interview.users.collect{ |user| user.name } data-interviewers=interview.interviewers.collect{ |i| [i.id, i.user_id] }

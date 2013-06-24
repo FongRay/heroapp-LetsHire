@@ -25,10 +25,6 @@
   font-weight: bold;
 }
 
-input#duration, input#interview_duration {
-  width: 100px;
-}
-
 .datetimepicker {
   width:  140px;
 }
@@ -41,6 +37,10 @@ table.list_interviews {
         margin-bottom: 0;
     }
 
+    input.text {
+        width: 100px;
+    }
+
     .status {
         select {
             width: 120px;
@@ -48,7 +48,7 @@ table.list_interviews {
     }
 
     #interviewers_literal {
-        width: 70px;
+        width: 100px;
         margin-left: 0px;    
         white-space: pre-wrap;
         word-wrap: break-word;
