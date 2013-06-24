@@ -30,11 +30,15 @@ textarea {
 
 /* for devise prompts */
 .flash-alert {
-  @extend .alert-error;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
 }
 
 .flash-notice {
-  @extend .alert-success;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
 }
 
 .navbar-fixed-top .container {

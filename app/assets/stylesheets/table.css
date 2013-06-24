@@ -22,17 +22,15 @@
 }
 
 .table .icon-gear {
-  background-image: url(gear.png);
-  display: inline-block;
-  height: 20px;
-  width: 20px;
+    background-image: url(gear.png);
+    display: inline-block;
+    height: 20px;
+    width: 20px;
 }
 
 .table .icon-editor {
-  background-image: url(edit.png);
-  display: inline-block;
-  height: 20px;
-  width: 20px;
+    background-image: url(edit.png);
+    display: inline-block;
+    height: 20px;
+    width: 20px;
 }
-
-.

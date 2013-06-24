@@ -26,7 +26,7 @@
 }
 
 input#duration, input#interview_duration {
-  width: 50px;
+  width: 100px;
 }
 
 .datetimepicker {
@@ -35,19 +35,24 @@ input#duration, input#interview_duration {
 
 table.schedule_interviews,
 table.list_interviews {
-  select, 
-  input,
-  p {
-    margin-bottom: 0;
-  }
+    select, 
+    input,
+    p {
+        margin-bottom: 0;
+    }
 
-  #interviewers_literal {
-    margin-left: 0px;    
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
+    .status {
+        select {
+            width: 120px;
+        }
+    }
 
-
+    #interviewers_literal {
+        width: 70px;
+        margin-left: 0px;    
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
 }
 
 .add-new-interview-div {
