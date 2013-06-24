@@ -8,10 +8,14 @@ class OpeningsController < ApplicationController
   # GET /openings
   def index
     unless user_signed_in?
-      #published openings are returned only
+      # Only published openings are returned.
       @openings = Opening.published.order(sort_column('Opening') + ' ' + sort_direction).paginate(:page => params[:page])
+      # Here is an exception, we allow anonymous users to see the opening positions, the scenario
+      # is that, for these candidates who are interested in these jobs, they can see the job description
+      # on the web page.
       render 'openings/index_anonymous'
     else
+      # Implement the openings ui page filter query.
       @default_filter = 'My Openings'
       case params[:mode]
       when 'all'
@@ -129,8 +133,6 @@ class OpeningsController < ApplicationController
     redirect_to request.referrer, :alert => 'Invalid opening'
   end
 
-
-
   # DELETE /openings/1
   # DELETE /openings/1.json
   def destroy
@@ -156,15 +158,17 @@ class OpeningsController < ApplicationController
     redirect_to openings_url, :alert => 'Invalid opening'
   end
 
+  # Choice of job location
   def subregion_options
     render :partial => 'utilities/province_select', :locals => { :container => 'opening' }
   end
 
+  # Used in job assignment
   def opening_options
-    render :partial => 'opening_selection_combox', :locals => {:selected_department_id => params[:selected_department_id] }
+    render :partial => 'opening_selection_combox', :locals => { :selected_department_id => params[:selected_department_id] }
   end
 
-
+  # Select interviewers during arrange interview
   def interviewers_select
     opening = Opening.find(params[:id])
     mode = params[:mode]
@@ -175,10 +179,10 @@ class OpeningsController < ApplicationController
     render :partial => 'users/user_select', :locals => { :users => [] }
   end
 
-
   private
+
   def description_template
-        #Fixme: need load from 'setting' page
+    # FIXME: this string should be loaded from 'setting' page
         <<-END_OF_STRING
 About Us
 

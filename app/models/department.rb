@@ -12,7 +12,8 @@ class Department < ActiveRecord::Base
 
   scope :with_users, joins(:users).uniq
 
-
+  # NOTE: predefined departments sets, from long-term perspective,
+  # we might implement a flexible way to customize departments.
   DEFAULT_SET = [ { name: 'Admin', description: 'Administrative' },
                   { name: 'Customer Support', description: 'Customer Support' },
                   { name: 'Design', description: 'Design' },
@@ -29,7 +30,6 @@ class Department < ActiveRecord::Base
                   { name: 'Sales', description: 'Sales' },
                   { name: 'Others', description: 'Others' },
   ]
-
 
   def self.selectable(user)
     if user.has_role?(:recruiter)

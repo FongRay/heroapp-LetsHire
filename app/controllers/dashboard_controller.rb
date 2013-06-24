@@ -12,7 +12,7 @@ class DashboardController < ApplicationController
     if can? :manage, Candidate
       @candidates_without_opening = Candidate.active.no_openings
       @candidates_without_interview = Candidate.active.no_interviews
-      #Fixme: no_assessment isn't a scope, cannot apply scope 'active' for without_assessment
+      # FIXME: no_assessment isn't a scope, cannot apply scope 'active' for without_assessment
       @candidates_without_assessment = Candidate.active.without_assessment
       @candidates_with_assessment = Candidate.active.with_assessment
     end
@@ -35,11 +35,10 @@ class DashboardController < ApplicationController
     @candidates_without_assessment ||= []
     @candidates_with_assessment ||= []
 
-
+    # interviewers related action items data providers
     @interviews_owned_by_me ||= []
     @interviews_interviewed_by_me ||= []
     @interviews_without_feedback ||= []
-
 
     # data displayed in charts
     @openings_created_by_me = Opening.created_by(current_user.id).count

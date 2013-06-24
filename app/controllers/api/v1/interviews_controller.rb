@@ -13,6 +13,9 @@ class Api::V1::InterviewsController < Api::V1::ApiController
   OK = 'success'
   ERROR = 'error'
 
+  # The Restful api is called by mobile app, in our design, mobile app
+  # only views/updates interview but does not create/delete an interview.
+
   def index
     interval = params['interval'] || '1d'
     return invalid_params unless INTERVAL_MAPPINGS.keys.include? interval

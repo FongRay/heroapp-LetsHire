@@ -1,6 +1,7 @@
 class CandidatesController < AuthenticatedController
   load_and_authorize_resource :except => [:create, :update, :index_for_selection ]
 
+  # Predefined maximum uploaded file size, 10M
   MAX_FILE_SIZE = 10 * 1024 * 1024
 
   include ApplicationHelper
@@ -23,6 +24,7 @@ class CandidatesController < AuthenticatedController
 
     @default_filter = FILTER_LITERAL[mode.to_sym] || 'Active Candidates'
 
+    # Implement the candidates ui page filter query.
     @candidates = (if %w[no_openings no_interviews with_assessment without_assessment with_opening].include?(mode)
       Candidate.active.send(mode.to_sym)
     elsif mode == 'inactive'
@@ -43,12 +45,14 @@ class CandidatesController < AuthenticatedController
     end).order(sort_column('Candidate') + ' ' + sort_direction).paginate(:page => params[:page])
   end
 
-
   def show
+    # show candidate detailed info, such as name/contact info/current status
     @candidate = Candidate.find params[:id]
+
     @opening = nil
     @interviews = []
     @assessment = nil
+    # show candidate current applying job's interviews status
     if @candidate.current_opening_candidate_id > 0
       @latest_applying_job = OpeningCandidate.find(@candidate.current_opening_candidate_id)
       @opening_candidate = @latest_applying_job
@@ -61,6 +65,7 @@ class CandidatesController < AuthenticatedController
       end
     end
 
+    # show candidate job applying history
     @applying_jobs = nil
     unless @latest_applying_job.nil?
       @applying_jobs = @candidate.opening_candidates.where("opening_candidates.id != #{@latest_applying_job.id}").order("opening_candidates.id DESC")
@@ -82,6 +87,7 @@ class CandidatesController < AuthenticatedController
     redirect_to request.referrer, :alert => 'Invalid candidate'
   end
 
+  # Used in assigning candidate to opening jobs
   def index_for_selection
     if params[:exclude_opening_id]
       exclude_opening = Opening.find(params[:exclude_opening_id])
@@ -91,8 +97,6 @@ class CandidatesController < AuthenticatedController
     end
     render :action => :index_for_selection, :layout => false
   end
-
-
 
   def create
     tempio = nil
@@ -114,7 +118,7 @@ class CandidatesController < AuthenticatedController
         opening_candidate.update_candidate if opening_candidate
       end
 
-      #TODO: async large file upload
+      # TODO: async large file upload
       unless tempio.nil?
         if tempio.size > MAX_FILE_SIZE
           render :status => 400, :json => {:message => 'File size cannot be larger than 10M.'}
@@ -133,7 +137,6 @@ class CandidatesController < AuthenticatedController
     return render :text => "", :alert => 'Invalid parameters'
   end
 
-
   def create_opening
     return redirect_to request.referrer, :alert => 'Invalid attributes' unless params[:candidate]
     @candidate = Candidate.find params[:id]
@@ -147,8 +150,8 @@ class CandidatesController < AuthenticatedController
     redirect_to candidates_url, :alert => 'Invalid Candidate'
   end
 
-  #Don't support remove JD assignment via update API
-  #To avoid removing a JD assignment accidentally, should use 'create_opening' instead.
+  # Don't support remove JD assignment via update API
+  # To avoid removing a JD assignment accidentally, should use 'create_opening' instead.
   def update
     return redirect_to @candidate, :alert => 'Invalid parameters' unless params[:candidate]
     @candidate = Candidate.find params[:id]
@@ -185,6 +188,8 @@ class CandidatesController < AuthenticatedController
     redirect_to candidates_url, :alert => 'Invalid Candidate'
   end
 
+  # In our design, we do not delete candidate physically, we just mark the candidate
+  # to be 'inactive' in database.
   def move_to_blacklist
     @candidate = Candidate.find(params[:id])
     authorize! :manage, @candidate

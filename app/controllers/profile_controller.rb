@@ -20,4 +20,7 @@ class ProfileController < AuthenticatedController
       render 'edit'
     end
   end
+
+  # From long-term perspective, we might need to provide a way to reset user's password
+  # through user's email.
 end

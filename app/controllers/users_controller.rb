@@ -1,4 +1,5 @@
 class UsersController < AuthenticatedController
+  # We only allow 'admin' user to manage users information.
   before_filter :require_admin, :except => [:index_for_selection, :show]
 
   def index
@@ -7,6 +8,9 @@ class UsersController < AuthenticatedController
 
   def index_for_selection
     @users = []
+    # Query users which belong to one specific department, one scenario is that,
+    # when we arrange interviews for one job in 'HR' department, we need to assign interviewers
+    # who are working at 'HR' department.
     if params[:department_id]
       department = Department.find(params[:department_id])
       @users = department.users.where("name like ?", "%#{params[:q]}%").paginate(:page => params[:page])
@@ -68,6 +72,8 @@ class UsersController < AuthenticatedController
     redirect_to users_url, :alert => 'Invalid user'
   end
 
+  # In our design, we do not delete user physically, what we do is to mark these
+  # users to be 'inactive' in database.
   def deactivate
     @user = User.active.find(params[:id])
     if current_user == @user
@@ -78,16 +84,17 @@ class UsersController < AuthenticatedController
     items = []
     items << "active openings" if active_opening_count > 0
     items << "active interviews" if active_interview_count > 0
+    # To simplify business logic, we forbid to delete user if the user still has active job
+    # openings or interviews.
     if items.first
       return redirect_to users_url, :alert => "Cannot disable user assigned with #{items.join(' or ')}."
     end
-    #It's ok to remove all 'potential interviewers' for this user
+    # Here it's safe to remove all 'potential interviewers' for this user.
     @user.opening_participants.destroy_all
     toggle(params, false)
-  #rescue
-  #  redirect_to users_url, :alert => 'Invalid user'
   end
 
+  # Move user back to system
   def reactivate
     toggle(params, true)
   rescue
@@ -105,8 +112,5 @@ class UsersController < AuthenticatedController
       redirect_to users_url, :alert => "Operation Failed, error = #{@user.errors.inspect}"
     end
   end
-
-  private
-
 
 end
