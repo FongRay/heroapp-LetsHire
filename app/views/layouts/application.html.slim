@@ -21,7 +21,7 @@ html
     = javascript_include_tag "jqplot/plugins/barRenderer"
     = csrf_meta_tags
     = render 'layouts/shim'
-  body data-controll="#{params[:controller]}"
+  body data-controller="#{params[:controller]}"
     /- unless user_signed_in?
     = render 'layouts/header'
     - if user_signed_in?
