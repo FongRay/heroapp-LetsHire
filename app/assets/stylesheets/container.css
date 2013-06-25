@@ -1,13 +1,10 @@
 .page-container {
-    border-top: 3px solid #003B56;
+    border-top: 1px solid #CCC;
     padding-top: 20px;
     width: 100%;
 }
 
 .page-container-inner {
-    border: 1px solid #DCDCDC;
-    border-radius: 5px;
-    margin: 0;
     padding: 30px 0px 50px 0px;
 }
 
@@ -20,9 +17,5 @@
 }
 
 .page-container-inner-view {
-    padding: 10px 35px 20px 35px;
-}
-
-.page-container-inner-interviews {
-    border-top: 2px solid #DCDCDC;
+    padding: 20px 35px;
 }

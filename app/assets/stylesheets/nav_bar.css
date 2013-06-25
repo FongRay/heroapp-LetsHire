@@ -22,8 +22,10 @@
     margin: 0;
 }
 
-.navbar h3 a, .navbar .brand {
-    padding: 4px 20px 0;
+.navbar h3 a, 
+.navbar .brand {
+    padding: 4px;
+    margin-left: -45px;
 }
 
 .navbar ul.nav {

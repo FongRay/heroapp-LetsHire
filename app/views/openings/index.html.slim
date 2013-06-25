@@ -1,30 +1,31 @@
-ul.breadcrumb
-  li 
-    | Job Openings 
-.page-container
-  .operations.clearfix
-    .pull-right.index-view-filter
-      .btn-group
-        button.btn id="openings_filtername" = @default_filter
-        button.btn.dropdown-toggle data-toggle="dropdown"
-          span.caret
-        ul.dropdown-menu.pull-right id="openings_viewfilter"
-          li
-            a href="?mode=owned_by_me" My Openings
-          li
-            a href="?mode=no_candidates" Openings with Zero Candidates
-          -if can? :manage, Opening
+.content
+  ul.breadcrumb
+    li 
+      | Job Openings 
+  .page-container
+    .operations.clearfix
+      .pull-right.index-view-filter
+        .btn-group
+          button.btn id="openings_filtername" = @default_filter
+          button.btn.dropdown-toggle data-toggle="dropdown"
+            span.caret
+          ul.dropdown-menu.pull-right id="openings_viewfilter"
             li
-              a href="?mode=all" All
+              a href="?mode=owned_by_me" My Openings
+            li
+              a href="?mode=no_candidates" Openings with Zero Candidates
+            -if can? :manage, Opening
+              li
+                a href="?mode=all" All
 
-    .pull-left.index-edit-button
-      -if can? :create, Opening
-        = '  '
-        = link_to 'Add a Job Opening', new_opening_path, :class => 'btn btn-primary'
+      .pull-left.index-edit-button
+        -if can? :create, Opening
+          = '  '
+          = link_to 'Add a Job Opening', new_opening_path, :class => 'btn btn-primary'
 
-    #candidates_selection_container.hide
-      #candidates_selection
-    .hide
-      #error_messages
-  
-  =render 'openings_index'
+      #candidates_selection_container.hide
+        #candidates_selection
+      .hide
+        #error_messages
+    
+    =render 'openings_index'

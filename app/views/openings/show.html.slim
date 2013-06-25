@@ -1,13 +1,17 @@
-ul.breadcrumb
-  li 
-    | #{@opening.title}
+.content
+  ul.breadcrumb
+    li 
+      | Job Openings 
+      span.divider 
+        | &raquo;
+    li.active 
+      | #{@opening.title}
+   
+    -if user_signed_in? && (can? :manage, @opening)
+     li.r
+      = link_to 'Edit', edit_opening_path(@opening), :class => "btn btn-primary"
 
-.page-container
-  .page-container-inner.page-container-inner-view
-    .pull-right.align-to-title
-      -if user_signed_in? && (can? :manage, @opening)
-        = link_to 'Edit', edit_opening_path(@opening), :class => "btn btn-primary"
-
+  .page-container.clearfix
     .form-horizontal.clear-both
       .control-group
         label.control-label

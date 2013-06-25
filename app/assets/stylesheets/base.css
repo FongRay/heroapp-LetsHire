@@ -32,7 +32,7 @@ form {
 }
 
 body {
-    /*background-color: #ECF1F3;*/
+    background-color: #F5F5F5;
 }
 
 header {
@@ -50,6 +50,14 @@ footer {
     height: 20px;
     line-height: 20px;
     margin: 50px 0;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
 }
 
 .mt20 {
@@ -70,4 +78,24 @@ footer {
 
 .tr {
     text-align: right;
+}
+
+.content {
+    border: 1px solid;
+    border-color: gainsboro;
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px;
+}
+
+.breadcrumb {
+    background-color: white;
+    padding-left: 0;
+    font-weight: bold;
+    font-size: 17.5px;
+    margin-bottom: 10px;
+}
+
+.breadcrumb > li {
+    line-height: 30px;
 }

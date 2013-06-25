@@ -1,41 +1,40 @@
-div.page-container
-  div.page-container-inner.page-container-inner-form
-    = form_for @user, :html => {:class => 'form-horizontal'} do |form|
-      = form.error_messages
-      .control-group
-        = form.label :name, :class => 'control-label'
-        .controls
-          = form.text_field :name
+.page-container.clearfix
+  = form_for @user, :html => {:class => 'form-horizontal'} do |form|
+    = form.error_messages
+    .control-group
+      = form.label :name, :class => 'control-label'
+      .controls
+        = form.text_field :name
 
-      .control-group
-        = form.label :email, :class => 'control-label'
-        .controls
-          = form.text_field :email, :autocomplete => 'off'
-      .control-group
-        = form.label :password, :class => 'control-label'
-        .controls
-          = form.password_field :password, :autocomplete => 'off'
-      .control-group
-        = form.label :password_confirmation, "Confirm Password", :class => 'control-label'
-        .controls
-          = form.password_field :password_confirmation, :autocomplete => 'off'
-      .control-group
-        = form.label :department, :class => 'control-label'
-        .controls
-          = collection_select :user, :department_id, Department.all, :id, :name
-      .control-group
-        = form.label :role, :class => 'control-label'
-        .controls
-          - User::ROLES.each do |role|
-            - next if role == 'interviewer'
-            = check_box_tag "user[roles][#{role}]", role, @user.roles.include?(role), {:name => "user[roles][]", :class => 'checkbox'}
-            = label_tag "user_roles_#{role}", role.humanize, :class => 'checkbox inline capitalized-text'
-            br
-          = hidden_field_tag "user[roles][]", ""
+    .control-group
+      = form.label :email, :class => 'control-label'
+      .controls
+        = form.text_field :email, :autocomplete => 'off'
+    .control-group
+      = form.label :password, :class => 'control-label'
+      .controls
+        = form.password_field :password, :autocomplete => 'off'
+    .control-group
+      = form.label :password_confirmation, "Confirm Password", :class => 'control-label'
+      .controls
+        = form.password_field :password_confirmation, :autocomplete => 'off'
+    .control-group
+      = form.label :department, :class => 'control-label'
+      .controls
+        = collection_select :user, :department_id, Department.all, :id, :name
+    .control-group
+      = form.label :role, :class => 'control-label'
+      .controls
+        - User::ROLES.each do |role|
+          - next if role == 'interviewer'
+          = check_box_tag "user[roles][#{role}]", role, @user.roles.include?(role), {:name => "user[roles][]", :class => 'checkbox'}
+          = label_tag "user_roles_#{role}", role.humanize, :class => 'checkbox inline capitalized-text'
           br
-      .control-group
-        .actions
-          .controls
-            div
-              = form.submit 'Save', :class => 'btn btn-primary'
-              = link_to 'Cancel', :back, :class => 'btn'
+        = hidden_field_tag "user[roles][]", ""
+        br
+    .control-group
+      .actions
+        .controls
+          div
+            = form.submit 'Save', :class => 'btn btn-primary'
+            = link_to 'Cancel', :back, :class => 'btn'

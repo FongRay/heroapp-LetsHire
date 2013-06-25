@@ -1,8 +1,12 @@
-ul.breadcrumb
-  li 
-    | Job Opening(#{@opening.title}) 
-    span.divider 
-      | /
-  li.active Edit
-
-== render 'form'
+.content
+  ul.breadcrumb
+    li 
+      | Job Opening
+      span.divider
+        | &raquo;
+    li 
+      | #{@opening.title}
+      span.divider
+        | &raquo;
+    li.active Edit
+  == render 'form'

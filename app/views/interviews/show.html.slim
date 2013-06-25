@@ -1,15 +1,19 @@
-ul.breadcrumb
-  li 
-    | Interview Details
-.page-container
-  .pull-right.align-to-title
+.content
+  ul.breadcrumb
+    li 
+      | Interview
+      span.divider 
+        | &raquo;
+    li.active
+      | #{@candidate.name} for #{@opening_candidate.opening.title}
+    - if is_interviewer? @interview.interviewers
+      li.r
+        a.interview-feedback-btn.btn.btn-primary href='#' data-interview-id=@interview.id Update Feedback  
     - if (can? :manage, @interview) && @opening_candidate.in_interview_loop?
-      = link_to 'Schedule Interviews', edit_multiple_interviews_path(:opening_candidate_id => @opening_candidate.id), :class => 'btn btn-primary'
-    span
-      - if is_interviewer? @interview.interviewers
-        a.interview-feedback-btn.btn.btn-primary href='#' data-interview-id=@interview.id Update Feedback
-  .page-container-inner.page-container-inner-view
-   
+      li.r
+        = link_to 'Schedule Interviews', edit_multiple_interviews_path(:opening_candidate_id => @opening_candidate.id), :class => 'btn btn-primary'
+  
+  .page-container.clearfix
     .form-horizontal.clear-both
       .control-group
         label.control-label
@@ -64,5 +68,4 @@ ul.breadcrumb
           b Feedback
         .controls
           span = simple_format h(@interview.assessment)
-
     =render 'interviews/interview_feedback', {:interview => @interview}

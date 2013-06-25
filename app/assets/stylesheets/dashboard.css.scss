@@ -19,7 +19,7 @@
 .carousel-wrapper {
     position: relative;
     padding: 20px 40px;
-    background-color: #F1F1F1;
+    background-color: #EAEAEA;
 }
 
 /** Carousel **/
@@ -155,22 +155,18 @@ a.carousel-control-next {
 }
 
 /** stats-charts **/
-
 .stats-chart-container {
-  margin-top: 40px;
-  border-top: 3px solid #003B56;
-  padding-top: 28px;
+    margin-top: 40px;
+    border-top: 1px solid #CCC;
+    padding-top: 28px;
 }
 
 .stats-chart {
-  border: 1px solid;
-  border-color: gainsboro;
-  border-radius: 5px;
-  background-color: white;
-}
-
-.stats-chart h4 {
-  text-align: center
+    border: 1px solid;
+    border-color: gainsboro;
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px;
 }
 
 .stats-chart hr {

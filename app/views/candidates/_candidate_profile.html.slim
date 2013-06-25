@@ -1,11 +1,10 @@
 - unless @candidate.nil?
-  .row-fluid
+  .row-fluid.mt10.mb10
     .span8.tc
       span.candidate-name-font #{@candidate.name}
-    .span4
-      - if can? :manage, @candidate
-        = link_to 'Edit', edit_candidate_path(@candidate), :class => "btn btn-info"
-    
+  
+  hr.candidate-splitter-line
+  
   table.table.candidate-profile
     tr
       td.align-right status

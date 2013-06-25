@@ -1,8 +1,13 @@
-ul.breadcrumb
-  li 
-    | Users(#{@user.name}) 
-    span.divider 
-      | /
-  li.active Edit
+.content
+  ul.breadcrumb
+    li 
+      | Users
+      span.divider 
+        | &raquo;
+    li
+    	| #{@user.name}
+    	span.divider
+    		| &raquo;
+    li.active Edit
 
-== render 'form'
+  == render 'form'

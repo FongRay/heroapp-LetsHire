@@ -1,38 +1,41 @@
-ul.breadcrumb
-  li 
-    | Interviews
-    span.divider 
-      | /
-  li.active Schedule
-
-.page-container
-  .page-container-inner-interview-info
-    #previous_url.hide data-value=request.referer
+.content
+  ul.breadcrumb
+    li 
+      | Interviews
+      span.divider 
+        | &raquo;
     -if @opening_candidate
-      = render :partial => "fixed_opening_candidate", :locals => { :opening_candidate => @opening_candidate}
-    -else
-      = render :partial => "flexible_opening_candidate", :locals => { :opening => @opening}
+      li
+        | #{@opening_candidate.candidate.name} for #{@opening_candidate.opening.title}
+        span.divider
+          | &raquo;
+    li.active Edit
 
-    #errorExplanation.hide
-      h2 Interviews cannot be saved due to the following errors.
-      ul#error_messages
+  .page-container
+    .page-container-inner-interview-info
+      #previous_url.hide data-value=request.referer
+      -if @opening_candidate
+        = render :partial => "fixed_opening_candidate", :locals => { :opening_candidate => @opening_candidate}
+      -else
+        = render :partial => "flexible_opening_candidate", :locals => { :opening => @opening}
 
-  .page-container-inner-interviews
-    div.add-new-interview-div
-      = link_to '#', :class=> 'add_new_interview btn btn-primary' do
-        /= image_tag('add.png')
-        = 'Schedule New'
+      #errorExplanation.hide
+        h2 Interviews cannot be saved due to the following errors.
+        ul#error_messages
 
-    #interviewers_selection_container.hide
-      = collection_select(nil, :participants_department_id, Department.with_users, :id, :name, { :selected => @opening.department_id }, { :prompt => 'Filter by department', :id => :participants_department_id })
-      #interviewers_selection
+    .page-container-inner-interviews.clearfix
+      .add-new-interview-div
+        = link_to '#', :class=> 'add_new_interview btn btn-primary' do
+          /= image_tag('add.png')
+          = 'Schedule New'
 
-    table.table.table-hover.table-striped.schedule_interviews
-      = render :partial => 'schedule_reload'
+      #interviewers_selection_container.hide
+        = collection_select(nil, :participants_department_id, Department.with_users, :id, :name, { :selected => @opening.department_id }, { :prompt => 'Filter by department', :id => :participants_department_id })
+        #interviewers_selection
 
-    p
-    .action_container.pull-right
-      = submit_tag 'OK', :class => 'btn btn-primary submit_interviews'
-      = link_to 'Cancel', :back, :class => 'btn'
+      table.table.table-hover.table-striped.schedule_interviews
+        = render :partial => 'schedule_reload'
 
-
+      .action_container.pull-right
+        = submit_tag 'OK', :class => 'btn btn-primary submit_interviews'
+        = link_to 'Cancel', :back, :class => 'btn'

@@ -1,27 +1,35 @@
-ul.breadcrumb
-  li 
-    | Candidate Details
-.page-container
-  .row-fluid
-    .span8
-      .page-container-inner.candidate-panel.fixed-size.candidate-container#candidate-applying-panel
-        - if @latest_applying_job.nil?
-          #candidate-no-assignment-msg.tc
-            span style="font-size: 30px"
-              = "No Job Opening Assignment."
-        - else
-          =render 'show_latest_applying_job'
-    .span4
-      .page-container-inner.candidate-panel.candidate-container.candidate-profile-panel id="candidate-profile-panel"
-        =render 'candidate_profile'
-  - j = 0
-  - unless @applying_jobs.nil?
-    - @applying_jobs.each do |job|
-      - j += 1
-      br
-      .page-container-inner.candidate-panel
-        .row-fluid
-          .span12
-            = render :partial => 'recruiting_history', :locals => { :applying_job => job, :index => j }
+.content
+  ul.breadcrumb
+    li 
+      | Candidate
+      span.divider 
+        | &raquo;
+    li.active
+      | #{@candidate.name}
+    - if can? :manage, @candidate
+      li.r
+        = link_to 'Edit', edit_candidate_path(@candidate), :class => "btn btn-primary"
+  .page-container
+    .row-fluid
+      .span8
+        .page-container-inner.candidate-panel.fixed-size.candidate-container#candidate-applying-panel
+          - if @latest_applying_job.nil?
+            #candidate-no-assignment-msg.tc
+              span style="font-size: 30px"
+                = "No Job Opening Assignment."
+          - else
+            =render 'show_latest_applying_job'
+      .span4
+        .page-container-inner.candidate-panel.candidate-container.candidate-profile-panel id="candidate-profile-panel"
+          =render 'candidate_profile'
+    - j = 0
+    - unless @applying_jobs.nil?
+      - @applying_jobs.each do |job|
+        - j += 1
+        br
+        .page-container-inner.candidate-panel
+          .row-fluid
+            .span12
+              = render :partial => 'recruiting_history', :locals => { :applying_job => job, :index => j }
 
-  = render 'new_opening'
+    = render 'new_opening'
