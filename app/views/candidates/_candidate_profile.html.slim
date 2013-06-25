@@ -1,40 +1,38 @@
 - unless @candidate.nil?
-  div style="line-height: 50px"
-    div align="left"
-      p.candidate-name-font #{@candidate.name}
-      div.row-fluid
-        .span8 align="center"
-          p.candidate-status-font #{@candidate.overall_status_str}
-        .span4
-          - if can? :manage, @candidate
-            = link_to 'Edit', edit_candidate_path(@candidate), :class => "btn btn-primary"
-    
-    div align="center"
-      table.candidate-profile
-        tr
-          td.align-right E-mail
-          td
-            a href="mailto:#{@candidate.email}" = @candidate.email
-        tr
-          td.align-right Phone
-          td
-            = @candidate.phone
-        tr
-          td.align-right From
-          td
-            = @candidate.source
-        tr
-          td.align-right Resume
-          td
-            - if not @resume.nil?
-              = link_to "#{@resume}", resume_candidate_path({:id => @candidate.id})
-
-    div align="center"
-      = hidden_field_tag :candidate_id, @candidate.id
-      -if @candidate.inactive?
-        = link_to 'Reactivate', reactivate_candidate_path(@candidate), :method => :post, :confirm => 'Please confirm?', :class => 'btn candidate-mark-inactive-button candidate-blacklist-link', :"data-candidate-id" => @candidate.id
-      -else
-        = link_to 'Assign Job Opening', '#', :class => 'btn candidate-assign-job-button candidate_new_opening'
-        = link_to 'Mark Inactive', '#', :class => 'btn candidate-mark-inactive-button candidate-blacklist-link', :"data-candidate-id" => @candidate.id
-        = render 'candidates/candidate_blacklist', {:candidate => @candidate}
+  .row-fluid.mt10.mb10
+    .span8.tc
+      span.candidate-name-font #{@candidate.name}
+  
+  hr.candidate-splitter-line
+  
+  table.table.candidate-profile
+    tr
+      td.align-right status
+      td
+        span.candidate-status-font #{@candidate.overall_status_str}
+    tr
+      td.align-right E-mail
+      td
+        a href="mailto:#{@candidate.email}" = @candidate.email
+    tr
+      td.align-right Phone
+      td
+        = @candidate.phone
+    tr
+      td.align-right From
+      td
+        = @candidate.source
+    tr
+      td.align-right Resume
+      td
+        - if not @resume.nil?
+          = link_to "#{@resume}", resume_candidate_path({:id => @candidate.id})
+  .tc
+    = hidden_field_tag :candidate_id, @candidate.id
+    -if @candidate.inactive?
+      = link_to 'Reactivate', reactivate_candidate_path(@candidate), :method => :post, :confirm => 'Please confirm?', :class => 'btn btn-primary candidate-blacklist-link', :"data-candidate-id" => @candidate.id
+    -else
+      = link_to 'Assign Job Opening', '#', :class => 'btn btn-primary candidate-assign-job-button candidate_new_opening'
+      = link_to 'Mark Inactive', '#', :class => 'btn btn-primary candidate-blacklist-link', :"data-candidate-id" => @candidate.id
+      = render 'candidates/candidate_blacklist', {:candidate => @candidate}
 

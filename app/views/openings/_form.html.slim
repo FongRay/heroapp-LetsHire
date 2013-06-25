@@ -1,79 +1,77 @@
 div.page-container
-  div.page-container-inner.page-container-inner-form
-    = form_for @opening, :html => {:class => 'form-horizontal'} do |f|
-      = f.error_messages
+  = form_for @opening, :html => {:class => 'form-horizontal'} do |f|
+    = f.error_messages
+    .control-group
+      =f.label :title, :class => 'control-label'
+      .controls
+        = f.text_field :title
+
+    .control-group
+      =f.label :recruiter, :class => 'control-label'
+      .controls
+        = f.select :recruiter_id, User.active.with_role(:recruiter).map { |user| [ user.name, user.id ] }
+        = f.label "You are creating one job opening that doesn't belong to you! ", :class => 'warning_message_label', :id => 'opening_recruiting_warn', :"data-recruiter-id" => @current_user ? @current_user.id : current_user.id
+
+    - if current_user.has_role?(:recruiter) && (!@opening.persisted? || (@opening.published?  && can?(:manage, @opening)))
       .control-group
-        =f.label :title, :class => 'control-label'
+        =f.label :department, :class => 'control-label'
         .controls
-          = f.text_field :title
-
+          - departments = current_user.has_role?(:recruiter) ? User.active_departments : [current_user.department]
+          - if departments.size > 0
+            = f.select :department_id, departments.map { |d| [d.name, d.id]}, :prompt => departments.size > 1
+          - else
+            = f.label 'No hiring manager created?!'
       .control-group
-        =f.label :recruiter, :class => 'control-label'
+        =f.label :hiring_manager, 'Hiring Manager', :class => 'control-label'
         .controls
-          = f.select :recruiter_id, User.active.with_role(:recruiter).map { |user| [ user.name, user.id ] }
-          = f.label "You are creating one job opening that doesn't belong to you! ", :class => 'warning_message_label', :id => 'opening_recruiting_warn', :"data-recruiter-id" => @current_user ? @current_user.id : current_user.id
-
-      - if current_user.has_role?(:recruiter) && (!@opening.persisted? || (@opening.published?  && can?(:manage, @opening)))
-        .control-group
-          =f.label :department, :class => 'control-label'
-          .controls
-            - departments = current_user.has_role?(:recruiter) ? User.active_departments : [current_user.department]
-            - if departments.size > 0
-              = f.select :department_id, departments.map { |d| [d.name, d.id]}, :prompt => departments.size > 1
-            - else
-              = f.label 'No hiring manager created?!'
-        .control-group
-          =f.label :hiring_manager, 'Hiring Manager', :class => 'control-label'
-          .controls
-            - users =  @opening.department ? @opening.department.users.active.select { |user| user.has_role?(:hiring_manager) } : []
-            = render :partial => 'users/user_select', :locals => { :name => :opening_hiring_manager_id, :users=> users, :selected => @opening.try(:hiring_manager_id) }
-      - else
-        =f.hidden_field :hiring_manager_id
-        =f.hidden_field :department_id
-        .control-group
-          =f.label :department, :class => 'control-label'
-          .controls
-            = text_field_tag nil, @opening.department.try(:name), :disabled => true
-        .control-group
-          =f.label :hiring_manager, 'Hiring Manager', :class => 'control-label'
-          .controls
-            = text_field_tag nil, @opening.hiring_manager.try(:name), :disabled => true
-
-
-
+          - users =  @opening.department ? @opening.department.users.active.select { |user| user.has_role?(:hiring_manager) } : []
+          = render :partial => 'users/user_select', :locals => { :name => :opening_hiring_manager_id, :users=> users, :selected => @opening.try(:hiring_manager_id) }
+    - else
+      =f.hidden_field :hiring_manager_id
+      =f.hidden_field :department_id
       .control-group
-        =f.label :total_no, 'Total Seats', :class => 'control-label'
+        =f.label :department, :class => 'control-label'
         .controls
-          - min_no = @opening.filled_no > 1 ? @opening.filled_no : 1
-          = f.number_field :total_no, :in => min_no..1000
-
+          = text_field_tag nil, @opening.department.try(:name), :disabled => true
       .control-group
-        =f.label :city, :class => 'control-label'
+        =f.label :hiring_manager, 'Hiring Manager', :class => 'control-label'
         .controls
-          = f.country_select :country, { :priority => ['US', 'CN'], :prompt => 'Please select a country' }
-          = render 'utilities/province_select', { :opening_form => f, :country_code => f.object.country, :city => @opening.city, :container => 'opening'}
+          = text_field_tag nil, @opening.hiring_manager.try(:name), :disabled => true
 
+
+
+    .control-group
+      =f.label :total_no, 'Total Seats', :class => 'control-label'
+      .controls
+        - min_no = @opening.filled_no > 1 ? @opening.filled_no : 1
+        = f.number_field :total_no, :in => min_no..1000
+
+    .control-group
+      =f.label :city, :class => 'control-label'
+      .controls
+        = f.country_select :country, { :priority => ['US', 'CN'], :prompt => 'Please select a country' }
+        = render 'utilities/province_select', { :opening_form => f, :country_code => f.object.country, :city => @opening.city, :container => 'opening'}
+
+    .control-group
+      =f.label :description, :class => 'control-label'
+      .controls
+        = f.text_area :description, :class => 'span8'
+
+    -if @opening.id && @opening.status != Opening::STATUS_LIST[:draft]
       .control-group
-        =f.label :description, :class => 'control-label'
+        =f.label :status, :class => 'control-label'
         .controls
-          = f.text_area :description, :class => 'span8'
+          = f.select :status, Opening::STATUS_LIST, {}, {:class => 'capitalized-text'}
 
-      -if @opening.id && @opening.status != Opening::STATUS_LIST[:draft]
-        .control-group
-          =f.label :status, :class => 'control-label'
-          .controls
-            = f.select :status, Opening::STATUS_LIST, {}, {:class => 'capitalized-text'}
-
-      -else
-        .control-group
-          =f.label :status, "Make Job Opening active immediately", :class => 'control-label'
-          .controls
-            = f.check_box :status
-
-
+    -else
       .control-group
+        =f.label :status, "Make Job Opening active immediately", :class => 'control-label'
         .controls
-          .actions
-            = f.submit 'Save', :class=>'btn-primary btn'
-            = link_to 'Cancel', :back, :class => 'btn'
+          = f.check_box :status
 
+
+    .control-group
+      .controls
+        .actions
+          = f.submit 'Save', :class=>'btn-primary btn'
+          = link_to 'Cancel', :back, :class => 'btn'

@@ -1,0 +1,101 @@
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1;
+}
+
+h1 {
+    font-size:  3em;
+    letter-spacing: -2px;
+    margin-top: 30px;
+    text-align: center;
+}
+
+h2 {
+    font-size:  1.7em;
+    letter-spacing: -1px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: normal;
+    color: #999;
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+p {
+    font-size:  1.1em;
+    line-height: 1.7em;
+}
+
+form {
+    margin: 0;
+}
+
+body {
+    background-color: #F5F5F5;
+}
+
+header {
+    padding: 20px 0;
+}
+
+#main {
+    min-height: 500px;
+}
+
+footer {
+    text-align: center;
+    clear: both;
+    color: #999999;
+    height: 20px;
+    line-height: 20px;
+    margin: 50px 0;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.tl {
+    text-align: left;
+}
+
+.tc {
+    text-align: center;
+}
+
+.tr {
+    text-align: right;
+}
+
+.content {
+    border: 1px solid;
+    border-color: gainsboro;
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px;
+}
+
+.breadcrumb {
+    background-color: white;
+    padding-left: 0;
+    font-weight: bold;
+    font-size: 17.5px;
+    margin-bottom: 10px;
+}
+
+.breadcrumb > li {
+    line-height: 30px;
+}

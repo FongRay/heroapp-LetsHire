@@ -1,18 +1,17 @@
-div id="all-openings"
-  table class='table table-hover table-bordered table-striped'
-    thead class='sortable colheader'
-      tr
-        th = sortable 'Opening', 'title', 'Title'
-        th = sortable 'Opening', 'department_id', 'Department'
-        -if user_signed_in?
-          th = sortable 'Opening', 'hiring_manager_id', 'Hiring Manager'
-          th = sortable 'Opening', 'status', 'Status'
-          th = sortable 'Opening', 'filled_no', 'Filled/Total'
-          th = sortable 'Opening', 'opening_candidates_count', '# of Candidates'
-        -else
-          th = sortable 'Opening', 'recruiter', 'Recruiter'
-        th
-    tbody
-      = render @openings
-  
-  = will_paginate @openings, :class => 'digg-paginate'  
+table class='table table-hover table-striped mt20'
+  thead class='sortable colheader'
+    tr
+      th = sortable 'Opening', 'title', 'Title'
+      th = sortable 'Opening', 'department_id', 'Department'
+      -if user_signed_in?
+        th = sortable 'Opening', 'hiring_manager_id', 'Hiring Manager'
+        th = sortable 'Opening', 'status', 'Status'
+        th = sortable 'Opening', 'filled_no', 'Filled/Total'
+        th = sortable 'Opening', 'opening_candidates_count', '# of Candidates'
+      -else
+        th = sortable 'Opening', 'recruiter', 'Recruiter'
+      th
+  tbody
+    = render @openings
+
+= will_paginate @openings, :class => 'digg-paginate'

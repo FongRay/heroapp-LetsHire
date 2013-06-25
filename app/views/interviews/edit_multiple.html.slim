@@ -1,9 +1,18 @@
-.page-container-wrapper
-  h3 Interviews -> Schedule
+.content
+  ul.breadcrumb
+    li 
+      | Interviews
+      span.divider 
+        | &raquo;
+    -if @opening_candidate
+      li
+        | #{@opening_candidate.candidate.name} for #{@opening_candidate.opening.title}
+        span.divider
+          | &raquo;
+    li.active Edit
+
   .page-container
-
     .page-container-inner-interview-info
-
       #previous_url.hide data-value=request.referer
       -if @opening_candidate
         = render :partial => "fixed_opening_candidate", :locals => { :opening_candidate => @opening_candidate}
@@ -14,24 +23,19 @@
         h2 Interviews cannot be saved due to the following errors.
         ul#error_messages
 
-    .page-container-inner-interviews
-      div.add-new-interview-div
-        = link_to '#', :class=> 'add_new_interview' do
-          = image_tag('add.png')
+    .page-container-inner-interviews.clearfix
+      .add-new-interview-div
+        = link_to '#', :class=> 'add_new_interview btn btn-primary' do
+          /= image_tag('add.png')
           = 'Schedule New'
-        end
-
 
       #interviewers_selection_container.hide
         = collection_select(nil, :participants_department_id, Department.with_users, :id, :name, { :selected => @opening.department_id }, { :prompt => 'Filter by department', :id => :participants_department_id })
         #interviewers_selection
 
-      table.table.table-hover.table-bordered.table-striped.schedule_interviews
+      table.table.table-hover.table-striped.schedule_interviews
         = render :partial => 'schedule_reload'
 
-      p
       .action_container.pull-right
         = submit_tag 'OK', :class => 'btn btn-primary submit_interviews'
         = link_to 'Cancel', :back, :class => 'btn'
-
-

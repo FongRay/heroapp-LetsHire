@@ -8,12 +8,9 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require custom-theme/jquery-ui.custom
  *= require jquery-ui-timepicker-addon
  *= require jqplot
  *= require token-input
- *= require bootstrap
- *= require bootstrap-fileupload
  *= require font-awesome/css/font-awesome
  *= require_self
  *= require_tree .
@@ -32,7 +29,11 @@
 }
 
 .home-title {
-  margin: 0;
+    color: white;
+    font-weight: bold;
+    font-size: 26px;
+    margin: 0;
+    text-align: left;
 }
 
 .sign-in {
@@ -91,12 +92,7 @@ img.logo {
   margin-top: 30px;
 }
 
-body,
-.ui-dialog,
-.ui-dialog .ui-dialog-buttonpane {
-  background: url(body_content.png);
-}
-
+/*body,*/
 .clearfix:before {
   content: "";
   display: table;

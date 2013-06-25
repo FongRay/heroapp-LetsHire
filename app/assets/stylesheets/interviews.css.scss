@@ -25,58 +25,38 @@
   font-weight: bold;
 }
 
-input#duration, input#interview_duration {
-  width: 50px;
-}
-
 .datetimepicker {
   width:  140px;
 }
 
 table.schedule_interviews,
 table.list_interviews {
-
-  .scheduled_at {
-    width: 20%;
-  }
-
-  .modality  {
-    width: 17%;
-
-  }
-
-  select {
-    width: 130px;
-  }
-
-  .location {
-    width: 17%;
-  }
-
-  input#phone {
-    width: 150px;
-  }
-
-  .interviewers {
-    width: 25%;
-  }
-  .status {
-    width: 17%;
-
-    select {
-      width: 110px;
+    select, 
+    input,
+    p {
+        margin-bottom: 0;
     }
-  }
 
-  #interviewers_literal {
-    margin-left: 0px;
-  }
+    input.text {
+        width: 100px;
+    }
 
+    .status {
+        select {
+            width: 120px;
+        }
+    }
+
+    #interviewers_literal {
+        width: 100px;
+        margin-left: 0px;    
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
 }
 
 .add-new-interview-div {
-  margin: 5px;
-  padding: 5px;
+  padding: 10px 0;
 }
 
 a.add_new_interview:link {text-decoration:none;}

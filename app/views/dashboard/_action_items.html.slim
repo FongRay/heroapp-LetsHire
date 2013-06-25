@@ -1,92 +1,79 @@
-div.action-item-title
-  h4
-    span = 'Action Items'
-
-div.carousel-wrapper
-  div.carousel data-jcarousel='true'
+h3.tl Reminders
+.carousel-wrapper
+  .carousel.row data-jcarousel='true'
     ul
       - if can? :manage, Opening and @active_openings.length == 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @active_openings.length
-              h5 = 'active job openings'
-              = link_to new_opening_path do
-                i.icon-caret-right  Create
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @active_openings.length
+            .salient-metric-label = 'active job openings'
+            = link_to new_opening_path do
+              i.icon-caret-right  Create
 
-      - if can? :manage, Opening and @openings_without_candidate.size !=0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @openings_without_candidate.length
-              h5 = "job openings don't have candidates"
-              = link_to openings_path(:mode => :no_candidates) do
-                i.i.icon-caret-right  Assign
-              end
+      - if can? :manage, Opening and @openings_without_candidate.size != 0
+        li.span3
+          .action-item
+            .salient-metric-number = @openings_without_candidate.length
+            .salient-metric-label = "job openings don't have candidates"
+            = link_to openings_path(:mode => :no_candidates), :class => 'action-link' do
+              i.i.icon-caret-right  Assign
+
       - if can? :manage, Candidate and @candidates_without_opening.size != 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @candidates_without_opening.length
-              h5 = 'candidates are not assigned to job openings'
-              = link_to candidates_path(:mode => :no_openings) do
-                i.i.icon-caret-right  Assign
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @candidates_without_opening.length
+            .salient-metric-label = 'candidates are not assigned to job openings'
+            = link_to candidates_path(:mode => :no_openings), :class => 'action-link' do
+              i.i.icon-caret-right  Assign
+
       - if can? :manage, Candidate and @candidates_without_interview.size != 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @candidates_without_interview.length
-              h5 = 'active candidates not scheduled for interviews'
-              = link_to candidates_path(:mode => :no_interviews) do
-                i.i.icon-caret-right  Schedule
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @candidates_without_interview.length
+            .salient-metric-label = 'active candidates not scheduled for interviews'
+            = link_to candidates_path(:mode => :no_interviews), :class => 'action-link' do
+              i.i.icon-caret-right  Schedule
+
       - if can? :manage, Interview and @interviews_owned_by_me.size != 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @interviews_owned_by_me.length
-              h5 = 'upcoming interviews for my owned job openings'
-              = link_to interviews_path(:mode => :owned_by_me) do
-                i.i.icon-caret-right  View
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @interviews_owned_by_me.length
+            .salient-metric-label = 'upcoming interviews for my owned job openings'
+            = link_to interviews_path(:mode => :owned_by_me), :class => 'action-link' do
+              i.i.icon-caret-right  View
+
       - if can? :manage, Interview and @interviews_interviewed_by_me.size != 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @interviews_interviewed_by_me.length
-              h5 = 'upcoming interviews for me as an interviewer'
-              = link_to interviews_path(:mode => :interviewed_by_me) do
-                i.i.icon-caret-right  View
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @interviews_interviewed_by_me.length
+            .salient-metric-label = 'upcoming interviews for me as an interviewer'
+            = link_to interviews_path(:mode => :interviewed_by_me), :class => 'action-link' do
+              i.i.icon-caret-right  View
+
       - if can? :manage, Interview and @interviews_without_feedback.size != 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @interviews_without_feedback.length
-              h5 = 'interviews were not given feedback'
-              = link_to interviews_path(:mode => :no_feedback) do
-                i.i.icon-caret-right  Give Feedback
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @interviews_without_feedback.length
+            .salient-metric-label = 'interviews were not given feedback'
+            = link_to interviews_path(:mode => :no_feedback), :class => 'action-link' do
+              i.i.icon-caret-right  Give Feedback
+
       - if can? :manage, Candidate and @candidates_without_assessment.size != 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @candidates_without_assessment.length
-              h5 = 'interviewed candidates were not given final assessment'
-              = link_to candidates_path(:mode => :without_assessment) do
-                i.i.icon-caret-right  Assess
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @candidates_without_assessment.length
+            .salient-metric-label = 'interviewed candidates were not given final assessment'
+            = link_to candidates_path(:mode => :without_assessment), :class => 'action-link' do
+              i.i.icon-caret-right  Assess
+
       - if can? :manage, Candidate and @candidates_with_assessment.size != 0
-        li
-          div.action-item-wrapper
-            div.action-item
-              h2 = @candidates_with_assessment.length
-              h5 = 'candidates have been given final assessment'
-              = link_to candidates_path(:mode => :with_assessment) do
-                i.i.icon-caret-right  View
-              end
+        li.span3
+          .action-item
+            .salient-metric-number = @candidates_with_assessment.length
+            .salient-metric-label = 'candidates have been given final assessment'
+            = link_to candidates_path(:mode => :with_assessment), :class => 'action-link' do
+              i.i.icon-caret-right  View
+
 
   a.carousel-control-prev href='#' data-jcarousel-control='true' data-target='-=1' ‹
   a.carousel-control-next href='#' data-jcarousel-control='true' data-target='+=1' ›

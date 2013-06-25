@@ -1,52 +1,35 @@
 - unless applying_job.nil?
-  div.row-fluid
+  .row-fluid
     - if applying_job.fail? or applying_job.quit?
-      div.candidate_failed
+      .candidate_failed
     - else
-      div.candidate_successful
+      .candidate_successful
     h4.interview_result Recruiting History for #{applying_job.opening.title}
   hr.candidate-splitter-line
   div
     - if applying_job.interviews.length > 0
-      div.container-fluid
-        div.row-fluid
-          div.span12
-            div.accordion id="accordion3"
+      .container-fluid
+        .row-fluid
+          .span12
+            .accordion
               - i = 0
               - applying_job.interviews.each do |interview|
-                - i += 1
-                div.accordion-group
-                  div.accordion-heading
-                    a.accordion-toggle.collapsed data-toggle="collapse" data-parent="#accordion3" href="#collapse3-#{index}-#{i}"
-                      table.interviewline.large-interval
-                        tr
-                          td
-                            img.indicator
-                          td
-                            = interview.scheduled_at
-                          td
-                            = interview.modality
-                          td
-                            = interview.duration
-                          td
-                            = interview.status
-                    - if interview.status == 'finished'
-                      div.accordion-body.collapse id="collapse3-#{index}-#{i}"
-                        div.accordion-inner
-                          div.feedbackborder
-                            p Feedback from interviews
-                            div.accordion id="accordion3-#{index}-#{i}-internal"
-                              div.accordion-group
-                                div.accordion-heading
-                                  a.accordion-toggle.collapsed data-toggle="collapse" data-parent="#accordion3-#{index}-#{i}-internal" href="#collapse3-#{index}-#{i}-internal"
-                                    - uids = interview.interviewers.map{|u| u.user_id}
-                                    - interviews = User.active.find(:all, :conditions => ['id in (?)', uids]).map{|u| u.name}
-                                    span
-                                      = "From #{interviews.join(' ')}"
-                                  div.accordion-body.collapse id="collapse3-#{index}-#{i}-internal"
-                                    div.accordion-inner
-                                    span
-                                      = interview.assessment
-    p style="text-indent: 2em" = "Final Assessment:"
+                - i += 1      
+                h3
+                  span.mr10 = interview.scheduled_at
+                  span.mr10 = interview.modality
+                  span.mr10 = interview.duration
+                  span.mr10 = interview.status
+                div
+                  - if interview.status == 'finished'
+                    p Feedback from interviews
+                    .accordion
+                      - uids = interview.interviewers.map{|u| u.user_id}
+                      - interviews = User.active.find(:all, :conditions => ['id in (?)', uids]).map{|u| u.name}
+                      h3
+                        = "From #{interviews.join(' ')}"
+                      div
+                          = interview.assessment
+    p 
+      strong Final Assessment
     =render :partial => 'job_assessment', :locals => { :opening_candidate => applying_job }
-    br

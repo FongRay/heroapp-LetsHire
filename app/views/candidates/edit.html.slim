@@ -1,9 +1,15 @@
-page-container-wrapper
-h3 Candidates -> #{@candidate.name} >> Edit
-
-div.page-container
-  div.page-container-inner.page-container-inner-form
-
+.content
+  ul.breadcrumb
+    li 
+      | Candidates
+      span.divider
+        | &raquo;
+    li
+      | #{@candidate.name}
+      span.divider
+        | &raquo;
+    li.active Edit
+  div.page-container
     = form_for @candidate, :html => { :class => 'form-horizontal' }  do |f|
       = f.error_messages
       .control-group

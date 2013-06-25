@@ -3,28 +3,27 @@ tr data-id=candidate.id
   td= h(candidate.email)
   td= candidate.active_opening.try(:title)
   td= candidate.overall_status_str
-  td.actions
-    div.row-fluid.actions
-      .span6.action-icon
-        -if can? :manage, @candidate
-          =link_to '', edit_candidate_path(candidate) , :class => 'icon-editor'
 
-      .span6.action-icon
-        .dropdown
-          a.dropdown-toggle.icon-gear data-toggle="dropdown" href="#"
-          ul.dropdown-menu
-            li = link_to 'View Details', candidate
-            -if can? :manage, @candidate
-              -unless candidate.inactive?
-                li = link_to 'Edit', edit_candidate_path(candidate)
-                - opening_candidate = candidate.active_opening_candidate
-                li = link_to 'Assign Job Opening', "", :class => 'candidates_index_new_opening'
-                -if opening_candidate && opening_candidate.in_interview_loop?
-                  li = link_to 'Schedule Interviews', edit_multiple_interviews_path(:opening_candidate_id => opening_candidate.id)
-                li
-                  a.candidate-blacklist-link href='#' data-candidate-id=candidate.id Move to Blacklist
-              - else
-                li = link_to 'Reactivate', reactivate_candidate_path(candidate), :method => :post, :confirm => 'Please confirm?'
+  td.actions
+      -if can? :manage, @candidate
+        .action-icon.l
+          = link_to '', edit_candidate_path(candidate) , :class => 'icon-editor'
+        .action-icon.r
+          .dropdown
+            a.dropdown-toggle.icon-gear data-toggle="dropdown"  data-target="dropdown-menu#{candidate.id}"
+            ul.dropdown-menu.pull-right id="dropdown-menu#{candidate.id}"
+              li = link_to 'View Details', candidate
+              -if can? :manage, @candidate
+                -unless candidate.inactive?
+                  li = link_to 'Edit', edit_candidate_path(candidate)
+                  - opening_candidate = candidate.active_opening_candidate
+                  li = link_to 'Assign Job Opening', "", :class => 'candidates_index_new_opening'
+                  -if opening_candidate && opening_candidate.in_interview_loop?
+                    li = link_to 'Schedule Interviews', edit_multiple_interviews_path(:opening_candidate_id => opening_candidate.id)
+                  li
+                    a.candidate-blacklist-link href='#' data-candidate-id=candidate.id Move to Blacklist
+                - else
+                  li = link_to 'Reactivate', reactivate_candidate_path(candidate), :method => :post, :confirm => 'Please confirm?'
   =render 'candidates/candidate_blacklist', {:candidate => candidate}
 
 

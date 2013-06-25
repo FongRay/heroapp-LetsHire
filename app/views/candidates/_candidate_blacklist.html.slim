@@ -2,9 +2,9 @@ div.dialog-candidate-blacklist-div id="candidate-blacklist-dialog-#{candidate.id
   =form_tag move_to_blacklist_candidate_path(candidate), :method => :post do
     p
       = label_tag "Candidate"
-      = label_tag candidate.name
+      span.strong #{candidate.name}
     p
       = label_tag "Comments"
       = text_area_tag :comments, nil, :cols => 20, :rows => 5
     p
-      = submit_tag 'OK', :id => 'confirm_move_candidate_to_blacklist', :class => 'btn'
+      = submit_tag 'OK', :id => 'confirm_move_candidate_to_blacklist', :class => 'btn btn-primary'

@@ -1,56 +1,62 @@
-.page-container-wrapper
-  h3 #{@opening.title}
-  .page-container
-    .page-container-inner.page-container-inner-view
-      .pull-right.align-to-title
-        -if user_signed_in? && (can? :manage, @opening)
-          = link_to 'Edit', edit_opening_path(@opening), :class => "btn btn-primary"
+.content
+  ul.breadcrumb
+    li 
+      | Job Openings 
+      span.divider 
+        | &raquo;
+    li.active 
+      | #{@opening.title}
+   
+    -if user_signed_in? && (can? :manage, @opening)
+     li.r
+      = link_to 'Edit', edit_opening_path(@opening), :class => "btn btn-primary"
 
-      .form-horizontal.clear-both
+  .page-container.clearfix
+    .form-horizontal.clear-both
+      .control-group
+        label.control-label
+          b Department:
+        .controls
+          = @opening.department.try(:name)
+      -if user_signed_in?
         .control-group
           label.control-label
-            b Department:
-          .controls
-            = @opening.department.try(:name)
-        -if user_signed_in?
-          .control-group
-            label.control-label
-              b Status:
-            .controls.capitalized-text
-              = "#{@opening.status_str} ("
-              span = link_to "#{pluralize(@opening.active_candidates.count, 'candidate')}", candidates_path(:opening_id => @opening.id )
-              span =  ")"
-        - elsif @opening.recruiter
-          .control-group
-            label.control-label
-              b Recruiter Email:
-            .controls
-              a href="mailto:#{@opening.recruiter.email}" = @opening.recruiter.email
+            b Status:
+          .controls.capitalized-text
+            = "#{@opening.status_str} ("
+            span = link_to "#{pluralize(@opening.active_candidates.count, 'candidate')}", candidates_path(:opening_id => @opening.id )
+            span =  ")"
+      - elsif @opening.recruiter
         .control-group
           label.control-label
-            b Available Seats:
+            b Recruiter Email:
           .controls
-            = @opening.available_no
-        -if user_signed_in?
-          .control-group
-            label.control-label
-              b Recruiter:
-            .controls
-              - if @opening.recruiter
-                = link_to @opening.recruiter.name, @opening.recruiter
-          .control-group
-            label.control-label
-              b Hiring Manager:
-            .controls
-              - if @opening.hiring_manager
-                = link_to @opening.hiring_manager.name, @opening.hiring_manager
+            a href="mailto:#{@opening.recruiter.email}" = @opening.recruiter.email
+      .control-group
+        label.control-label
+          b Available Seats:
+        .controls
+          = @opening.available_no
+      -if user_signed_in?
         .control-group
           label.control-label
-            b Address:
+            b Recruiter:
           .controls
-            = @opening.full_address
+            - if @opening.recruiter
+              = link_to @opening.recruiter.name, @opening.recruiter
         .control-group
           label.control-label
-            b Description:
+            b Hiring Manager:
           .controls
-            = simple_format h(@opening.description)
+            - if @opening.hiring_manager
+              = link_to @opening.hiring_manager.name, @opening.hiring_manager
+      .control-group
+        label.control-label
+          b Address:
+        .controls
+          = @opening.full_address
+      .control-group
+        label.control-label
+          b Description:
+        .controls
+          = simple_format h(@opening.description)

@@ -1,24 +1,19 @@
-- if user_signed_in?
-  /maybe dashboard here
-  .center.hero-unit
-    h1.home-title Welcome to LetsHire
-- else
-  .row-fluid
-    .span8
-      .center.hero-unit
-        h1.home-title Welcome to LetsHire
-
-    .span4
-      .auth-form
-        .auth-form-header
-          h3 Sign in
-        .auth-form-body
-          = form_for('user', :url => user_session_path) do |form|
-            = form.label :email
-            = form.text_field :email, :class => 'full-input', :autofocus => true
-            = form.label :password
-            = form.password_field :password, :class => 'full-input', :autocomplete => 'off'
-            div id="login_div"
-              = form.check_box :remember_me, :id => 'login_checkbox', :checked => 'checked'
-              = form.label :remember_me, :class => 'inline-label'
-              = form.submit 'Sign in', :class => 'pull-right btn '
+.row
+  .login-wrapper.span6.offset3
+    h1.login-header Login to LetsHire
+    .login-box
+      = form_for('user', :url => user_session_path, :html => {:class=>'login-form'}) do |form|
+        .mb20
+          = form.label :email
+          = form.text_field :email, :class => 'full-input', :autofocus => true, :placeholder => 'Email'
+        .mb20
+          = form.label :password
+          = form.password_field :password, :class => 'full-input', :autocomplete => 'off', :placeholder => 'Password'
+        .mb20
+          = form.check_box :remember_me, :id => 'login_checkbox', :checked => 'checked'
+          = form.label :remember_me, :class => 'inline-label'
+        .mb20
+          = form.submit 'Log in', :class => 'btn btn-primary btn-large'
+    -if User.count == 0
+      .login-box-tip
+        a href="/init" Please initialise your LetsHire installation.

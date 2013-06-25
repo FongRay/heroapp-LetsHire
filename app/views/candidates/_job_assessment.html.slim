@@ -1,11 +1,10 @@
 -opening_candidate ||= nil
-div.row-fluid
-  div.span1
-  div.span11
+.row-fluid
+  .span1
+  .span11
     - if opening_candidate
       - unless opening_candidate.assessment.nil?
-        ul
-          =render opening_candidate.assessment
+        =render opening_candidate.assessment
       - else
         span No final assessment.
     - else

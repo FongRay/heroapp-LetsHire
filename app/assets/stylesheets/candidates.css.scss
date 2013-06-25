@@ -16,15 +16,6 @@ img.indicator {
   background: url(arrow.png) no-repeat center;
 }
 
-div.feedbackborder {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  padding: 3px;
-  border-color: #D3D3D3; //LightGrey
-  background-color: #A9A9A9; //DarkGray
-}
-
 div.assessment-candidate-dialog {
   display: none;
 }
@@ -34,25 +25,38 @@ div.dialog-candidate-blacklist-div {
 }
 
 div.page-container-inner.candidate-panel {
-  background-color: #ffffff;
-  padding: 20px;
+    padding: 10px;
 }
 
 div.page-container-inner.candidate-panel.fixed-size {
-  overflow: auto;
+    overflow: auto;
+}
+
+.candidate-container {
+    height: 320px;
+}
+
+.candidate-profile-panel {
+    line-height: 2;
+    margin: 0 auto;
+}
+
+#candidate-no-assignment-msg {
+    line-height: 320px;
 }
 
 hr.candidate-splitter-line {
   color: #dcdbdf;
-  background-color: #dcdbdf;
+  background-color: #CCC;
   height: 2px;
   margin-top: 0px;
   margin-bottom: 20px;
 }
 
-p.candidate-name-font {
+.candidate-name-font {
   color: #2c639b;
-  font-size: 40px;
+  font-size: 30px;
+  line-height: 1;
   white-space: pre-wrap; /* css-3 */
   white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
   white-space: -pre-wrap; /* Opera 4-6 */
@@ -60,36 +64,20 @@ p.candidate-name-font {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
-p.candidate-status-font {
+.candidate-status-font {
   font-weight: bold;
   font-size: 20px;
 }
 
-.candidate-mark-inactive-button {
-  font-size: 20px;
-  font-color: #2c639b;
-  width: 90%;
-  height: 30px;
-  padding: 5px;
-  background: url(mark_inactive.png) no-repeat left;
-}
-
-.candidate-assign-job-button {
-  font-size: 20px;
-  font-color: #2c639b;
-  width: 90%;
-  height: 30px;
-  padding: 5px;
-  background: url(assign_job_opening.png) no-repeat left;
-}
-
 table.candidate-profile {
-  table-layout: fixed;
-  width: 80%;
+  margin: 15px 0;
+}
+
+table.candidate-profile td {
+  border: none;
 }
 
 .candidate-profile td { 
-    padding: 5px;
     font-size: 15px;
     white-space: pre-wrap; /* css-3 */
     white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
@@ -121,4 +109,8 @@ div.candidate_failed {
 
 h4.interview_result {
     padding: 10px 5px 15px 5px;
+}
+
+.mr10 {
+  margin-left: 10px;
 }

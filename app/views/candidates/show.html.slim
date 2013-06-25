@@ -1,25 +1,34 @@
-.page-container-wrapper
-  h3 Candidate Details
+.content
+  ul.breadcrumb
+    li 
+      | Candidate
+      span.divider 
+        | &raquo;
+    li.active
+      | #{@candidate.name}
+    - if can? :manage, @candidate
+      li.r
+        = link_to 'Edit', edit_candidate_path(@candidate), :class => "btn btn-primary"
   .page-container
-    div.row-fluid
+    .row-fluid
       .span8
-        div.page-container-inner.candidate-panel.fixed-size id="candidate-applying-panel"
+        .page-container-inner.candidate-panel.fixed-size.candidate-container#candidate-applying-panel
           - if @latest_applying_job.nil?
-            div align="center" id="candidate-no-assignment-msg"
+            #candidate-no-assignment-msg.tc
               span style="font-size: 30px"
                 = "No Job Opening Assignment."
           - else
             =render 'show_latest_applying_job'
       .span4
-        div.page-container-inner.candidate-panel id="candidate-profile-panel"
+        .page-container-inner.candidate-panel.candidate-container.candidate-profile-panel id="candidate-profile-panel"
           =render 'candidate_profile'
     - j = 0
     - unless @applying_jobs.nil?
       - @applying_jobs.each do |job|
         - j += 1
         br
-        div.page-container-inner.candidate-panel
-          div.row-fluid
+        .page-container-inner.candidate-panel
+          .row-fluid
             .span12
               = render :partial => 'recruiting_history', :locals => { :applying_job => job, :index => j }
 

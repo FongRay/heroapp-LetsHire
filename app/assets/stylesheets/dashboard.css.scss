@@ -16,67 +16,28 @@
   background-color: lightyellow;
 }
 
-.action_items {
-  display: inline-block;
-  border-style: solid;
-  border-color: gainsboro;
-  border-width: 1px;
-  border-radius: 5px;
-  padding-bottom: 0;
-  width: 826px;
-  max-width: 826px;
-  height: 310px;
-}
-
 .carousel-wrapper {
-  margin: 0px auto;
-  margin-bottom: 0;
-  position: relative;
-  height: 240px;
-
-  padding: 10px;
-  -webkit-border-radius: 0px 0px 5px 5px;
-  -moz-border-radius: 0px 0px 5px 5px;
-  -webkit-box-shadow: 0 0 2px #999;
-  -moz-box-shadow: 0 0 2px #999;
-  box-shadow: 0 0 2px #999;
-  background-color: white;
-
-  background-image: url(banner.jpg);
-}
-
-
-.carousel-wrapper .photo-credits {
-  position: absolute;
-  right: 15px;
-  bottom: 0;
-  font-size: 13px;
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.85);
-  opacity: .66;
-}
-
-.carousel-wrapper .photo-credits a {
-  color: #fff;
+    position: relative;
+    padding: 20px 40px;
+    background-color: #EAEAEA;
 }
 
 /** Carousel **/
-
 .carousel {
-  position: relative;
-  overflow: hidden;
-  width: 90%;
-  height: 260px;
-  margin: 5%;
-  margin-top: 10px;
-  margin-bottom: 1px;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    height: 185px;
+    width: 100%;
+    text-align: center;
 }
 
 .carousel ul {
-  width: 20000em;
-  position: absolute;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    position: absolute;
+    list-style: none;
+    width: 20000em;
+    margin: 0;
+    padding: 0;
 }
 
 .carousel li {
@@ -85,34 +46,38 @@
   margin-top: 1px;
 }
 
+.carousel li.span3 {
+    width: 240px;
+}
+
 /** Carousel Controls **/
 
 a.carousel-control-prev,
 a.carousel-control-next {
-  position: absolute;
-  top: 45%;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  background: #4E443C;
-  color: #fff;
-  text-decoration: none;
-  text-shadow: 0 0 1px #000;
-  font: 24px/27px Arial, sans-serif;
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
-  border-radius: 30px;
-  -webkit-box-shadow: 0 0 2px #999;
-  -moz-box-shadow: 0 0 2px #999;
-  box-shadow: 0 0 2px #999;
+    position: absolute;
+    top: 45%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background: #4E443C;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 0 1px #000;
+    font: 24px/27px Arial, sans-serif;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    -webkit-box-shadow: 0 0 2px #999;
+    -moz-box-shadow: 0 0 2px #999;
+    box-shadow: 0 0 2px #999;
 }
 
 .carousel-control-prev {
-  left: 0px;
+    left: 10px;
 }
 
 .carousel-control-next {
-  right: 0px;
+    right: 10px;
 }
 
 .carousel-control-prev:hover span,
@@ -120,87 +85,49 @@ a.carousel-control-next {
   display: block;
 }
 
-/** title bar **/
-
-.action-item-title {
-  background-color: #fcfcfc;
-  padding: 2px;
-  margin: 1px;
-  border-radius: 5px 5px 0px 0px;
-  border-bottom: 2px solid;
-  border-bottom-color: #4f86ba;
-
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#a6c1dc), to(#FFFFFF));
-  background-image: -webkit-linear-gradient(top, #a6c1dc, #FFFFFF);
-  background-image:    -moz-linear-gradient(top, #a6c1dc, #FFFFFF);
-  background-image:     -ms-linear-gradient(top, #a6c1dc, #FFFFFF);
-  background-image:      -o-linear-gradient(top, #a6c1dc, #FFFFFF);
-}
-
-.action-item-title span{
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin-left: 15px;
-}
-
 /** action item **/
-
-.action-item-wrapper {
-  height: 100%;
-  width: 160px;
-  text-align: center;
-  margin: 10px;
-  background: none repeat scroll 0 0 #fcfcfc;
-  opacity: 0.7;
-  
-}
-
 .action-item {
-  padding: 10px;
-  position: relative;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 50%;
+    display: block;
+    padding: 40px 10px;
+    transition: all 0.2s ease 0s;
+    width: 180px;
+    color: #3982BD;
 }
 
-.action-item h2 {
-  text-align: center;
-  font-size: 60px;
-  font-weight: bold;
-  color: #E0A200;
-  height: 60px;
-  opacity: 1.0;
-  text-shadow: 2px 2px 10px #313130;
+.action-item:hover, 
+.action-item:focus {
+    background-color: #517FA4;
+    border-color: #234662;
+    color: #FFFFFF;
+    outline: 0 none;
+    text-decoration: none;
 }
 
-.action-item h5 {
-  text-align: left;
-  height: 72px;
-  font-size: 14px;
-  line-height: 18px;
-  opacity: 1.0;
-  color: #2B2B2B;
+.action-item:hover .action-link, 
+.action-item:hover .action-link {
+    color: #FFF;
 }
 
-.action-item a {
-  bottom: 5px;
-  right: 0px;
-  padding: 4px 15px;
-  position: absolute;
-  text-decoration: none;
-  background: none repeat scroll 0 0;
-  text-align: center;
-  color:  black;
-  opacity: 1.0;
+.action-item .salient-metric-number {
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 1.1;
+    text-align: center;
 }
 
-/** bird sight **/
-.bird_sight {
-  display: inline-block;
-  float: right;
-  width: 210px;
-  height: 310px;
-  background-image: url(current_stats.jpg);
+.action-item .salient-metric-label {
+    font-size: 12px;
+    line-height: 1.3;
+    margin: 5px 0;
+    text-align: center;
 }
 
 /** status-board **/
-
 .status-board {
   text-align: center;
   vertical-align: middle;
@@ -228,36 +155,18 @@ a.carousel-control-next {
 }
 
 /** stats-charts **/
-
 .stats-chart-container {
-  margin-top: 40px;
-  border-top: 3px solid #4f86ba;
-  padding-top: 28px;
+    margin-top: 40px;
+    border-top: 1px solid #CCC;
+    padding-top: 28px;
 }
-
 
 .stats-chart {
-  border: 1px solid;
-  border-color: gainsboro;
-  border-radius: 5px;
-  float: left;
-  margin: 44px;
-  margin-top: 0px;
-  padding: 1px;
-  background-color: white;
-}
-
-.stats-chart:first-of-type {
-  margin-left: 0px;
-}
-
-.stats-chart:last-of-type {
-  float: right;
-  margin-right: 0px;
-}
-
-.stats-chart h4 {
-  text-align: center
+    border: 1px solid;
+    border-color: gainsboro;
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px;
 }
 
 .stats-chart hr {
@@ -265,15 +174,7 @@ a.carousel-control-next {
 }
 
 .chart-title {
-
   border-radius: 5px 5px 0px 0px;
   padding: 2px;
   margin: 1px;
-
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DCDCDC), to(#FFFFFF));
-  background-image: -webkit-linear-gradient(top, #DCDCDC, #FFFFFF);
-  background-image:    -moz-linear-gradient(top, #DCDCDC, #FFFFFF);
-  background-image:     -ms-linear-gradient(top, #DCDCDC, #FFFFFF);
-  background-image:      -o-linear-gradient(top, #DCDCDC, #FFFFFF);
 }
-

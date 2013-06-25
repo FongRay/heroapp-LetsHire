@@ -1,0 +1,62 @@
+.appnav {
+    font-size: 12px;
+    list-style: none outside none;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.appnav > li {
+    float: left;
+}
+
+.appnav > li > a {
+    background-color: #F8F8F8;
+    background-image: linear-gradient(to bottom, #FFFFFF, #EEEEEE);
+    background-repeat: repeat-x;
+    border: 1px solid #AAAAAA;
+    color: #555555;
+    display: block;
+    padding: 4px;
+    text-align: center;
+    text-shadow: 0 1px 1px #FFFFFF;
+    width: 85px;
+}
+
+.appnav > li > a:hover, 
+.appnav > li > a:focus {
+    background-color: #EEEEEE;
+    background-image: none;
+    color: #000000;
+    filter: none;
+    outline: medium none;
+    text-decoration: none;
+}
+
+.appnav > li:first-child > a {
+    border-radius: 100px 0 0 100px;
+}
+
+.appnav > li:last-child > a {
+    border-radius: 0 100px 100px 0;
+}
+
+.appnav > li + li > a {
+    border-left-width: 0;
+}
+
+.appnav > .current > a {
+    background-color: #555555;
+    background-image: none;
+    border-color: #333333 transparent #333333 #333333;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7) inset;
+    color: #FFFFFF;
+    filter: none;
+    text-shadow: 0 1px 1px #000000;
+}
+
+.appnav > .current:hover a,
+.appnav > .current:focus a{
+    background-color: #555555;
+    color: #FFFFFF;
+    text-shadow: 0 1px 1px #000000;
+}
