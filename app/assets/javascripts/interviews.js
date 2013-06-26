@@ -34,7 +34,7 @@ $(function () {
         var div_id = "interview-feedback-dialog-" + interview_id;
 
         $("div#" + div_id).dialog({
-            height: 500,
+            height: 400,
             width: 600,
             modal: true,
             title: 'Add Feedback',

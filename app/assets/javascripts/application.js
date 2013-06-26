@@ -18,4 +18,19 @@
 //= require bootstrap-fileupload
 //= require jquery.tokeninput
 //= require jquery.jcarousel
+//= require base/base
 //= require_tree .
+
+
+(function ($, tmpst) {
+    'use strict';
+
+    $(function () {
+        var controller = $('body').attr('data-controller');
+        var page = tmpst[tmpst.format('#{0}Page', controller)];
+
+        if (page) {
+            new page();
+        }
+    });
+}(jQuery, tmpst));
