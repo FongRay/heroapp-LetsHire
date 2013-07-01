@@ -139,7 +139,7 @@
          * @public
          * @see $.isFunction
          *
-         * @param  {*} Object to test whether or not it is a function
+         * @param  {*} obj Object to test whether or not it is a function
          *
          * @return {boolean} Test result
          */

@@ -25,6 +25,9 @@
 (function ($, tmpst) {
 	'use strict';
 
+	/**
+	 * Find the related page function and initizlie it
+	 */
 	$(function () {
 		var controller = $('body').data('controller');
 		var page = tmpst[tmpst.format('#{0}Page', controller)];

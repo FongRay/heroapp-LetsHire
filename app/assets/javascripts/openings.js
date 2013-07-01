@@ -30,17 +30,17 @@
          * @public
          */
         initialize: function () {
-            this.initCountrySelect();
-            this.initRecruiterSelect();
-            this.initDepartmentSelect();
+            this._initCountrySelect();
+            this._initRecruiterSelect();
+            this._initDepartmentSelect();
             this.bindEvents();
         },
         /**
          * Initialize country select component
          *
-         * @public
+         * @private
          */
-        initCountrySelect: function () {
+        _initCountrySelect: function () {
             $("#opening_country").change(function (event) {
                 var country_code = $(this).val();
                 var state_select_wrapper = $("#opening_state_wrapper");
@@ -54,9 +54,9 @@
         /**
          * Initialize recruiter select component
          *
-         * @public
+         * @private
          */
-        initRecruiterSelect: function () {
+        _initRecruiterSelect: function () {
             $('#opening_recruiter_id').change(function (event) {
                 var current_user_id = $('#opening_recruiting_warn').attr('data-recruiter-id');
 
@@ -70,9 +70,9 @@
         /**
          * Initialize department select component
          *
-         * @public
+         * @private
          */
-        initDepartmentSelect: function () {
+        _initDepartmentSelect: function () {
             $('#opening_department_id').change(function (event) {
                 var department_id = $(this).val();
 
@@ -106,6 +106,8 @@
         /**
          * Click event handler for assigning candidate
          *
+         * @private
+         * @event
          * @param  {Object} event Event object
          *
          * @return {boolean} stop event

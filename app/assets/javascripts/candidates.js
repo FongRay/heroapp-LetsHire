@@ -20,8 +20,8 @@
          * @public
          */
         initialize: function () {
-            this.initAccordion();
-            this.initFileUpload();
+            this._initAccordion();
+            this._initFileUpload();
 
             if ($('.candidates_index_new_opening').length > 0 ||
                 $('.candidate_new_opening').length > 0 ||
@@ -66,9 +66,9 @@
         /**
          * Initializing accordion component
          *
-         * @public
+         * @private
          */
-        initAccordion: function () {
+        _initAccordion: function () {
             $(".accordion").accordion({
                 collapsible: true,
                 heightStyle: 'content'
@@ -77,9 +77,9 @@
         /**
          * Initialzing file upload component
          *
-         * @return {[type]} [description]
+         * @private
          */
-        initFileUpload: function () {
+        _initFileUpload: function () {
             $('.fileupload').fileupload({
                 name: "candidate[resume]"
             });
@@ -119,6 +119,8 @@
         /**
          * Click event handler for 'Move to Blacklist' button
          *
+         * @private
+         * @event
          * @param  {Object} event Event object
          *
          * @return {boolean} stop event

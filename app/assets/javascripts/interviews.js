@@ -1,6 +1,370 @@
 (function ($, tmpst) {
     'use strict';
 
+    var page = {
+        /**
+         * Initialize page
+         *
+         * @constructs
+         * @public
+         */
+        initialize: function () {
+            this._initSelectOpeningDialog();
+            this._initInterviewSelectionDialog();
+            this._initDatetimepicker();
+
+            this.bindEvents();
+        },
+        /**
+         * Initialize Select Opening dialog component
+         *
+         * @private
+         */
+        _initSelectOpeningDialog: function () {
+            $('#department_id').attr('name', null);
+            $('#openingid_select_wrapper').attr('id', 'interview_openingid_select_wrapper');
+            $('#opening_id').attr('name', 'opening_id');
+
+            $('#department_id').change(function (event) {
+                tmpst.reloadOpening($(this), $('#interview_openingid_select_wrapper'), 'opening_id');
+            });
+
+            $('.flexible_schedule_interviews').on('click', $.proxy(this, '_onscheduleInterviewClick'));
+        },
+        /**
+         * Initizlize interviews selection dialog component
+         *
+         * @private
+         */
+        _initInterviewSelectionDialog: function () {
+            tmpst.prepareObjectSelectionContainer($('#interviewers_selection'), loadInterviewersStatus, function (checkbox) {
+                var interviewers_selection_container = $("#interviewers_selection_container");
+                var user_ids = interviewers_selection_container.data('user_ids');
+                var users = interviewers_selection_container.data('users');
+                var current_val = parseInt($(checkbox).val());
+                var index = user_ids.indexOf(current_val);
+
+                if (index >= 0) {
+                    user_ids.splice(index, 1);
+                    users.splice(index, 1);
+                } else {
+                    user_ids.push(current_val);
+                    users.push(checkbox.data('str'));
+                }
+            });
+        },
+        /**
+         * Initialize datetimepicker component
+         *
+         * @private
+         */
+        _initDatetimepicker: function () {
+            setupDatetimePicker($(".datetimepicker"));
+
+            $(".iso-time").each(function (index, elem) {
+                elem.innerHTML = new Date(elem.innerHTML).toLocaleString();
+            });
+        },
+        /**
+         * Click event handler for schedule interview
+         *
+         * @private
+         * @event
+         * @param  {Object} event Event object
+         *
+         * @return {boolean} stop event
+         */
+        _onscheduleInterviewClick: function (event) {
+            var opening_selection_container = $("#opening_selection_container");
+            var opening_candidate_id = $('#opening_candidate_id').val();
+
+            if (opening_candidate_id) {
+                window.location = '/interviews/edit_multiple?opening_candidate_id=' + opening_candidate_id;
+            } else {
+                opening_selection_container.parent().dialog({
+                    modal: true,
+                    title: "Select Opening",
+                    width: '450'
+                });
+            }
+        },
+        /**
+         * Click event handler for adding interview
+         *
+         * @private
+         * @event
+         *
+         * @return {boolean} stop event
+         */
+        _onAddInterviewClick: function () {
+            var $table = $('.table-schedule-interviews');
+            var $tbody = $table.find('tbody');
+
+            if ($tbody.find('tr').length >= 30) {
+                //TODO: just check new added lines, not including existing ones
+                alert('Too many interviews scheduled.');
+
+                return;
+            }
+
+            var opening_id = $('#opening_id').val();
+            var candidate_id = $('#candidate_id').val();
+            var url = tmpst.format('/interviews/schedule_add?opening_id=#{0}&candidate_id=#{1}', opening_id, candidate_id);
+
+            $.get(url, function (data, status) {
+                var newElem = $(data).appendTo($tbody);
+
+                setupDatetimePicker(newElem.find("td .datetimepicker"));
+            });
+
+            return false;
+        },
+        /**
+         * Change event handler for datetimepicker
+         *
+         * @private
+         * @event
+         * @param  {Object} event Event object
+         */
+        _onDatetimePickerChange: function (event) {
+            var $target = $(event.target);
+            var targetId = event.target.id;
+            var isoVal = new Date($target.val()).toISOString();
+
+            $target.data('iso', isoVal);
+
+            var new_id = targetId.replace("scheduled_at", "scheduled_at_iso");
+
+            if (new_id != targetId) {
+                var iso_elem = $("#" + new_id);
+
+                if (iso_elem) {
+                    iso_elem.val(isoVal);
+                }
+            }
+        },
+        /**
+         * Click evnet handler for edit interviewers button
+         *
+         * @private
+         * @event
+         * @param  {Object} event Event object
+         *
+         * @return {boolean} stop event
+         */
+        _onEditInterviewersClick: function (event) {
+            var interviewer_td = $(event.target).closest('td');
+            var interviewers_selection_container = $("#interviewers_selection_container");
+
+            interviewers_selection_container.data('user_ids', interviewer_td.data('user_ids').slice(0));
+            interviewers_selection_container.data('users', interviewer_td.data('users').slice(0));
+
+            var new_val = $('#opening_id').data('department');
+
+            $('#interviewers_selection').empty().append('Loading users...');
+            $('#participants_department_id').val(new_val);
+
+            tmpst.usersPage.reloadDepartmentUsers($('#interviewers_selection'), $('#participants_department_id').val(), loadInterviewersStatus);
+
+            interviewers_selection_container.show().dialog({
+                width: 400,
+                height: 500,
+                title: "Assign Interviewers",
+                modal: true,
+                buttons: {
+                    "OK": function () {
+                        interviewers_selection_container.hide().dialog("close");
+                        calculateInterviewersChange(interviewer_td);
+                    },
+                    Cancel: function () {
+                        $interviewers_selection_container.hide().dialog("close");
+                    }
+                }
+            });
+
+            return false;
+        },
+        /**
+         * Click event handler for remove interviews button
+         *
+         * @private
+         * @event
+         * @param  {Object} event Event object
+         *
+         * @return {boolean} stop event
+         */
+        _onRemoveInterviewClick: function (event) {
+            var $table = $('.table-schedule-interviews');
+            var $tbody = $table.find('tbody');
+            var $currentRow = $(event.target).closest('tr');
+
+            if ($currentRow.data('interview_id')) {
+                var del_ids = tbody.data('del_ids');
+
+                if (!del_ids) {
+                    del_ids = [$currentRow.data('interview_id')];
+                } else {
+                    del_ids.push($currentRow.data('interview_id'));
+                }
+
+                tbody.data('del_ids', del_ids);
+            }
+
+            $currentRow.remove();
+
+            return false;
+        },
+        /**
+         * Click event handler for submitting interviews
+         *
+         * @private
+         * @event
+         * 
+         * @return {boolean} stop event
+         */
+        _onSubmitInterviewsClick: function () {
+            var $table = $('.table-schedule-interviews');
+            var $tbody = $table.find('tbody');
+
+            $('#error_messages')
+                .closest('div')
+                .hide();
+
+            if (!this._validationCheck($tbody)) {
+                return false;
+            }
+
+            var interviews = GetAllInterviews($tbody);
+
+            if (!interviews) {
+                return false;
+            }
+
+            var me = this;
+
+            $.post('/interviews/update_multiple', {
+                interviews: {
+                    opening_id: $('#opening_id').val(),
+                    candidate_id: $('#candidate_id').val(),
+                    interviews_attributes: interviews
+                }
+            }).done(function (response) {
+                if (!response.success) {
+                    me._displaySubmitErrors(response.messages);
+                } else {
+                    var url = $('#previous_url').data('value');
+                    if (!url) {
+                        url = "/interviews"
+                    }
+                    window.location = url;
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                me._displaySubmitErrors(['Server error']);
+            });
+
+            return false;
+        },
+        /**
+         * Click event handler for interview feedback button
+         *
+         * @private
+         * @event
+         * @param  {Object} event Event object
+         *
+         * @return {boolean} stop event
+         */
+        _onInterviewFeedbackClick: function (event) {
+            var interview_id = $(this).attr('data-interview-id');
+            var div_id = "interview-feedback-dialog-" + interview_id;
+
+            $("#" + div_id).dialog({
+                height: 400,
+                width: 600,
+                modal: true,
+                title: 'Add Feedback',
+                close: function (event, ui) {
+                    $(this).dialog('destroy');
+                }
+            });
+
+            return false;
+        },
+        /**
+         * Bind events
+         *
+         * @public
+         */
+        bindEvents: function () {
+            $('.add_new_interview').on('click', $.proxy(this, '_onAddInterviewClick'));
+            $('.table-schedule-interviews').on('change', '.datetimepicker', $.proxy(this, '_onDatetimePickerChange'));
+
+            $('#candidate_id').change(update_schedule_interviews_table);
+            update_schedule_interviews_table();
+
+
+            $('#participants_department_id').change(function () {
+                tmpst.usersPage.reloadDepartmentUsers($('#interviewers_selection'), $('#participants_department_id').val(), loadInterviewersStatus);
+            });
+
+            $('.table-schedule-interviews').on('click', '.edit_interviewers', $.proxy(this, '_onEditInterviewersClick'));
+            $('.table-schedule-interviews').on('click', '.button-remove', $.proxy(this, '_onRemoveInterviewClick'));
+            $('.submit_interviews').on('click', $.proxy(this, '_onSubmitInterviewsClick'));
+
+            $('#main').on('click', '.interview-feedback-btn', $.proxy(this, '_onInterviewFeedbackClick'));
+        },
+        /**
+         * Validate submit of interviews
+         *
+         * @param  {Object} tbody The body of table we should to check
+         *
+         * @return {boolean} Whether it's valid
+         */
+        _validationCheck: function (tbody) {
+            var errors = [];
+
+            tbody.find('tr').each(function (index, row) {
+                var interviewer_td = $(row).find('td:eq(4)');
+                interviewer_td.find('div').removeClass('field_with_errors');
+                if ($(row).find('.button-remove').length > 0) {
+                    var user_ids = interviewer_td.data('user_ids');
+
+                    if (user_ids == null || user_ids.length == 0) {
+                        interviewer_td.find('div').addClass('field_with_errors');
+                        errors.push('No interviewers configured for row ' + (index + 1));
+                    }
+                }
+            });
+
+            this._displaySubmitErrors(errors);
+
+            return (errors.length == 0);
+        },
+        /**
+         * Display error messages of submitting interviews
+         *
+         * @private
+         * @param  {Array} errors Array of error string messages
+         *
+         */
+        _displaySubmitErrors: function (errors) {
+            if (errors.length > 0) {
+                var error_content = '<ul>';
+
+                for (var i = 0; i < errors.length; i++) {
+                    error_content += '<li>' + errors[i] + '</li>';
+                }
+
+                error_content += '</ul>';
+
+                $('#error_messages').html(error_content);
+                $('#error_messages').closest('div').show();
+            } else {
+                $('#error_messages').closest('div').hide();
+            }
+
+        }
+    };
+
     function setupDatetimePicker(elements) {
         $(elements).datetimepicker().each(function (index, elem) {
             var isoTime = new Date($(elem).data('iso'));
@@ -133,6 +497,7 @@
     /**
      * We assume a1 and a2 don't have duplicated elements.
      */
+
     function uniq_array_equal(a1, a2) {
         if (a1.length != a2.length) {
             return false;
@@ -195,275 +560,6 @@
 
         return true;
     }
-
-    var page = {
-        /**
-         * Initialize page
-         *
-         * @constructs
-         * @public
-         */
-        initialize: function () {
-            this._initSelectOpeningDialog();
-            this._initInterviewSelectionDialog();
-            this._initDatetimepicker();
-
-            this.bindEvents();
-        },
-        _initSelectOpeningDialog: function () {
-            $('#department_id').attr('name', null);
-            $('#openingid_select_wrapper').attr('id', 'interview_openingid_select_wrapper');
-            $('#opening_id').attr('name', 'opening_id');
-
-            $('#department_id').change(function (event) {
-                tmpst.reloadOpening($(this), $('#interview_openingid_select_wrapper'), 'opening_id');
-            });
-
-            $('.flexible_schedule_interviews').on('click', $.proxy(this, '_onscheduleInterviewClick'));
-        },
-        _initInterviewSelectionDialog: function () {
-            tmpst.prepareObjectSelectionContainer($('#interviewers_selection'), loadInterviewersStatus, function (checkbox) {
-                var interviewers_selection_container = $("#interviewers_selection_container");
-                var user_ids = interviewers_selection_container.data('user_ids');
-                var users = interviewers_selection_container.data('users');
-                var current_val = parseInt($(checkbox).val());
-                var index = user_ids.indexOf(current_val);
-
-                if (index >= 0) {
-                    user_ids.splice(index, 1);
-                    users.splice(index, 1);
-                } else {
-                    user_ids.push(current_val);
-                    users.push(checkbox.data('str'));
-                }
-            });
-        },
-        _initDatetimepicker: function () {
-            setupDatetimePicker($(".datetimepicker"));
-
-            $(".iso-time").each(function (index, elem) {
-                elem.innerHTML = new Date(elem.innerHTML).toLocaleString();
-            });
-        },
-        _onscheduleInterviewClick: function (event) {
-            var opening_selection_container = $("#opening_selection_container");
-            var opening_candidate_id = $('#opening_candidate_id').val();
-
-            if (opening_candidate_id) {
-                window.location = '/interviews/edit_multiple?opening_candidate_id=' + opening_candidate_id;
-            } else {
-                opening_selection_container.parent().dialog({
-                    modal: true,
-                    title: "Select Opening",
-                    width: '450'
-                });
-            }
-        },
-        _onAddInterviewClick: function () {
-            var $table = $('.table-schedule-interviews');
-            var $tbody = $table.find('tbody');
-
-            if ($tbody.find('tr').length >= 30) {
-                //TODO: just check new added lines, not including existing ones
-                alert('Too many interviews scheduled.');
-
-                return;
-            }
-
-            var opening_id = $('#opening_id').val();
-            var candidate_id = $('#candidate_id').val();
-            var url = tmpst.format('/interviews/schedule_add?opening_id=#{0}&candidate_id=#{1}', opening_id, candidate_id);
-
-            $.get(url, function (data, status) {
-                var newElem = $(data).appendTo($tbody);
-
-                setupDatetimePicker(newElem.find("td .datetimepicker"));
-            });
-
-            return false;
-        },
-        _onDatetimePickerChange: function (event) {
-            var $target = $(event.target);
-            var targetId = event.target.id;
-            var isoVal = new Date($target.val()).toISOString();
-
-            $target.data('iso', isoVal);
-
-            var new_id = targetId.replace("scheduled_at", "scheduled_at_iso");
-
-            if (new_id != targetId) {
-                var iso_elem = $("#" + new_id);
-
-                if (iso_elem) {
-                    iso_elem.val(isoVal);
-                }
-            }
-        },
-        _onEditInterviewClick: function (event) {
-            var interviewer_td = $(event.target).closest('td');
-            var interviewers_selection_container = $("#interviewers_selection_container");
-
-            interviewers_selection_container.data('user_ids', interviewer_td.data('user_ids').slice(0));
-            interviewers_selection_container.data('users', interviewer_td.data('users').slice(0));
-
-            var new_val = $('#opening_id').data('department');
-
-            $('#interviewers_selection').empty().append('Loading users...');
-            $('#participants_department_id').val(new_val);
-
-            tmpst.usersPage.reloadDepartmentUsers($('#interviewers_selection'), $('#participants_department_id').val(), loadInterviewersStatus);
-
-            interviewers_selection_container.show().dialog({
-                width: 400,
-                height: 500,
-                title: "Assign Interviewers",
-                modal: true,
-                buttons: {
-                    "OK": function () {
-                        interviewers_selection_container.hide().dialog("close");
-                        calculateInterviewersChange(interviewer_td);
-                    },
-                    Cancel: function () {
-                        $interviewers_selection_container.hide().dialog("close");
-                    }
-                }
-            });
-        },
-        _onRemoveInterviewClick: function (event) {
-            var $table = $('.table-schedule-interviews');
-            var $tbody = $table.find('tbody');
-            var $currentRow = $(event.target).closest('tr');
-
-            if ($currentRow.data('interview_id')) {
-                var del_ids = tbody.data('del_ids');
-
-                if (!del_ids) {
-                    del_ids = [$currentRow.data('interview_id')];
-                } else {
-                    del_ids.push($currentRow.data('interview_id'));
-                }
-
-                tbody.data('del_ids', del_ids);
-            }
-
-            $currentRow.remove();
-
-            return false;
-        },
-        _onSubmitInterviews: function () {
-            var $table = $('.table-schedule-interviews');
-            var $tbody = $table.find('tbody');
-
-            $('#error_messages')
-                .closest('div')
-                .hide();
-
-            if (!this._validationCheck($tbody)) {
-                return false;
-            }
-
-            var interviews = GetAllInterviews($tbody);
-
-            if (!interviews) {
-                return false;
-            }
-
-            var me = this;
-
-            $.post('/interviews/update_multiple', {
-                interviews: {
-                    opening_id: $('#opening_id').val(),
-                    candidate_id: $('#candidate_id').val(),
-                    interviews_attributes: interviews
-                }
-            }).done(function (response) {
-                if (!response.success) {
-                    me._displaySubmitErrors(response.messages);
-                } else {
-                    var url = $('#previous_url').data('value');
-                    if (!url) {
-                        url = "/interviews"
-                    }
-                    window.location = url;
-                }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                me._displaySubmitErrors(['Server error']);
-            });
-
-            return false;
-        },
-        _onInterviewFeedbackClick: function (event) {
-            var interview_id = $(this).attr('data-interview-id');
-            var div_id = "interview-feedback-dialog-" + interview_id;
-
-            $("#" + div_id).dialog({
-                height: 400,
-                width: 600,
-                modal: true,
-                title: 'Add Feedback',
-                close: function (event, ui) {
-                    $(this).dialog('destroy');
-                }
-            });
-
-            return false;
-        },
-        bindEvents: function () {
-            $('.add_new_interview').on('click', $.proxy(this, '_onAddInterviewClick'));
-            $('.table-schedule-interviews').on('change', '.datetimepicker', $.proxy(this, '_onDatetimePickerChange'));
-
-            $('#candidate_id').change(update_schedule_interviews_table);
-            update_schedule_interviews_table();
-
-
-            $('#participants_department_id').change(function () {
-                tmpst.usersPage.reloadDepartmentUsers($('#interviewers_selection'), $('#participants_department_id').val(), loadInterviewersStatus);
-            });
-
-            $('.table-schedule-interviews').on('click', '.edit_interviewers', $.proxy(this, '_onEditInterviewClick'));
-            $('.table-schedule-interviews').on('click', '.button-remove', $.proxy(this, '_onRemoveInterviewClick'));
-            $('.submit_interviews').on('click', $.proxy(this, '_onSubmitInterviews'));
-
-            $('#main').on('click', '.interview-feedback-btn', $.proxy(this, '_onInterviewFeedbackClick'));
-        },
-        _validationCheck: function (tbody) {
-            var errors = [];
-
-            tbody.find('tr').each(function (index, row) {
-                var interviewer_td = $(row).find('td:eq(4)');
-                interviewer_td.find('div').removeClass('field_with_errors');
-                if ($(row).find('.button-remove').length > 0) {
-                    var user_ids = interviewer_td.data('user_ids');
-
-                    if (user_ids == null || user_ids.length == 0) {
-                        interviewer_td.find('div').addClass('field_with_errors');
-                        errors.push('No interviewers configured for row ' + (index + 1));
-                    }
-                }
-            });
-
-            this._displaySubmitErrors(errors);
-
-            return (errors.length == 0);
-        },
-        _displaySubmitErrors: function (errors) {
-            if (errors.length > 0) {
-                var error_content = '<ul>';
-
-                for (var i = 0; i < errors.length; i++) {
-                    error_content += '<li>' + errors[i] + '</li>';
-                }
-
-                error_content += '</ul>';
-
-                $('#error_messages').html(error_content);
-                $('#error_messages').closest('div').show();
-            } else {
-                $('#error_messages').closest('div').hide();
-            }
-
-        }
-    };
 
     tmpst.interviewsPage = tmpst.Class(page);
 }(jQuery, tmpst));

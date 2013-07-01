@@ -14,7 +14,7 @@
         /**
          * Initialize the carousel component
          *
-         * @return {[type]} [description]
+         * @public
          */
         initCarousel: function () {
             $('.carousel').jcarousel();
@@ -33,7 +33,7 @@
             $('.carousel-control-next').on('click', $.proxy(this, '_onNextCarouselClick'));
         },
         /**
-         * Event handler when the button of previous carousel was clicked
+         * Click event handler for previous carousel button
          *
          * @private
          * @event
@@ -51,7 +51,7 @@
             }
         },
         /**
-         * Event handler when the button of next carousel was clicked
+         * Click event handler for next carousel button
          *
          * @private
          * @event
