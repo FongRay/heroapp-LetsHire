@@ -1,6 +1,6 @@
 h3.tl Reminders
 .carousel-wrapper
-  .carousel.row data-jcarousel='true'
+  .carousel.row
     ul
       - if can? :manage, Opening and @active_openings.length == 0
         li.span3
@@ -75,5 +75,5 @@ h3.tl Reminders
               i.i.icon-caret-right  View
 
 
-  a.carousel-control-prev href='#' data-jcarousel-control='true' data-target='-=1' ‹
-  a.carousel-control-next href='#' data-jcarousel-control='true' data-target='+=1' ›
+  a.carousel-control-prev.jcarousel-control data-target='-=1' ‹
+  a.carousel-control-next.jcarousel-control data-target='+=1' ›

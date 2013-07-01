@@ -1,9 +1,58 @@
+/**
+ * @fileOverview Base functionalities for LetsHire
+ * @author khalil zhang(khalilz@vmware.com)
+ */
+
 (function ($, window) {
+    'use strict';
+
+    var htmlDecodeDict = {
+        "quot": '"',
+        "lt": "<",
+        "gt": ">",
+        "amp": "&",
+        "nbsp": " "
+    };
+
+    var htmlEncodeDict = {
+        '"': "quot",
+        "'": "#39",
+        "<": "lt",
+        ">": "gt",
+        "&": "amp",
+        " ": "nbsp"
+    };
+
     window.tmpst = {
         /**
+         * Encode html
+         *
+         * @public
+         * @param {String} html
+         */
+        encodeHTML: function (html) {
+            return String(html).replace(/["<>& ]/g, function (all) {
+                return "&" + htmlEncodeDict[all] + ";";
+            });
+        },
+        /**
+         * Encode html attriute
+         *
+         * @public
+         * @param {String} html attribute
+         */
+        encodeAttr: function (html) {
+            return String(html).replace(/["']/g, function (all) {
+                return "&" + htmlEncodeDict[all] + ";";
+            });
+        },
+        /**
          * Format string
+         *
+         * @public
          * @param  {string} source
          * @param  {Object} opts
+         *
          * @return {string} formated string
          */
         format: function (source, opts) {
@@ -22,13 +71,14 @@
                     if (length) {
                         replacer = h.truncate(replacer, length);
                     }
-                    /*
-                //html encode
-                if (type == "#") {
-                    replacer = h.escape(replacer);
-                } else if (type === '@') {
-                    replacer = h.encodeAttr(replacer);
-                }*/
+
+                    //html encode
+                    if (type == "#") {
+                        replacer = tmpst.encodeHTML(replacer);
+                    } else if (type === '@') {
+                        replacer = tmpst.encodeAttr(replacer);
+                    }
+
 
                     return ('undefined' == typeof replacer ? '' : replacer);
                 });
@@ -36,7 +86,7 @@
             return source;
         },
         /**
-         * Generate namespace
+         * Generat namespace
          *
          * @public
          * @param {string} ns_string namespace string that is joined with dot
@@ -83,10 +133,71 @@
                 return str.length > length ? str.slice(0, length / 2) + truncateStr + str.slice(-length / 2) : str;
             }
         },
+        /**
+         * Determine if the argument passed is a Javascript function object
+         *
+         * @public
+         * @see $.isFunction
+         *
+         * @param  {*} Object to test whether or not it is a function
+         *
+         * @return {boolean} Test result
+         */
         isFunction: function (obj) {
             return $.isFunction(obj);
         },
-        extend: $.extend,
-        noop: $.noop
+        prepareObjectSelectionContainer: function (object, paginate_callback, change_event_callback) {
+            var parent_object = object.parent();
+
+            parent_object.delegate('.pagination a', 'click', function () {
+                $('.pagination').html('Page is loading...');
+                object.load(this.href, function () {
+                    if (paginate_callback) {
+                        paginate_callback($(this));
+                    }
+                });
+
+                return false;
+            });
+
+            parent_object.delegate('i.icon-arrow-down', 'click', function () {
+                $(this).parent().parent().next().show();
+                $(this).removeClass('icon-arrow-down').addClass('icon-arrow-up');
+
+                return false;
+            });
+
+            parent_object.delegate('i.icon-arrow-up', 'click', function () {
+                $(this).parent().parent().next().hide();
+                $(this).removeClass('icon-arrow-up').addClass('icon-arrow-down');
+
+                return false;
+            });
+
+            parent_object.delegate('input:checkbox', 'change', function () {
+                if (change_event_callback) {
+                    change_event_callback($(this));
+                }
+            });
+        },
+        reloadOpening: function (department_control, opening_control, opening_control_name) {
+            $(department_control).attr('disabled', true);
+            var url = '/openings/opening_options?selected_department_id=' + $(department_control).val();
+
+            return $(opening_control).load(url, function () {
+                $(department_control).attr('disabled', false);
+                $(opening_control).find('select#opening_id').attr('name', opening_control_name);
+            });
+        },
+        updateQueryStringParameter: function (uri, key, value) {
+            var re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
+
+            separator = uri.indexOf('?') !== -1 ? "&" : "?";
+            if (uri.match(re)) {
+                return uri.replace(re, '$1' + key + "=" + value + '$2');
+            } else {
+                return uri + separator + key + "=" + value;
+            }
+        }
     };
 }(jQuery, window));
