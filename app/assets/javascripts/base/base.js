@@ -60,7 +60,7 @@
             var data = Array.prototype.slice.call(arguments, 1),
                 toString = Object.prototype.toString;
             if (data.length) {
-                data = data.length == 1 ? /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
+                data = data.length == 1 ? /* ie: Object.prototype.toString.call(null) == '[object Object]' */
                     (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data) : data;
                 return source.replace(/>\s*</g, '><').replace(/(#|!|@)\{(.+?)(?:\s*[,:]\s*(\d+?))*?\}/g, function (match, type, key, length) {
                     var replacer = data[key];
