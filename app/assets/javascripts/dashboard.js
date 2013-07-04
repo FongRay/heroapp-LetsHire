@@ -9,14 +9,14 @@
          * @public
          */
         initialize: function () {
-            this.initCarousel();
+            this._initCarousel();
         },
         /**
          * Initialize the carousel component
          *
-         * @public
+         * @private
          */
-        initCarousel: function () {
+        _initCarousel: function () {
             $('.carousel').jcarousel();
             $('.jcarousel-control').jcarouselControl();
 
@@ -46,7 +46,6 @@
                 if (current_target === items[0]) {
                     $('.carousel-control-prev').hide();
                 }
-
                 $('.carousel-control-next').show();
             }
         },
@@ -64,7 +63,6 @@
                 if (current_target == items[items.length - 4]) {
                     $('.carousel-control-next').hide();
                 }
-
                 $('.carousel-control-prev').show();
             }
         }

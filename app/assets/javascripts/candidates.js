@@ -1,17 +1,6 @@
 (function ($, tmpst) {
     'use strict';
 
-    function create_opening(id) {
-        var opening_selection_container = $("#opening_selection_container");
-
-        opening_selection_container.parent().get(0).setAttribute('action', '/candidates/' + id + '/create_opening');
-        opening_selection_container.parent().dialog({
-            modal: true,
-            title: "Select Opening",
-            width: '450'
-        });
-    }
-
     var page = {
         /**
          * Initialize page
@@ -22,6 +11,8 @@
         initialize: function () {
             this._initAccordion();
             this._initFileUpload();
+            this._initPhotoPreviewTooltip();
+            this._initDatetime();
 
             if ($('.candidates_index_new_opening').length > 0 ||
                 $('.candidate_new_opening').length > 0 ||
@@ -36,35 +27,9 @@
             }
 
             this.bindEvents();
-
-            if ($('.dropdown-toggle').length > 0) {
-                $('.dropdown-toggle').dropdown();
-            }
-
-            $('#candidate_resume').change(function (event) {
-                var maxsize = 10 * 1024 * 1024;
-
-                if ($.browser.msie) {
-                    // microsoft ie
-                    //
-                    // It's not easy to achieve this functionality in IE, most likly,
-                    // IE configuration does forbidden ActiveXObject. Anyway, we have
-                    // done the server side file size limit mechanism.
-                } else {
-                    // firefox, chrome
-                    if (this.files[0].size > maxsize) {
-                        alert('File size cannot be larger than 10M.');
-                        $(this).attr('value', '');
-                    }
-                }
-            });
-
-            $("ul.interviewline").each(function (index, elem) {
-                elem.childNodes[0].innerHTML = new Date(elem.childNodes[0].innerHTML).toLocaleString();
-            });
         },
         /**
-         * Initializing accordion component
+         * Initialize accordion component
          *
          * @private
          */
@@ -75,7 +40,7 @@
             });
         },
         /**
-         * Initialzing file upload component
+         * Initialize file upload component
          *
          * @private
          */
@@ -85,36 +50,56 @@
             });
         },
         /**
+         * Initialize the tooltip of photo preivew
+         *
+         * @private
+         */
+        _initPhotoPreviewTooltip: function () {
+            $(document).on('mouseover', '.photo-preview-tooltip', function () {
+                $(this).tooltip({
+                    items: '[class~="photo-preview-tooltip"]',
+                    tooltipClass: 'photo-preview-dialog',
+                    content: function () {
+                        var photoId = $(this).data('photo-id');
+
+                        return tmpst.format('<img src="/api/v1/photo/download?photo_id=#{0}" />', photoId);
+                    }
+                }).tooltip('open');
+            });
+        },
+        /**
+         * Initialize the format of date time
+         *
+         * @private
+         */
+        _initDatetime: function () {
+            $(".iso-time").each(function (index, elem) {
+                elem.innerHTML = new Date(elem.innerHTML).toLocaleString();
+            });
+        },
+        /**
          * Bind events
          *
          * @public
          */
         bindEvents: function () {
+            var me = this;
+
             // open dialog for "Assign Job Opening"
-            $('.candidates_index_new_opening').click(function (event) {
-                create_opening($(this).closest('tr').data('id'));
+            $('.candidates_index_new_opening').on('click', function (event) {
+                me._assignJobOpening($(this).closest('tr').data('id'));
+
+                return false;
+            });
+            $('.candidate_new_opening').on('click', function (event) {
+                me._assignJobOpening($('#candidate_id').val());
 
                 return false;
             });
 
-            $('.candidate_new_opening').click(function (event) {
-                create_opening($('#candidate_id').val());
-
-                return false;
-            });
-
-            // to handle "blacklist-link" click event
-            $('.table-candicates').on('click', '.candidate-blacklist-link', $.proxy(this, '_onCandidateBlacklistClick'));
-
-            // assess candidates
-            $('#candidate-assessment-btn').click(function () {
-                $('div#candidate-assessment-dialog').dialog({
-                    modal: true,
-                    width: '700',
-                    height: '620',
-                    title: 'Assess Candidate'
-                });
-            });
+            $('.table-candicates').on('click', '.candidate-blacklist-link', $.proxy(this, '_onCandidateBlacklistBtnClick'));
+            $('#candidate-assessment-btn').on('click', $.proxy(this, '_onCandidateAssessmentBtnClick'));
+            $('#candidate_resume').change($.proxy(this, '_onCandiateResumeSelectChange'));
         },
         /**
          * Click event handler for 'Move to Blacklist' button
@@ -125,7 +110,7 @@
          *
          * @return {boolean} stop event
          */
-        _onCandidateBlacklistClick: function (event) {
+        _onCandidateBlacklistBtnClick: function (event) {
             var candidate_id = $(event.target).attr('data-candidate-id');
             var div_id = "candidate-blacklist-dialog-" + candidate_id;
 
@@ -140,6 +125,63 @@
             });
 
             return false;
+        },
+        /**
+         * Click event handler for assess candidate
+         *
+         * @private
+         * @event
+         */
+        _onCandidateAssessmentBtnClick: function () {
+            $('#candidate-assessment-dialog').dialog({
+                modal: true,
+                width: '700',
+                height: '620',
+                title: 'Assess Candidate'
+            });
+        },
+        /**
+         * Change event handler for resume select
+         *
+         * @private
+         * @event
+         * @param  {Object} event Event object
+         *
+         */
+        _onCandiateResumeSelectChange: function (event) {
+            var maxsize = 10 * 1024 * 1024;
+            var target = event.target;
+
+            if ($.browser.msie) {
+                // microsoft ie
+                //
+                // It's not easy to achieve this functionality in IE, most likly,
+                // IE configuration does forbidden ActiveXObject. Anyway, we have
+                // done the server side file size limit mechanism.
+            } else {
+                // firefox, chrome
+                if (target.files[0].size > maxsize) {
+                    alert('File size cannot be larger than 10M.');
+                    $(target).attr('value', '');
+                }
+            }
+        },
+        /**
+         * Assign job opening
+         *
+         * @private
+         * @param  {string | number} id Candidate id
+         *
+         */
+        _assignJobOpening: function (id) {
+            var openingSelectionContainer = $("#opening_selection_container");
+
+            openingSelectionContainer.parent().get(0).setAttribute('action', '/candidates/' + id + '/create_opening');
+            openingSelectionContainer.parent().dialog({
+                modal: true,
+                title: "Select Opening",
+                width: '450'
+            });
         }
     };
 

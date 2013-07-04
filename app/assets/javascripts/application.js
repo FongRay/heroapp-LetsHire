@@ -26,11 +26,10 @@
 	'use strict';
 
 	/**
-	 * Find the related page function and initizlie it
+	 * Find the related page and then initizlie it
 	 */
 	$(function () {
-		var controller = $('body').data('controller');
-		var page = tmpst[tmpst.format('#{0}Page', controller)];
+		var page = tmpst[tmpst.format('#{0}Page', $('body').data('controller'))];
 
 		if (page && tmpst.isFunction(page)) {
 			new page();

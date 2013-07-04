@@ -2,14 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.interviewline td {
-  padding: 0px 15px 0px 15px;
-}
-
-.interviewline.large-interval td {
-  padding: 0px 30px 0px 30px;
-}
-
 img.indicator {
   width: 13px;
   height: 12px;
@@ -111,6 +103,11 @@ h4.interview_result {
     padding: 10px 5px 15px 5px;
 }
 
-.mr10 {
-  margin-left: 10px;
+a.photo-preview-tooltip {
+    color: #0088CC;
+    margin-left: 5px;
+}
+
+.photo-preview-dialog {
+  max-width: none;
 }

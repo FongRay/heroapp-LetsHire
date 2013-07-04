@@ -43,8 +43,8 @@ private
     @password = opts[:password] if opts.has_key?(:password)
     @database = opts[:database] if opts.has_key?(:database)
 
-    @host = "localhost" if @host.nil?
-    @port = "5432" if @port.nil?
+    #@host = "localhost" if @host.nil?
+    #@port = "5432" if @port.nil?
   end
 end
 
@@ -146,8 +146,8 @@ private
   def connection
     conf = {}
     conf[:dbname] = @database
-    conf[:host] = @host
-    conf[:port] = @port
+    conf[:host] = @host unless @host.nil?
+    conf[:port] = @port unless @port.nil?
     conf[:user] = @user unless @user.nil?
     conf[:password] = @password unless @password.nil?
     @conn ||= PGconn.connect(conf)
