@@ -30,7 +30,7 @@
         -if can? :create, Candidate
           = link_to 'Add a Candidate', new_candidate_path, :class => 'btn btn-primary'
 
-    table class='table table-hover table-striped mt20'
+    table class='table table-hover table-striped mt20 table-candicates'
       thead class='sortable colheader'
         tr
           th = sortable 'Candidate', 'name', 'Name'

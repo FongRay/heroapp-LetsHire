@@ -14,10 +14,13 @@
     - @interviews.each do |interview|
       - i += 1
       h3
-        span.mr10 = interview.scheduled_at
+        span.mr10.iso-time = interview.scheduled_at_iso
         span.mr10 = interview.modality
         span.mr10 = interview.duration
         span.mr10 = interview.status
+        span.mr10.r
+          - interview.photos.each do |photo|
+            a.photo-preview-tooltip data-photo-id="#{photo.id}" #{photo.name}
       div
         - if interview.status == 'finished'
           p Feedback from interviews

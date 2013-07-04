@@ -33,7 +33,7 @@
         = collection_select(nil, :participants_department_id, Department.with_users, :id, :name, { :selected => @opening.department_id }, { :prompt => 'Filter by department', :id => :participants_department_id })
         #interviewers_selection
 
-      table.table.table-hover.table-striped.schedule_interviews
+      table.table.table-hover.table-striped.schedule_interviews.table-schedule-interviews
         = render :partial => 'schedule_reload'
 
       .action_container.pull-right
