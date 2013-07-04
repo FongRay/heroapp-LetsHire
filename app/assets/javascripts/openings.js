@@ -93,13 +93,13 @@
             tmpst.prepareObjectSelectionContainer($('#candidates_selection'), null, function (checkbox) {
                 var candidates_selection_container = $('#candidates_selection_container');
                 var ids = candidates_selection_container.data('ids');
-                var current_val = parseInt($(checkbox).val());
-                var index = ids.indexOf(current_val);
+                var currentVal = parseInt($(checkbox).val());
+                var index = ids.indexOf(currentVal);
 
                 if (index >= 0) {
                     ids.splice(index, 1);
                 } else {
-                    ids.push(current_val);
+                    ids.push(currentVal);
                 }
             });
         },
@@ -113,13 +113,13 @@
          * @return {boolean} stop event
          */
         _onAssignCandidatesClick: function (event) {
-            var opening_id = $(event.target).closest('tr').data('id');
+            var openingId = $(event.target).closest('tr').data('id');
 
-            if (opening_id == undefined) {
+            if (openingId == undefined) {
                 return false;
             }
 
-            $('#candidates_selection').load('/candidates/index_for_selection?exclude_opening_id=' + opening_id, function () {
+            $('#candidates_selection').load('/candidates/index_for_selection?exclude_opening_id=' + openingId, function () {
                 var candidates_selection_container = $('#candidates_selection_container');
 
                 candidates_selection_container.data('ids', []);
@@ -132,7 +132,7 @@
                     modal: true,
                     buttons: {
                         "OK": function () {
-                            var id = opening_id;
+                            var id = openingId;
                             var candidate_ids = candidates_selection_container.data('ids');
 
                             $.post('/openings/' + id + '/assign_candidates', {

@@ -64,7 +64,7 @@
                     (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data) : data;
                 return source.replace(/>\s*</g, '><').replace(/(#|!|@)\{(.+?)(?:\s*[,:]\s*(\d+?))*?\}/g, function (match, type, key, length) {
                     var replacer = data[key];
-                    // chrome 下 typeof /a/ == 'function'
+                    // chrome: typeof /a/ == 'function'
                     if ('[object Function]' == toString.call(replacer)) {
                         replacer = replacer(key);
                     }
@@ -89,18 +89,18 @@
          * Generat namespace
          *
          * @public
-         * @param {string} ns_string namespace string that is joined with dot
+         * @param {string} nsString namespace string that is joined with dot
          *
          * @return {Object} the top-end object of the namespace
          */
-        namespace: function (ns_string) {
-            if (!ns_string || !ns_string.length) {
+        namespace: function (nsString) {
+            if (!nsString || !nsString.length) {
                 return null;
             }
 
             var _package = window;
 
-            for (var a = ns_string.split('.'), l = a.length, i = (a[0] == 'window') ? 1 : 0; i < l; _package = _package[a[i]] = _package[a[i]] || {}, i++);
+            for (var a = nsString.split('.'), l = a.length, i = (a[0] == 'window') ? 1 : 0; i < l; _package = _package[a[i]] = _package[a[i]] || {}, i++);
 
             return _package;
         },
@@ -146,14 +146,14 @@
         isFunction: function (obj) {
             return $.isFunction(obj);
         },
-        prepareObjectSelectionContainer: function (object, paginate_callback, change_event_callback) {
+        prepareObjectSelectionContainer: function (object, paginateCallback, changeEventCallback) {
             var parent_object = object.parent();
 
             parent_object.delegate('.pagination a', 'click', function () {
                 $('.pagination').html('Page is loading...');
                 object.load(this.href, function () {
-                    if (paginate_callback) {
-                        paginate_callback($(this));
+                    if (paginateCallback) {
+                        paginateCallback($(this));
                     }
                 });
 
@@ -175,18 +175,18 @@
             });
 
             parent_object.delegate('input:checkbox', 'change', function () {
-                if (change_event_callback) {
-                    change_event_callback($(this));
+                if (changeEventCallback) {
+                    changeEventCallback($(this));
                 }
             });
         },
-        reloadOpening: function (department_control, opening_control, opening_control_name) {
-            $(department_control).attr('disabled', true);
-            var url = '/openings/opening_options?selected_department_id=' + $(department_control).val();
+        reloadOpening: function (departmentControl, openingControl, openingControlHome) {
+            $(departmentControl).attr('disabled', true);
+            var url = '/openings/opening_options?selected_department_id=' + $(departmentControl).val();
 
-            return $(opening_control).load(url, function () {
-                $(department_control).attr('disabled', false);
-                $(opening_control).find('select#opening_id').attr('name', opening_control_name);
+            return $(openingControl).load(url, function () {
+                $(departmentControl).attr('disabled', false);
+                $(openingControl).find('select#opening_id').attr('name', openingControlHome);
             });
         },
         updateQueryStringParameter: function (uri, key, value) {

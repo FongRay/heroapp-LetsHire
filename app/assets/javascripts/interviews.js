@@ -41,14 +41,14 @@
                 var interviewersSelectionContainer = $("#interviewers_selection_container");
                 var userIds = interviewersSelectionContainer.data('user_ids');
                 var users = interviewersSelectionContainer.data('users');
-                var current_val = parseInt($(checkbox).val());
-                var index = userIds.indexOf(current_val);
+                var currentVal = parseInt($(checkbox).val());
+                var index = userIds.indexOf(currentVal);
 
                 if (index >= 0) {
                     userIds.splice(index, 1);
                     users.splice(index, 1);
                 } else {
-                    userIds.push(current_val);
+                    userIds.push(currentVal);
                     users.push(checkbox.data('str'));
                 }
             });
@@ -199,15 +199,15 @@
             var $currentRow = $(event.target).closest('tr');
 
             if ($currentRow.data('interview_id')) {
-                var del_ids = tbody.data('del_ids');
+                var delIds = tbody.data('del_ids');
 
-                if (!del_ids) {
-                    del_ids = [$currentRow.data('interview_id')];
+                if (!delIds) {
+                    delIds = [$currentRow.data('interview_id')];
                 } else {
-                    del_ids.push($currentRow.data('interview_id'));
+                    delIds.push($currentRow.data('interview_id'));
                 }
 
-                tbody.data('del_ids', del_ids);
+                tbody.data('del_ids', delIds);
             }
 
             $currentRow.remove();
@@ -274,10 +274,10 @@
          * @return {boolean} stop event
          */
         _onInterviewFeedbackClick: function (event) {
-            var interview_id = $(this).attr('data-interview-id');
-            var div_id = "interview-feedback-dialog-" + interview_id;
+            var interviewId = $(this).attr('data-interview-id');
+            var divId = "interview-feedback-dialog-" + interviewId;
 
-            $("#" + div_id).dialog({
+            $("#" + divId).dialog({
                 height: 400,
                 width: 600,
                 modal: true,
@@ -326,9 +326,9 @@
                 var interviewerTd = $(row).find('td:eq(4)');
                 interviewerTd.find('div').removeClass('field_with_errors');
                 if ($(row).find('.button-remove').length > 0) {
-                    var user_ids = interviewerTd.data('user_ids');
+                    var userIds = interviewerTd.data('user_ids');
 
-                    if (user_ids == null || user_ids.length == 0) {
+                    if (userIds == null || userIds.length == 0) {
                         interviewerTd.find('div').addClass('field_with_errors');
                         errors.push('No interviewers configured for row ' + (index + 1));
                     }
@@ -348,15 +348,15 @@
          */
         _displaySubmitErrors: function (errors) {
             if (errors.length > 0) {
-                var error_content = '<ul>';
+                var errorContent = '<ul>';
 
                 for (var i = 0; i < errors.length; i++) {
-                    error_content += '<li>' + errors[i] + '</li>';
+                    errorContent += '<li>' + errors[i] + '</li>';
                 }
 
-                error_content += '</ul>';
+                errorContent += '</ul>';
 
-                $('#error_messages').html(error_content);
+                $('#error_messages').html(errorContent);
                 $('#error_messages').closest('div').show();
             } else {
                 $('#error_messages').closest('div').hide();
@@ -368,9 +368,9 @@
     function setupDatetimePicker(elements) {
         $(elements).datetimepicker().each(function (index, elem) {
             var isoTime = new Date($(elem).data('iso'));
-            var new_id = elem.id.replace("scheduled_at", "scheduled_at_iso");
-            if (new_id != elem.id) {
-                var iso_elem = $("#" + new_id);
+            var newId = elem.id.replace("scheduled_at", "scheduled_at_iso");
+            if (newId != elem.id) {
+                var iso_elem = $("#" + newId);
                 if (iso_elem) {
                     iso_elem.val($(elem).data('iso'));
                 }
@@ -394,10 +394,10 @@
         if (interviews.length < $('table.schedule_interviews tbody tr').length) {
             return false;
         } else {
-            var del_ids = tbody.data('del_ids');
+            var delIds = tbody.data('del_ids');
 
-            if (del_ids) {
-                $.each(del_ids, function (index, value) {
+            if (delIds) {
+                $.each(delIds, function (index, value) {
                     var interview = {};
                     interview.id = value;
                     interview._destroy = true;
@@ -430,18 +430,18 @@
             }
 
             var interviewerTd = row.find('td:eq(4)');
-            var user_ids = interviewerTd.data('user_ids');
+            var userIds = interviewerTd.data('user_ids');
 
-            if (user_ids == null || user_ids.length == 0) {
+            if (userIds == null || userIds.length == 0) {
                 alert('No interviewers configured for row ' + (rowNum + 1));
                 return false;
             }
 
-            var origin_user_ids = interviewerTd.data('origin_user_ids');
+            var originUserIds = interviewerTd.data('origin_user_ids');
 
-            if (origin_user_ids) {
+            if (originUserIds) {
                 //We have change
-                interview.user_ids = user_ids;
+                interview.user_ids = userIds;
             }
         }
 
@@ -515,19 +515,19 @@
      * We assume a1 and a2 don't have duplicated elements.
      */
 
-    function uniq_array_equal(a1, a2) {
+    function isArrayDuplicated(a1, a2) {
         if (a1.length != a2.length) {
             return false;
         }
 
-        for (var a1_i = 0; a1_i < a1.length; a1_i++) {
-            if (a2.indexOf(a1[a1_i]) == -1) {
+        for (var i = 0; i < a1.length; i++) {
+            if (a2.indexOf(a1[i]) == -1) {
                 return false;
             }
         }
 
-        for (var a2_i = 0; a2_i < a2.length; a2_i++) {
-            if (a1.indexOf(a2[a2_i]) == -1) {
+        for (var i = 0; i < a2.length; i++) {
+            if (a1.indexOf(a2[i]) == -1) {
                 return false;
             }
         }
@@ -540,7 +540,7 @@
         var newUserIds = interviewersSelectionContainer.data('user_ids');
         var oldUserIds = $(interviewerTd).data('user_ids');
 
-        if (uniq_array_equal(newUserIds, oldUserIds)) {
+        if (isArrayDuplicated(newUserIds, oldUserIds)) {
             //No change comparing to data before dialog open.
             return true;
         }
@@ -570,7 +570,7 @@
             $(interviewerTd).data('origin_user_ids', oldUserIds.slice(0));
         } else {
             // Check whether we rollback to the original version
-            if (uniq_array_equal(newUserIds, originalUserIds)) {
+            if (isArrayDuplicated(newUserIds, originalUserIds)) {
                 $(interviewerTd).removeData('origin_user_ids');
             }
         }

@@ -111,10 +111,10 @@
          * @return {boolean} stop event
          */
         _onCandidateBlacklistBtnClick: function (event) {
-            var candidate_id = $(event.target).attr('data-candidate-id');
-            var div_id = "candidate-blacklist-dialog-" + candidate_id;
+            var candidateId = $(event.target).attr('data-candidate-id');
+            var divId = "candidate-blacklist-dialog-" + candidateId;
 
-            $("#" + div_id).dialog({
+            $("#" + divId).dialog({
                 height: 350,
                 width: 450,
                 modal: true,
