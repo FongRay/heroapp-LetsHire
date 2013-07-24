@@ -23,8 +23,8 @@ development:
 #  database: letshire_development
 
 ci:
-  <<: *common
-  database: letshire_ci
+  <<: *localcommon
+  database: db/test.sqlite3
 
 production:
   <<: *common
