@@ -4,6 +4,7 @@ applications:
   memory: 512M
   instances: 1
   host: letshire-${random-word}
+  domain: cfapps.io
   path: .
   services:
     letshiredb:
