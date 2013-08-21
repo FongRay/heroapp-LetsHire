@@ -58,32 +58,26 @@ __jquery-rails__ is a gem to automate using jQuery with Rails 3.
 
 2. Login cloudfoundry environment
     + cf target api.run.pivotal.io
-    + cf login <email account> <password>
+    + cf login [EMAIL]
 
-3. Create service instance
-    + cf create-service postgresql <service instance name>
-
-4. Update RAILS_ROOT/manifest.yml
-    + change the service instance name under 'services' section
-
-5. Run bundler:
+3. Run bundler:
     + bundle package
     + bundle install
     + bundle exec rake assets:precompile
 
-6. Push app to cloudfoundry
+4. Push app to cloudfoundry
     + cf push
 
 ## User initialization
 --------------
-access http://<host>:<port>/init through http POST request, then web browser will redirect a page to setup admin account.
+access http://[host]:[port]/init through http POST request, then web browser will redirect a page to setup admin account.
 
 
 The story between you and LetsHire web application starts from now on ...
 
 # Usage
 --------------
-Login http://<host>:<port>/ with the admin account, after successful login web browser will redirect you to the dashboard page.
+Login http://[host]:[port]/ with the admin account, after successful login web browser will redirect you to the dashboard page.
 
 ## User roles definition
 --------------
@@ -115,4 +109,4 @@ E. update interview feedback
 
 ## Departments management
 --------------
-Currently LetsHire provides separate web pages to manage jop openings/candidates/interviews, but does not provide any visual interface to manage departments. The departments value are fixed, see RAILS_ROOT/app/model/users DEFAULT_SET definition.
+Currently LetsHire provides separate web pages to manage jop openings/candidates/interviews, but does not provide any visual interface to manage departments. The departments value are fixed, see the __DEFAULT_SET__ definition of [app/model/department.rb](https://github.com/vchs/heroapp-LetsHire/blob/master/app/models/department.rb) .
