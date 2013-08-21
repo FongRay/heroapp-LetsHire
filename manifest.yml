@@ -1,14 +1,13 @@
 ---
 applications:
 - name: letshire
-  framework: rails3
-  runtime: ruby19
   memory: 512M
   instances: 1
-  url: letshire.${target-base}
+  host: letshire-${random-word}
+  domain: cfapps.io
   path: .
   services:
-    postgresql-ac7ed:
-      vendor: postgresql
-      version: '9.0'
-      tier: free
+    letshiredb:
+      label: elephantsql
+      provider: elephantsql
+      plan: turtle
