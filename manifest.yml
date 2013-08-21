@@ -1,6 +1,7 @@
 ---
 applications:
 - name: letshire
+  command: bundle exec rake db:create db:migrate && rails server -e production -p $PORT
   memory: 512M
   instances: 1
   host: letshire-${random-word}
