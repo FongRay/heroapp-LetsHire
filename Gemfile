@@ -18,6 +18,9 @@ gem 'ransack', '0.7.2'
 gem 'rake', '10.0.4'
 gem 'jqplot-rails', '~> 0.3'
 
+gem 'mysql2'
+gem 'activerecord-mysql-adapter'
+
 group :development, :test do
   gem 'sqlite3', '1.3.5'
   gem 'rspec-rails', '2.11.0'

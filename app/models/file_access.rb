@@ -30,6 +30,7 @@ private
     @user     = dbconfig["username"]
     @password = dbconfig["password"]
     @database = dbconfig["database"]
+    @adapter  = dbconfig["adapter"] || ''
   end
 
   def storagelo
@@ -40,7 +41,11 @@ private
       :password => @password,
       :database => @database
     }
-    @storage ||= PostgresqlStorage.new(conf)
+    if @adapter.start_with? 'mysql'
+      @storage ||= MysqlStorage.new(conf)
+    else
+      @storage ||= PostgresqlStorage.new(conf)
+    end
     @storage
   end
 

@@ -52,10 +52,10 @@ class Candidate < ActiveRecord::Base
                                 SELECT "opening_candidates"."id" FROM "opening_candidates"
                                 INNER JOIN "assessments" ON "assessments"."opening_candidate_id" = "opening_candidates"."id"
                                 WHERE "assessments"."comment" IS NOT NULL)')
-  scope :with_assessment, lambda{ where(:current_opening_candidate_id => OpeningCandidate.joins(:assessment).where('"assessments"."comment" IS NOT NULL')) }
+  scope :with_assessment, lambda{ where(:current_opening_candidate_id => OpeningCandidate.joins(:assessment).where('assessments.comment IS NOT NULL')) }
 
   scope :without_assessment, lambda { with_feedback.where("current_opening_candidate_id NOT IN (?)",
-                                   OpeningCandidate.joins(:assessment).where('"assessments"."comment" IS NOT NULL')
+                                   OpeningCandidate.joins(:assessment).where('assessments.comment IS NOT NULL')
                                    .pluck(:opening_candidate_id).uniq.push(0)) }
 
   def opening(index)

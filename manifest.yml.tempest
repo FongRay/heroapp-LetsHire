@@ -1,0 +1,15 @@
+---
+applications:
+- name: letshire
+  memory: 512M
+  command: bundle exec rake db:create db:migrate && rails server -e production -p $PORT
+  instances: 1
+  host: letshire
+  domain: tptest.io
+  path: .
+  services:
+    mysql-serial-id:
+      label: mysql
+      provider: core
+      version: '5.5'
+      plan: '100'

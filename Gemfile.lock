@@ -22,6 +22,10 @@ GEM
       activesupport (= 3.2.12)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-mysql-adapter (0.0.1)
+      activerecord (>= 3.2.9)
+      activesupport (>= 3.2.9)
+      mysql (>= 2.9.0)
     activeresource (3.2.12)
       activemodel (= 3.2.12)
       activesupport (= 3.2.12)
@@ -118,6 +122,8 @@ GEM
     method_source (0.8.1)
     mime-types (1.21)
     multi_json (1.7.2)
+    mysql (2.9.1)
+    mysql2 (0.3.13)
     nokogiri (1.5.9)
     orm_adapter (0.4.0)
     pg (0.15.1)
@@ -230,6 +236,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-mysql-adapter
   better_errors (= 0.7.2)
   binding_of_caller (= 0.7.1)
   cancan (= 1.6.9)
@@ -251,6 +258,7 @@ DEPENDENCIES
   libnotify (= 0.8.0)
   meta_request (= 0.2.2)
   mime-types (= 1.21)
+  mysql2
   pg (= 0.15.1)
   rails (= 3.2.12)
   rake (= 10.0.4)
