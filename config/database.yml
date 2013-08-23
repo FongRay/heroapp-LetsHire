@@ -3,10 +3,18 @@ localcommon: &localcommon
   pool: 5
   timeout: 5000
 
+# config for postgres
 common: &common
   adapter: postgresql
   encoding: unicode
   username: postgres
+
+# config for mysql
+common2: &common2
+  adapter: mysql2
+  encoding: utf8
+  username: root
+  password: '123321'
 
 test:
   <<: *localcommon
@@ -16,10 +24,17 @@ development:
   <<: *localcommon
   database: db/development.sqlite3
 
-#NOTE:The following config is for file upload/download. If you do not touch them
+#NOTE:The following configs is for file upload/download. If you do not touch them
 #during daily development, just keep them unchanged.
+
+#NOTE: postgres
 #development:
 #  <<: *common
+#  database: letshire_development
+
+#NOTE: mysql
+#development:
+#  <<: *common2
 #  database: letshire_development
 
 ci:

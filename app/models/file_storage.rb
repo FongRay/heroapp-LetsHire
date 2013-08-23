@@ -1,7 +1,8 @@
 require 'pg'
+require 'mysql2'
 
 class FileStorageImpl
-  @@storages = %w(postgresql mongodb)
+  @@storages = %w(postgresql mongodb mysql)
 
   attr_accessor :buffer_size, :host, :port, :database
 
@@ -46,6 +47,95 @@ private
     #@host = "localhost" if @host.nil?
     #@port = "5432" if @port.nil?
   end
+end
+
+class MysqlStorage < FileStorageImpl
+  def initialize(opts)
+    opts[:storage] = 'mysql'
+    super(opts)
+    @conn = nil
+    setup_client
+  end
+
+  def fini
+    disconnect if conn_established?
+  end
+
+  def read(file, oid)
+    if !file.methods.include?(:write) || oid < 0
+      raise Exception.new("parameters invalid")
+    end
+
+    file.rewind
+
+    results = client.query("select file from file_storage where id = #{oid}")
+    results.each do |result|
+      stream = result['file']
+      file.write(hex_to_bin(stream))
+    end
+  end
+
+  def write(file)
+    file_hex_string = bin_to_hex(file.read)
+    client.query("insert into file_storage(file) values('#{file_hex_string}')")
+    oid = client.last_id
+    oid
+  end
+
+  def clean(oid)
+    client.query("delete from file_storage where id = #{oid}")
+  end
+
+  def file_length(oid)
+    raise Exception.new('parameters invalid') if oid < 0
+
+    length = 0
+
+    results = client.query("select file from file_storage where id = #{oid}")
+    results.each do |result|
+      stream = result['file']
+      length = stream.size
+    end
+    length
+  end
+
+private
+
+  def bin_to_hex(s)
+    s.unpack('H*').first
+  end
+
+  def hex_to_bin(s)
+    s.scan(/../).map { |x| x.hex }.pack('c*')
+  end
+
+  def setup_client
+    conf = {}
+    conf[:host] = @host unless @host.nil?
+    conf[:port] = @port unless @port.nil?
+    conf[:username] = @user unless @user.nil?
+    conf[:password] = @password unless @password.nil?
+    conf[:database] = @database
+
+    @conn ||= Mysql2::Client.new(conf)
+
+    @conn.query('create table if not exists file_storage (id integer auto_increment, file longblob, primary key (id))')
+  end
+
+  def client
+    @conn
+  end
+
+  def disconnect
+    @conn.close
+    @conn = nil
+  end
+
+  def conn_established?
+    return true unless @conn.nil?
+    false
+  end
+
 end
 
 class PostgresqlStorage < FileStorageImpl
