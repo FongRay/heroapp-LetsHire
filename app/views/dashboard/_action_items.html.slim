@@ -7,7 +7,7 @@ h3.tl Reminders
           .action-item
             .salient-metric-number = @active_openings.length
             .salient-metric-label = 'active job openings'
-            = link_to new_opening_path do
+            = link_to new_opening_path, :class => 'action-link' do
               i.icon-caret-right  Create
 
       - if can? :manage, Opening and @openings_without_candidate.size != 0

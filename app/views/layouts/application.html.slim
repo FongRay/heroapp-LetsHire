@@ -35,6 +35,8 @@ html
               li class="#{current_page(interviews_path)}" = link_to 'Interviews', interviews_path
               - if current_user.admin?
                 li class="#{current_page(users_path)}" = link_to 'Users', users_path
+                li class="#{current_page(settings_path)}" = link_to 'Settings', settings_path
+
       = render 'layouts/flash_message'
       == yield
     = render 'layouts/footer'

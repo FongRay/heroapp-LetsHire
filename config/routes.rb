@@ -51,6 +51,10 @@ LetsHire::Application.routes.draw do
   devise_for :users
   match '/profile', to: 'profile#edit'
   match '/profile/update', to: 'profile#update'
+
+  get '/settings', to: 'settings#edit'
+  post '/settings', to: 'settings#update'
+
   get '/users/index_for_selection', to: 'users#index_for_selection'
   resources :users
 

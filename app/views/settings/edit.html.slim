@@ -1,0 +1,34 @@
+.page-container-wrapper
+  h3
+    span
+    = "Settings"
+  .page-container
+    .page-container-inner.page-container-inner-form
+      = form_for @setting, url: settings_path, :method => :post do |form|
+        = form.error_messages
+
+        .field
+          = form.label :ldap_host
+          = form.text_field :ldap_host
+        .field
+          = form.label :ldap_port
+          = form.text_field :ldap_port
+        .field
+          = form.label :ldap_base
+          = form.text_field :ldap_base
+        .field
+          = form.label :smtp_server
+          = form.text_field :smtp_server
+        .field
+          = form.label :smtp_port
+          = form.text_field :smtp_port
+        .field
+          = form.label :mail_user
+          = form.text_field :mail_user
+        .field
+          = form.label :mail_password
+          = form.text_field :mail_password
+        .action_container
+          = form.submit 'Submit Configuration', :class => 'btn btn-primary'
+          = link_to 'Cancel', root_path, :class => 'btn'
+

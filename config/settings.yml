@@ -1,0 +1,8 @@
+---
+development:
+  host: 'ldap1-pek2.eng.vmware.com'
+  port: '636'
+  base: dc=vmware,dc=com
+  address: smtp.gmail.com
+  user_name: fray9166@gmail.com
+  password: password

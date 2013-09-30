@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130607060225) do
+ActiveRecord::Schema.define(:version => 20130930033739) do
 
   create_table "assessments", :force => true do |t|
     t.integer  "opening_candidate_id"
@@ -127,6 +127,18 @@ ActiveRecord::Schema.define(:version => 20130607060225) do
     t.string   "path"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "settings", :force => true do |t|
+    t.string   "ldap_host"
+    t.integer  "ldap_port"
+    t.string   "ldap_base"
+    t.string   "smtp_server"
+    t.integer  "smtp_port"
+    t.string   "mail_user"
+    t.string   "mail_password"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "users", :force => true do |t|
