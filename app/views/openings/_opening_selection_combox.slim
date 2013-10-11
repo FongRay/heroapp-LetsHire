@@ -5,7 +5,10 @@
   -if department.nil?
     em Please select a department
   -else
-    -openings = department.openings.select { |opening| (can? :manage, opening) && !opening.closed? }
+    -if hiring_manager.nil?
+      -openings = department.openings.select { |opening| (can? :manage, opening) && !opening.closed? }
+    -else
+      -openings = hiring_manager.openings.select { |opening| !opening.closed? }
     -if openings.count > 0
       = collection_select(nil, :opening_id, openings, :id, :title, { :selected => opening_id }, { :prompt => 'Select a department...', :id => :opening_id })
     -else
