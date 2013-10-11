@@ -24,6 +24,8 @@ class User < ActiveRecord::Base
   has_many :interviewers
   has_many :interviews, :through => :interviewers
 
+  #has_many :openings, :inverse_of => :hiring_manager
+
   def admin?
     read_attribute :admin
   end

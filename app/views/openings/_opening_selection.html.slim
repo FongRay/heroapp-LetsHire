@@ -1,22 +1,25 @@
 - selected ||= {}
 - departments ||= Department.selectable(current_user)
 - prompt ||= nil
-- selected_department_id = selected[:department] || ( prompt.nil? ? departments.try(:first).try(:id) : -1 )
-.control-group
-  = label_tag :opening, "Department", :class => "control-label"
-  .controls
-    - if departments.size > 0
-      - selected_department_id ||= departments.first.id
-      - if prompt.nil?
-        = collection_select(nil, :department_id, departments, :id, :name, { :selected => selected_department_id }, { :id => :department_id })
+- hiring_manager ||= current_user.has_role?(:hiring_manager) ? current_user : nil
+- logger.info("not exsit!") if hiring_manager.nil?
+- if hiring_manager.nil?
+  - selected_department_id = selected[:department] || ( prompt.nil? ? departments.try(:first).try(:id) : -1 )
+  .control-group
+    = label_tag :opening, "Department", :class => "control-label"
+    .controls
+      - if departments.size > 0
+        - selected_department_id ||= departments.first.id
+        - if prompt.nil?
+          = collection_select(nil, :department_id, departments, :id, :name, { :selected => selected_department_id }, { :id => :department_id })
+        - else
+          = collection_select(nil, :department_id, departments, :id, :name, { :selected => selected_department_id, :include_blank => "Please select" }, { :id => :department_id })
       - else
-        = collection_select(nil, :department_id, departments, :id, :name, { :selected => selected_department_id, :include_blank => "Please select" }, { :id => :department_id })
-    - else
-      label No openings
+        label No openings
+- else
+  - selected_department_id = hiring_manager.department_id
 .control-group
   = label_tag :opening, "Job Opening", :class => "control-label"
   .controls
     #openingid_select_wrapper
-      = render 'openings/opening_selection_combox', { :selected_department_id => selected_department_id, :opening_id => selected[:opening] }
-
-
+      = render 'openings/opening_selection_combox', { :selected_department_id => selected_department_id, :hiring_manager => hiring_manager, :opening_id => selected[:opening] }

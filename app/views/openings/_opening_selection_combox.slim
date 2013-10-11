@@ -1,14 +1,15 @@
-- opening_id ||= nil
+-opening_id ||= nil
+-hiring_manager ||= nil
 -if !selected_department_id.nil? && selected_department_id.to_i > 0
   -department = Department.find(selected_department_id.to_i)
   -if department.nil?
     em Please select a department
   -else
-    - openings = department.openings.select { |opening| (can? :manage, opening) && !opening.closed? }
+    -openings = department.openings.select { |opening| (can? :manage, opening) && !opening.closed? }
     -if openings.count > 0
       = collection_select(nil, :opening_id, openings, :id, :title, { :selected => opening_id }, { :prompt => 'Select a department...', :id => :opening_id })
     -else
       em No job openings owned by you
 -else
-  em Please select a department
+  em Please select a Department
 
