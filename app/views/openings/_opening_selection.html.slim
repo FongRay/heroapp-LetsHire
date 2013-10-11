@@ -2,7 +2,6 @@
 - departments ||= Department.selectable(current_user)
 - prompt ||= nil
 - hiring_manager ||= current_user.has_role?(:hiring_manager) ? current_user : nil
-- logger.info("not exsit!") if hiring_manager.nil?
 - if hiring_manager.nil?
   - selected_department_id = selected[:department] || ( prompt.nil? ? departments.try(:first).try(:id) : -1 )
   .control-group
