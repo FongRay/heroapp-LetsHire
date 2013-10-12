@@ -7,7 +7,9 @@ class SettingsController < ApplicationController
 	def update
 		@setting = Setting.find("1")
 		if @setting.update_attributes(params[:setting])
-			redirect_to root_path, :notice => 'Config successfully'			
+			ActionMailer::Base.smtp_settings[:address] = Setting.find("1").smtp_server
+			ActionMailer::Base.smtp_settings[:port]    = Setting.find("1").smtp_port
+			redirect_to root_path, :notice             => 'Config successfully'
 		else
 			render :action => edit
 		end
