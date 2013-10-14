@@ -89,9 +89,30 @@ class InterviewsController < AuthenticatedController
       # save multiple interviews at one shot
       if @opening_candidate.update_attributes new_interviews
         user_ids = []
+
+        # send email to notify interviewers
+        candidate_name = Candidate.find(@opening_candidate.candidate_id).name
+        interviews = Interview.find(:all, :conditions => ["opening_candidate_id=#{@opening_candidate.id}"])
+
+        if interviews.any?
+          interviews.each do |t|
+            p "interviews:", t
+            path = "http://" + request.host_with_port + "/interviews/#{t.id}"
+            interviewers = Interviewer.find(:all, :conditions => ["interview_id=#{t.id}"])
+            p "interviewers:", interviewers
+
+            if interviewers.any?
+              interviewers.each do |m|
+                UserMailer.interview_update(User.find(m.user_id.to_i), candidate_name, path).deliver
+              end
+            end
+          end
+        end
+        
         new_interviews[:interviews_attributes].each do |key, val|
           user_ids.concat val[:user_ids] if val[:user_ids].is_a?(Array)
         end
+
         # update database, which user should be the interviewer
         update_favorite_interviewers user_ids
         render :json => { :success => true }
@@ -163,8 +184,18 @@ class InterviewsController < AuthenticatedController
   def destroy
     authorize! :manage, @interview
     @interview = Interview.find params[:id]
+    interviewers = Interviewer.find(:all, :conditions => ["interview_id=#{params[:id]}"])
     @candidate = @interview.opening_candidate.candidate
     @interview.destroy
+
+    candidate_name = @candidate.name
+    path = "http://" + request.host_with_port + "/interviews"
+
+    p "INFO:", params[:id], interviewers, candidate_name, path
+
+    interviewers.each do |m|
+      UserMailer.interview_delete(User.find(m.user_id.to_i), candidate_name, path).deliver
+    end
 
     redirect_to (request.referrer == interview_path(@interview) ? interviews_url : :back), :notice => 'Interview was successfully deleted'
   rescue
